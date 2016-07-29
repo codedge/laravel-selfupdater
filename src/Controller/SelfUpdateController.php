@@ -5,7 +5,7 @@ namespace Codedge\Updater\Controller;
 use App\Http\Controllers\Controller;
 
 /**
- * Class SelfUpdateController
+ * Class SelfUpdateController.
  */
 class SelfUpdateController extends Controller
 {

@@ -14,16 +14,14 @@ class Github implements RepositoryType
 {
     public function getLatestVersion($prepend = '', $append = '')
     {
-        
     }
 
     public function downloadLatestSource()
     {
         // TODO: Implement downloadLatestSource() method.
     }
-    
-    protected function download($version='')
-    {
 
+    protected function download($version = '')
+    {
     }
 }
