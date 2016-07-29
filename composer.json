@@ -1,0 +1,34 @@
+{
+  "name": "codedge/laravel-selfupdater",
+  "description": "Providing an auto-updating functionality for your Laravel application.",
+  "license": "MIT",
+  "keywords": [
+    "self-update",
+    "self update",
+    "auto-update",
+    "auto update",
+    "update",
+    "laravel"
+  ],
+  "support": {
+    "issues": "https://github.com/codedge/laravel-selfupdater/issues",
+    "source": "https://github.com/codedge/laravel-selfupdater"
+  },
+  "authors": [
+    {
+      "name": "Holger Lösken",
+      "email": "holger.loesken@codedge.de",
+      "homepage": "http://codedge.de",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Codedge\\Updater\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=5.6",
+    "illuminate/support": "5.*"
+  }
+}
