@@ -23,6 +23,4 @@ class Updater
     {
         $this->config = $config;
     }
-    
-    
 }
