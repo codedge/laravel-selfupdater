@@ -28,7 +28,9 @@
     }
   },
   "require": {
-    "php": ">=5.6",
-    "illuminate/support": "5.*"
+    "php": ">=5.5",
+    "ext-zip": "*",
+    "illuminate/support": "5.*",
+    "guzzlehttp/guzzle": "6.*"
   }
 }

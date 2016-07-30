@@ -4,7 +4,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Repository type
+    | Default source repository type
+    |--------------------------------------------------------------------------
+    |
+    | The default source repository type you want to pull your updates from.
+    |
+    */
+    'default' => env('SELF_UPDATE_SOURCE', 'github'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Repository types
     |--------------------------------------------------------------------------
     |
     | A repository can be of different types, which can be specified here.
@@ -13,17 +23,14 @@ return [
     |
     */
 
-    'type' => 'github',
+    'repository_types' => [
+        'github' => [
+            'type' => 'github',
+            'repository_owner' => '',
+            'repository_name' => '',
+            'repository_url' => '',
+            'download_path' => env('SELF_UPDATE_SOURCE', storage_path('self-update/github/')),
+        ]
+    ]
 
-    /*
-    |--------------------------------------------------------------------------
-    | Repository resources
-    |--------------------------------------------------------------------------
-    |
-    | Depending on the type you need to set the resource/URL of the repository
-    | you want to update from.
-    |
-    */
-
-    'repository' => '',
 ];
