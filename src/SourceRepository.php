@@ -36,7 +36,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      */
     public function fetch($version = '')
     {
-        return $this->fetch($version);
+        return $this->sourceRepository->fetch($version);
     }
 
     /**
@@ -76,6 +76,6 @@ class SourceRepository implements SourceRepositoryTypeContract
      */
     public function getVersionAvailable($prepend = '', $append = '') : string
     {
-        return $this->getVersionAvailable($prepend, $append);
+        return $this->sourceRepository->getVersionAvailable($prepend, $append);
     }
 }
