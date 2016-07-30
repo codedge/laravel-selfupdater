@@ -24,14 +24,14 @@ class UpdaterManager implements UpdaterContract
     protected $app;
 
     /**
-     * @var  array
+     * @var array
      */
     protected $sources = [];
 
     /**
      * Create a new Updater manager instance.
      *
-     * @param  Application $app
+     * @param Application $app
      */
     public function __construct(Application $app)
     {
@@ -53,7 +53,7 @@ class UpdaterManager implements UpdaterContract
     }
 
     /**
-     * Get the default source repository type
+     * Get the default source repository type.
      *
      * @return string
      */
@@ -75,7 +75,7 @@ class UpdaterManager implements UpdaterContract
     /**
      * Get the source repository connection configuration.
      *
-     * @param  string  $name
+     * @param string $name
      *
      * @return array
      */
@@ -87,7 +87,7 @@ class UpdaterManager implements UpdaterContract
     /**
      * Attempt to get the right source repository instance.
      *
-     * @param  string  $name
+     * @param string $name
      *
      * @return SourceRepositoryTypeContract
      */
@@ -99,11 +99,11 @@ class UpdaterManager implements UpdaterContract
     /**
      * Try to find the correct source repository implementation ;-).
      *
-     * @param  string  $name
-     *
-     * @return mixed
+     * @param string $name
      *
      * @throws InvalidArgumentException
+     *
+     * @return mixed
      */
     protected function resolve($name)
     {
@@ -117,9 +117,8 @@ class UpdaterManager implements UpdaterContract
 
         if (method_exists($this, $repositoryMethod)) {
             return $this->{$repositoryMethod}($config);
-        } else {
-            throw new InvalidArgumentException("Repository [{$name}] is not supported.");
         }
+        throw new InvalidArgumentException("Repository [{$name}] is not supported.");
     }
 
     /**
@@ -132,6 +131,7 @@ class UpdaterManager implements UpdaterContract
     protected function createGithubRepository(array $config)
     {
         $client = new Client();
+
         return $this->sourceRepository(new GithubRepositoryType($client, $config));
     }
 }

@@ -30,7 +30,7 @@ return [
             'repository_name' => '',
             'repository_url' => '',
             'download_path' => env('SELF_UPDATE_SOURCE', storage_path('self-update/github/')),
-        ]
-    ]
+        ],
+    ],
 
 ];
