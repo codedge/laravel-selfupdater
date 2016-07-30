@@ -5,7 +5,7 @@ namespace Codedge\Updater;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 
 /**
- * SourceRepository
+ * SourceRepository.
  *
  * @author Holger Lösken <holger.loesken@codedge.de>
  * @copyright See LICENSE file that was distributed with this source code.
@@ -19,7 +19,7 @@ class SourceRepository implements SourceRepositoryTypeContract
 
     /**
      * SourceRepository constructor.
-     * 
+     *
      * @param SourceRepositoryTypeContract $sourceRepository
      */
     public function __construct(SourceRepositoryTypeContract $sourceRepository)
@@ -40,7 +40,7 @@ class SourceRepository implements SourceRepositoryTypeContract
     }
 
     /**
-     * Check repository if a newer version than the installed one is available
+     * Check repository if a newer version than the installed one is available.
      *
      * @param string $currentVersion
      *
@@ -53,7 +53,7 @@ class SourceRepository implements SourceRepositoryTypeContract
 
     /**
      * Get the version that is currenly installed.
-     * Example: 1.1.0 or v1.1.0 or "1.1.0 version"
+     * Example: 1.1.0 or v1.1.0 or "1.1.0 version".
      *
      * @param string $prepend
      * @param string $append
@@ -67,10 +67,10 @@ class SourceRepository implements SourceRepositoryTypeContract
 
     /**
      * Get the latest version that has been published in a certain repository.
-     * Example: 2.6.5 or v2.6.5
+     * Example: 2.6.5 or v2.6.5.
      *
      * @param string $prepend Prepend a string to the latest version
-     * @param string $append Append a string to the latest version
+     * @param string $append  Append a string to the latest version
      *
      * @return string
      */

@@ -11,36 +11,36 @@ interface SourceRepositoryTypeContract
      *
      * @return mixed
      */
-    public function fetch($version='');
+    public function fetch($version = '');
 
     /**
-     * Check repository if a newer version than the installed one is available
+     * Check repository if a newer version than the installed one is available.
      *
      * @param string $currentVersion
      *
      * @return bool
      */
-    public function isNewVersionAvailable($currentVersion='') : bool;
+    public function isNewVersionAvailable($currentVersion = '') : bool;
 
     /**
      * Get the version that is currenly installed.
-     * Example: 1.1.0 or v1.1.0 or "1.1.0 version"
+     * Example: 1.1.0 or v1.1.0 or "1.1.0 version".
      *
      * @param string $prepend
      * @param string $append
      *
      * @return string
      */
-    public function getVersionInstalled($prepend='', $append='') : string;
+    public function getVersionInstalled($prepend = '', $append = '') : string;
 
     /**
      * Get the latest version that has been published in a certain repository.
-     * Example: 2.6.5 or v2.6.5
+     * Example: 2.6.5 or v2.6.5.
      *
      * @param string $prepend Prepend a string to the latest version
-     * @param string $append Append a string to the latest version
+     * @param string $append  Append a string to the latest version
      *
      * @return string
      */
-    public function getVersionAvailable($prepend='', $append='') : string;
+    public function getVersionAvailable($prepend = '', $append = '') : string;
 }
