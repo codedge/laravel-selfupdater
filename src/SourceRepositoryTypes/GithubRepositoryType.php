@@ -44,10 +44,10 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @param string $currentVersion
      *
-     * @return bool
-     *
      * @throws \InvalidArgumentException
      * @throws \Exception
+     *
+     * @return bool
      */
     public function isNewVersionAvailable($currentVersion = '') : bool
     {
@@ -78,24 +78,23 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         $storagePath = $this->config['download_path'];
         $storageFilename = 'latest.zip';
 
-        if(!File::exists($storagePath)) {
+        if (! File::exists($storagePath)) {
             File::makeDirectory($storagePath, 493, true, true);
         }
 
-        if (!empty($version)) {
+        if (! empty($version)) {
             $release = $releaseCollection->where('tag_name', $version);
             $storageFilename = "{$version}.zip";
         }
 
-        $storageFile = $storagePath . $storageFilename;
+        $storageFile = $storagePath.$storageFilename;
         $zipArchiveUrl = $release->zipball_url;
         $this->client->request(
             'GET', $zipArchiveUrl, ['sink' => $storageFile]
         );
-        
+
         $this->unzipArchive($storageFile, $storagePath);
         $this->cleanupGithubSubfoldersInArchive($storagePath);
-
     }
 
     /**
@@ -105,7 +104,6 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      */
     public function update() : bool
     {
-
     }
 
     /**
@@ -163,16 +161,15 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         $subDirName = File::directories($storagePath);
         $directories = File::directories($subDirName[0]);
 
-        foreach ($directories as $directory) { /** @var \SplFileInfo $directory */
+        foreach ($directories as $directory) { /* @var \SplFileInfo $directory */
             File::moveDirectory($directory, $storagePath.'/'.File::name($directory));
         }
 
         $files = File::allFiles($subDirName[0], true);
-        foreach ($files as $file) { /** @var \SplFileInfo $file */
+        foreach ($files as $file) { /* @var \SplFileInfo $file */
             File::move($file->getRealPath(), $storagePath.'/'.$file->getFilename());
         }
 
         File::deleteDirectory($subDirName[0]);
     }
-
 }
