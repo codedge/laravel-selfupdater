@@ -40,6 +40,16 @@ class SourceRepository implements SourceRepositoryTypeContract
     }
 
     /**
+     * Perform the actual update process.
+     *
+     * @return bool
+     */
+    public function update() : bool
+    {
+        return $this->sourceRepository->update();
+    }
+
+    /**
      * Check repository if a newer version than the installed one is available.
      *
      * @param string $currentVersion
