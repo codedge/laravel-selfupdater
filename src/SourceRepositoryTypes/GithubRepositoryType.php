@@ -2,7 +2,9 @@
 
 namespace Codedge\Updater\SourceRepositoryTypes;
 
+use Codedge\Updater\AbstractRepositoryType;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use File;
 use GuzzleHttp\Client;
 
 /**
@@ -11,7 +13,7 @@ use GuzzleHttp\Client;
  * @author Holger Lösken <holger.loesken@codedge.de>
  * @copyright See LICENSE file that was distributed with this source code.
  */
-class GithubRepositoryType implements SourceRepositoryTypeContract
+class GithubRepositoryType extends AbstractRepositoryType implements SourceRepositoryTypeContract
 {
     const GITHUB_API_URL = 'https://api.github.com';
 
@@ -42,16 +44,19 @@ class GithubRepositoryType implements SourceRepositoryTypeContract
      *
      * @param string $currentVersion
      *
-     * @throws InvalidArgumentException
-     *
      * @return bool
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Exception
      */
     public function isNewVersionAvailable($currentVersion = '') : bool
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
-        if (empty($version)) {
-            throw new InvalidArgumentException('No currently installed version specified.');
+        if (empty($version) && empty($currentVersion)) {
+            throw new \InvalidArgumentException('No currently installed version specified.');
+        } elseif (empty($version) && empty($this->getVersionInstalled())) {
+            throw new \Exception('Currently installed version cannot be determined.');
         }
 
         return version_compare($version, $this->getVersionAvailable(), '<');
@@ -70,11 +75,37 @@ class GithubRepositoryType implements SourceRepositoryTypeContract
         $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()));
         $release = $releaseCollection->first();
 
-        if (! empty($version)) {
-            $release = $releaseCollection->where('tag_name', $version);
+        $storagePath = $this->config['download_path'];
+        $storageFilename = 'latest.zip';
+
+        if(!File::exists($storagePath)) {
+            File::makeDirectory($storagePath, 493, true, true);
         }
 
-        //dd($release);
+        if (!empty($version)) {
+            $release = $releaseCollection->where('tag_name', $version);
+            $storageFilename = "{$version}.zip";
+        }
+
+        $storageFile = $storagePath . $storageFilename;
+        $zipArchiveUrl = $release->zipball_url;
+        $this->client->request(
+            'GET', $zipArchiveUrl, ['sink' => $storageFile]
+        );
+        
+        $this->unzipArchive($storageFile, $storagePath);
+        $this->cleanupGithubSubfoldersInArchive($storagePath);
+
+    }
+
+    /**
+     * Perform the actual update process.
+     *
+     * @return bool
+     */
+    public function update() : bool
+    {
+
     }
 
     /**
@@ -120,4 +151,28 @@ class GithubRepositoryType implements SourceRepositoryTypeContract
             self::GITHUB_API_URL.'/repos/'.$this->config['repository_owner'].'/'.$this->config['repository_name'].'/releases'
         );
     }
+
+    /**
+     * Github archives have a sub-folder inside,
+     * but we want to have all the content in the main download folder.
+     *
+     * @param $storagePath
+     */
+    protected function cleanupGithubSubfoldersInArchive($storagePath)
+    {
+        $subDirName = File::directories($storagePath);
+        $directories = File::directories($subDirName[0]);
+
+        foreach ($directories as $directory) { /** @var \SplFileInfo $directory */
+            File::moveDirectory($directory, $storagePath.'/'.File::name($directory));
+        }
+
+        $files = File::allFiles($subDirName[0], true);
+        foreach ($files as $file) { /** @var \SplFileInfo $file */
+            File::move($file->getRealPath(), $storagePath.'/'.$file->getFilename());
+        }
+
+        File::deleteDirectory($subDirName[0]);
+    }
+
 }
