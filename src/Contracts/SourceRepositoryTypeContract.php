@@ -14,7 +14,16 @@ interface SourceRepositoryTypeContract
     public function fetch($version = '');
 
     /**
+     * Perform the actual update process.
+     *
+     * @return bool
+     */
+    public function update() : bool;
+
+    /**
      * Check repository if a newer version than the installed one is available.
+     * Caution: v.1.1 compared to 1.1 is not the same. Check to actually compare correct version, including letters
+     * before or after.
      *
      * @param string $currentVersion
      *
