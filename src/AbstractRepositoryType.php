@@ -13,28 +13,28 @@ use File;
 abstract class AbstractRepositoryType
 {
     /**
-     * Unzip an archive
+     * Unzip an archive.
      *
      * @param string $file
      * @param string $targetDir
-     * @param bool $deleteZipArchive
+     * @param bool   $deleteZipArchive
      *
      * @return bool
      */
-    protected function unzipArchive($file='', $targetDir='', $deleteZipArchive=true) : bool
+    protected function unzipArchive($file = '', $targetDir = '', $deleteZipArchive = true) : bool
     {
-        if(empty($file) || !File::exists($file)) {
+        if (empty($file) || ! File::exists($file)) {
             throw new \InvalidArgumentException("Archive [{$file}] cannot be found or is empty.");
         }
 
         $zip = new \ZipArchive();
         $res = $zip->open($file);
 
-        if(!$res) {
+        if (! $res) {
             throw new \Exception("Cannot open zip archive [{$file}].");
         }
 
-        if(empty($targetDir)) {
+        if (empty($targetDir)) {
             $extracted = $zip->extractTo(File::dirname($file));
         } else {
             $extracted = $zip->extractTo($targetDir);
@@ -42,7 +42,7 @@ abstract class AbstractRepositoryType
 
         $zip->close();
 
-        if($extracted && $deleteZipArchive===true) {
+        if ($extracted && $deleteZipArchive === true) {
             File::delete($file);
         }
 
