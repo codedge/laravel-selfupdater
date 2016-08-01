@@ -27,6 +27,11 @@
       "Codedge\\Updater\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Codedge\\Updater\\Tests\\": "tests/"
+    }
+  },
   "require": {
     "php": ">=5.5",
     "ext-zip": "*",
