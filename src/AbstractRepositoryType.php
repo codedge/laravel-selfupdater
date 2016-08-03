@@ -51,7 +51,7 @@ abstract class AbstractRepositoryType
     }
 
     /**
-     * Check a given directory recursively if all files are writeable
+     * Check a given directory recursively if all files are writeable.
      *
      * @param $directory
      *
@@ -64,7 +64,7 @@ abstract class AbstractRepositoryType
         $collection = collect($files)->each(function ($file) { /* @var \SplFileInfo $file */
             if (! File::isWritable($file->getRealPath())) {
                 event(new HasWrongPermissions($this));
-                
+
                 return false;
             }
         });
