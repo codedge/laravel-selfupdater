@@ -81,7 +81,7 @@ class UpdaterManager implements UpdaterContract
     /**
      * Register a custom driver creator Closure.
      *
-     * @param  string $driver
+     * @param string  $driver
      * @param Closure $callback
      *
      * @return $this
@@ -96,8 +96,8 @@ class UpdaterManager implements UpdaterContract
     /**
      * Dynamically call the default source repository instance.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param string $method
+     * @param array  $parameters
      *
      * @return mixed
      */
@@ -149,14 +149,13 @@ class UpdaterManager implements UpdaterContract
 
         if (isset($this->customSourceCreators[$config['driver']])) {
             return $this->callCustomSourceCreators($config);
-        } else {
-            $repositoryMethod = 'create' . ucfirst($name) . 'Repository';
-
-            if (method_exists($this, $repositoryMethod)) {
-                return $this->{$repositoryMethod}($config);
-            }
-            throw new InvalidArgumentException("Repository [{$name}] is not supported.");
         }
+        $repositoryMethod = 'create'.ucfirst($name).'Repository';
+
+        if (method_exists($this, $repositoryMethod)) {
+            return $this->{$repositoryMethod}($config);
+        }
+        throw new InvalidArgumentException("Repository [{$name}] is not supported.");
     }
 
     /**
@@ -176,7 +175,7 @@ class UpdaterManager implements UpdaterContract
     /**
      * Call a custom source repository type.
      *
-     * @param  array  $config
+     * @param array $config
      *
      * @return mixed
      */
