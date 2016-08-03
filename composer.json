@@ -1,6 +1,6 @@
 {
   "name": "codedge/laravel-selfupdater",
-  "description": "Providing an auto-updating functionality for your Laravel application.",
+  "description": "Providing an auto-updating functionality for your self-hosted Laravel application.",
   "license": "MIT",
   "keywords": [
     "self-update",
@@ -8,7 +8,9 @@
     "auto-update",
     "auto update",
     "update",
-    "laravel"
+    "laravel",
+    "laravel application",
+    "self-hosted laravel application"
   ],
   "support": {
     "issues": "https://github.com/codedge/laravel-selfupdater/issues",
