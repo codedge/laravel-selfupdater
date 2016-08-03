@@ -14,7 +14,7 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 class UpdateAvailable extends Event
 {
     /**
-     * @var  SourceRepositoryTypeContract
+     * @var SourceRepositoryTypeContract
      */
     protected $sourceRepository;
 
