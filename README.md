@@ -79,9 +79,10 @@ public function update()
 ```
 
 Of course you can inject the _updater_ via method injection:
-```
+```php
 public function update(Updater $updater)
 {
+    $updater->update(); // Same as above...
     $updater->fetch() // Same as above...
 }
 ```
