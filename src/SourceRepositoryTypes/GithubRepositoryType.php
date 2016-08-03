@@ -4,6 +4,7 @@ namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\AbstractRepositoryType;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use Codedge\Updater\Events\UpdateFailed;
 use File;
 use GuzzleHttp\Client;
 
@@ -104,6 +105,23 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      */
     public function update() : bool
     {
+        if ($this->hasCorrectPermissionForUpdate(app_path())) {
+            $directoriesCollection = collect(File::directories($this->config['download_path']));
+            $directoriesCollection->each(function ($directory) {
+                File::moveDirectory($directory, base_path(File::name($directory)));
+            });
+
+            $filesCollection = collect(File::allFiles($this->config['download_path'], true));
+            $filesCollection->each(function ($file) { /* @var \SplFileInfo $file */
+                File::move($file->getRealPath(), base_path($file->getFilename()));
+            });
+
+            return true;
+        } 
+
+        event(new UpdateFailed($this));
+        
+        return false;
     }
 
     /**
@@ -161,7 +179,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         $subDirName = File::directories($storagePath);
         $directories = File::directories($subDirName[0]);
 
-        foreach ($directories as $directory) { /* @var \SplFileInfo $directory */
+        foreach ($directories as $directory) { /* @var string $directory */
             File::moveDirectory($directory, $storagePath.'/'.File::name($directory));
         }
 
@@ -172,4 +190,5 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
 
         File::deleteDirectory($subDirName[0]);
     }
+
 }

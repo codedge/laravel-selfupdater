@@ -2,6 +2,7 @@
 
 namespace Codedge\Updater;
 
+use Codedge\Updater\Events\HasWrongPermissions;
 use File;
 
 /**
@@ -45,6 +46,28 @@ abstract class AbstractRepositoryType
         if ($extracted && $deleteZipArchive === true) {
             File::delete($file);
         }
+
+        return true;
+    }
+
+    /**
+     * Check a given directory recursively if all files are writeable
+     *
+     * @param $directory
+     *
+     * @return bool
+     */
+    protected function hasCorrectPermissionForUpdate($directory) : bool
+    {
+        $files = File::allFiles($directory);
+
+        $collection = collect($files)->each(function ($file) { /* @var \SplFileInfo $file */
+            if (! File::isWritable($file->getRealPath())) {
+                event(new HasWrongPermissions($this));
+                
+                return false;
+            }
+        });
 
         return true;
     }
