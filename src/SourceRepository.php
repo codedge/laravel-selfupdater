@@ -48,7 +48,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      */
     public function update($forceFetching = true) : bool
     {
-        if($forceFetching) {
+        if ($forceFetching) {
             $this->fetch();
         }
 
