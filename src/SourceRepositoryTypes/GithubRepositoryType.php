@@ -158,13 +158,14 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     /**
      * Get all releases for a specific repository.
      *
-     * @return mixed|\Psr\Http\Message\ResponseInterface
      * @throws \Exception
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface
      */
     protected function getRepositoryReleases()
     {
         if (empty($this->config['repository_owner']) || empty($this->config['repository_name'])) {
-            throw new \Exception("No repository specified. Please enter a valid Github repository owner and name in your config.");
+            throw new \Exception('No repository specified. Please enter a valid Github repository owner and name in your config.');
         }
 
         return $this->client->request(
