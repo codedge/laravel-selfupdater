@@ -81,7 +81,7 @@ class UpdaterManager implements UpdaterContract
     /**
      * Register a custom driver creator Closure.
      *
-     * @param  string $source
+     * @param string  $source
      * @param Closure $callback
      *
      * @return $this

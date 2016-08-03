@@ -15,7 +15,7 @@ use Codedge\Updater\SourceRepository;
 class UpdateFailed extends Event
 {
     /**
-     * @var  SourceRepositoryTypeContract
+     * @var SourceRepositoryTypeContract
      */
     protected $sourceRepository;
 
