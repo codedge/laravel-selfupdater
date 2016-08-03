@@ -4,7 +4,6 @@ namespace Codedge\Updater\Events;
 
 use App\Events\Event;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
-use Codedge\Updater\SourceRepository;
 
 /**
  * UpdateFailed.php.
