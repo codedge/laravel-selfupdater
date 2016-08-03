@@ -2,6 +2,7 @@
 
 namespace Codedge\Updater;
 
+use Closure;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
@@ -27,6 +28,11 @@ class UpdaterManager implements UpdaterContract
      * @var array
      */
     protected $sources = [];
+
+    /**
+     * @var array
+     */
+    protected $customSourceCreators = [];
 
     /**
      * Create a new Updater manager instance.
@@ -73,6 +79,34 @@ class UpdaterManager implements UpdaterContract
     }
 
     /**
+     * Register a custom driver creator Closure.
+     *
+     * @param  string $driver
+     * @param Closure $callback
+     *
+     * @return $this
+     */
+    public function extend($driver, Closure $callback)
+    {
+        $this->customRepositoryTypes[$driver] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Dynamically call the default source repository instance.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return call_user_func_array([$this->source(), $method], $parameters);
+    }
+
+    /**
      * Get the source repository connection configuration.
      *
      * @param string $name
@@ -113,12 +147,16 @@ class UpdaterManager implements UpdaterContract
             throw new InvalidArgumentException("Source repository [{$name}] is not defined.");
         }
 
-        $repositoryMethod = 'create'.ucfirst($name).'Repository';
+        if (isset($this->customSourceCreators[$config['driver']])) {
+            return $this->callCustomSourceCreators($config);
+        } else {
+            $repositoryMethod = 'create' . ucfirst($name) . 'Repository';
 
-        if (method_exists($this, $repositoryMethod)) {
-            return $this->{$repositoryMethod}($config);
+            if (method_exists($this, $repositoryMethod)) {
+                return $this->{$repositoryMethod}($config);
+            }
+            throw new InvalidArgumentException("Repository [{$name}] is not supported.");
         }
-        throw new InvalidArgumentException("Repository [{$name}] is not supported.");
     }
 
     /**
@@ -133,5 +171,17 @@ class UpdaterManager implements UpdaterContract
         $client = new Client();
 
         return $this->sourceRepository(new GithubRepositoryType($client, $config));
+    }
+
+    /**
+     * Call a custom source repository type.
+     *
+     * @param  array  $config
+     *
+     * @return mixed
+     */
+    protected function callCustomSourceCreators(array $config)
+    {
+        return $this->customSourceCreators[$config['type']]($this->app, $config);
     }
 }
