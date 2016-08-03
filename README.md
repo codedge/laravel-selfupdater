@@ -11,7 +11,7 @@ lovely users with Git commands ;-)
 ## Install with Composer
 To install the library using [Composer](https://getcomposer.org/):
 ```sh
-$ composer require codedge/laravel-selfupdater
+$ composer require codedge/laravel-selfupdater:"dev-master"
 ```
 
 This adds the _codedge/laravel-selfupdater_ package to your `composer.json` and downloads the project.
