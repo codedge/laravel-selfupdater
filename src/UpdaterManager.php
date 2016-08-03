@@ -81,14 +81,14 @@ class UpdaterManager implements UpdaterContract
     /**
      * Register a custom driver creator Closure.
      *
-     * @param  string $driver
+     * @param  string $source
      * @param Closure $callback
      *
      * @return $this
      */
-    public function extend($driver, Closure $callback)
+    public function extend($source, Closure $callback)
     {
-        $this->customRepositoryTypes[$driver] = $callback;
+        $this->customRepositoryTypes[$source] = $callback;
 
         return $this;
     }
@@ -147,7 +147,7 @@ class UpdaterManager implements UpdaterContract
             throw new InvalidArgumentException("Source repository [{$name}] is not defined.");
         }
 
-        if (isset($this->customSourceCreators[$config['driver']])) {
+        if (isset($this->customSourceCreators[$config['type']])) {
             return $this->callCustomSourceCreators($config);
         } else {
             $repositoryMethod = 'create' . ucfirst($name) . 'Repository';
