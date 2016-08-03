@@ -82,7 +82,12 @@ Of course you can inject the _updater_ via method injection:
 ```php
 public function update(Updater $updater)
 {
-    $updater->update(); // Same as above...
+
+    $updater->update(); // Same as above
+    
+    // .. and shorthand for this:
+    $updater->source()->update;
+    
     $updater->fetch() // Same as above...
 }
 ```
@@ -97,8 +102,29 @@ source repository type:
 
 So the perfect class head looks like
 ```
-class MyFancyRepositoryType extends AbstractRepositoryType implements SourceRepositoryTypeContract
+class BitbucketRepositoryType extends AbstractRepositoryType implements SourceRepositoryTypeContract
+```
+
+Afterwards you may create your own [service provider](https://laravel.com/docs/5.2/providers),
+i. e. BitbucketUpdaterServiceProvider, with your boot method like so:
+
+```php
+public function boot()
+{
+    Updater::extend('bitbucket', function($app) {
+        return Updater::sourceRepository(new BitbucketRepositoryType);
+    });
+}
+
+```
+
+Now you call your own update source with:
+```php
+public function update(Updater $updater)
+{
+    $updater->source('bitbucket')->update();
+}
 ```
 
 ## Contributing
-Please see the [contributing guide].
+Please see the [contributing guide](CONTRIBUTING.md).
