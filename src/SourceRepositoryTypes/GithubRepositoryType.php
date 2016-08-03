@@ -117,7 +117,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             });
 
             return true;
-        } 
+        }
 
         event(new UpdateFailed($this));
 
@@ -190,5 +190,4 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
 
         File::deleteDirectory($subDirName[0]);
     }
-
 }

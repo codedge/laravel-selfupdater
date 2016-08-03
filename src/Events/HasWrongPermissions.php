@@ -11,7 +11,7 @@ namespace Codedge\Updater\Events;
 class HasWrongPermissions
 {
     /**
-     * @var  SourceRepositoryTypeContract
+     * @var SourceRepositoryTypeContract
      */
     protected $sourceRepository;
 
