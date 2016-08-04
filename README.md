@@ -80,7 +80,7 @@ public function update()
 
 Of course you can inject the _updater_ via method injection:
 ```php
-public function update(Updater $updater)
+public function update(UpdaterManager $updater)
 {
 
     $updater->update(); // Same as above
@@ -120,7 +120,7 @@ public function boot()
 
 Now you call your own update source with:
 ```php
-public function update(Updater $updater)
+public function update(UpdaterManager $updater)
 {
     $updater->source('bitbucket')->update();
 }
@@ -128,3 +128,9 @@ public function update(Updater $updater)
 
 ## Contributing
 Please see the [contributing guide](CONTRIBUTING.md).
+
+## Roadmap
+Just a quickly sketched [roadmap](https://github.com/codedge/laravel-selfupdater/wiki/Roadmap) what still needs to be implemented.
+
+## Licence
+The MIT License (MIT). Please see [Licencse file](LICENSE) for more information.
