@@ -62,12 +62,11 @@ After installing the package you need to publish the configuration file via
  your updates.
 
 ## Usage
-If you want to utilize the pre-packaged Github component as the update
-source you could use this in a controller as Github is the default source:
+To start an update process, i. e. in a controller, just use:
 ```php
 public function update()
 {
-    // This downloads the latest version of your repo from Github
+    // This downloads and install the latest version of your repo
     Updater::update();
     
     // Just download the source and do the actual update elsewhere
@@ -91,6 +90,17 @@ public function update(UpdaterManager $updater)
     $updater->fetch() // Same as above...
 }
 ```
+
+**Note:** Currently the fetching of the source is a _synchronous_ process.
+It is not run in background.
+
+### Using Github
+The package comes with a _Github_ source repository type to fetch 
+releases from Github - basically use Github to pull the latest version
+of your software.
+
+Just make sure you set the proper repository in your `config/self-updater.php`
+file.
 
 ## Extending and adding new source repository types
 You want to pull your new versions from elsewhere? Feel free to create
