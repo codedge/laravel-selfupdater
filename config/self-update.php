@@ -27,8 +27,8 @@ return [
     'repository_types' => [
         'github' => [
             'type' => 'github',
-            'repository_owner' => '',
-            'repository_name' => '',
+            'repository_vendor' => env('SELF_UPDATER_REPO_VENDOR', ''),
+            'repository_name' => env('SELF_UPDATER_REPO_NAME', ''),
             'repository_url' => '',
             'download_path' => env('SELF_UPDATE_DOWNLOAD_PATH', storage_path('self-update/github/')),
         ],

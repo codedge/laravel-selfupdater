@@ -170,7 +170,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
 
         return $this->client->request(
             'GET',
-            self::GITHUB_API_URL.'/repos/'.$this->config['repository_owner'].'/'.$this->config['repository_name'].'/releases'
+            self::GITHUB_API_URL.'/repos/'.$this->config['repository_vendor'].'/'.$this->config['repository_name'].'/releases'
         );
     }
 
