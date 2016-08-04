@@ -164,7 +164,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      */
     protected function getRepositoryReleases()
     {
-        if (empty($this->config['repository_owner']) || empty($this->config['repository_name'])) {
+        if (empty($this->config['repository_vendor']) || empty($this->config['repository_name'])) {
             throw new \Exception('No repository specified. Please enter a valid Github repository owner and name in your config.');
         }
 
