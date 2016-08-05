@@ -6,7 +6,6 @@ use Codedge\Updater\AbstractRepositoryType;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateFailed;
 use File;
-use GuzzleHttp\Client;
 
 /**
  * Github.php.
@@ -89,10 +88,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         }
 
         $storageFile = $storagePath.$storageFilename;
-        $zipArchiveUrl = $release->zipball_url;
-        $this->client->request(
-            'GET', $zipArchiveUrl, ['sink' => $storageFile]
-        );
+        $this->downloadRelease($this->client, $release->zipball_url, $storageFile);
 
         $this->unzipArchive($storageFile, $storagePath);
         $this->cleanupGithubSubfoldersInArchive($storagePath);

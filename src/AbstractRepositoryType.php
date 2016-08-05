@@ -4,6 +4,7 @@ namespace Codedge\Updater;
 
 use Codedge\Updater\Events\HasWrongPermissions;
 use File;
+use GuzzleHttp\Client;
 
 /**
  * AbstractRepositoryType.php.
@@ -18,9 +19,10 @@ abstract class AbstractRepositoryType
      *
      * @param string $file
      * @param string $targetDir
-     * @param bool   $deleteZipArchive
+     * @param bool $deleteZipArchive
      *
      * @return bool
+     * @throws \Exception
      */
     protected function unzipArchive($file = '', $targetDir = '', $deleteZipArchive = true) : bool
     {
@@ -70,5 +72,21 @@ abstract class AbstractRepositoryType
         });
 
         return true;
+    }
+
+    /**
+     * Download a file to a given location
+     *
+     * @param Client $client
+     * @param string $source
+     * @param string $storagePath
+     * 
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     */
+    protected function downloadRelease(Client $client, $source, $storagePath)
+    {
+        return $client->request(
+            'GET', $source, ['sink' => $storagePath]
+        );
     }
 }
