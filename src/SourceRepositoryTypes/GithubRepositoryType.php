@@ -6,6 +6,7 @@ use Codedge\Updater\AbstractRepositoryType;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateFailed;
 use File;
+use GuzzleHttp\Client;
 
 /**
  * Github.php.
@@ -76,38 +77,49 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         $release = $releaseCollection->first();
 
         $storagePath = $this->config['download_path'];
-        $storageFilename = 'latest.zip';
 
         if (! File::exists($storagePath)) {
             File::makeDirectory($storagePath, 493, true, true);
         }
 
         if (! empty($version)) {
-            $release = $releaseCollection->where('tag_name', $version);
-            $storageFilename = "{$version}.zip";
+            $release = $releaseCollection->where('tag_name', $version)->first();
         }
 
-        $storageFile = $storagePath.$storageFilename;
-        $this->downloadRelease($this->client, $release->zipball_url, $storageFile);
+        $storageFilename = "{$release->tag_name}.zip";
 
-        $this->unzipArchive($storageFile, $storagePath);
-        $this->cleanupGithubSubfoldersInArchive($storagePath);
+        if (! $this->isSourceAlreadyFetched($release->tag_name)) {
+            $storageFile = $storagePath.$storageFilename;
+            $this->downloadRelease($this->client, $release->zipball_url, $storageFile);
+
+            $this->unzipArchive($storageFile, $storagePath);
+            $this->createReleaseFolder($storagePath, $release->tag_name);
+        }
     }
 
     /**
      * Perform the actual update process.
      *
+     * @param string $version
+     *
      * @return bool
      */
-    public function update() : bool
+    public function update($version = '') : bool
     {
         if ($this->hasCorrectPermissionForUpdate(base_path())) {
-            $directoriesCollection = collect(File::directories($this->config['download_path']));
+
+            if (! empty($version)) {
+                $sourcePath = $this->config['download_path'].DIRECTORY_SEPARATOR.$version;
+            } else {
+                $sourcePath = File::directories($this->config['download_path'])[0];
+            }
+
+            $directoriesCollection = collect(File::directories($sourcePath));
             $directoriesCollection->each(function ($directory) {
                 File::moveDirectory($directory, base_path(File::name($directory)), true);
             });
 
-            $filesCollection = collect(File::allFiles($this->config['download_path'], true));
+            $filesCollection = collect(File::allFiles($sourcePath, true));
             $filesCollection->each(function ($file) { /* @var \SplFileInfo $file */
                 File::move($file->getRealPath(), base_path($file->getFilename()));
             });
@@ -174,22 +186,43 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      * Github archives have a sub-folder inside,
      * but we want to have all the content in the main download folder.
      *
-     * @param $storagePath
+     * @param string $storagePath
+     * @param string $releaseName
      */
-    protected function cleanupGithubSubfoldersInArchive($storagePath)
+    protected function createReleaseFolder($storagePath, $releaseName)
     {
         $subDirName = File::directories($storagePath);
         $directories = File::directories($subDirName[0]);
 
+        File::makeDirectory($storagePath.'/'.$releaseName);
+
         foreach ($directories as $directory) { /* @var string $directory */
-            File::moveDirectory($directory, $storagePath.'/'.File::name($directory));
+            File::moveDirectory($directory, $storagePath.'/'.$releaseName.'/'.File::name($directory));
         }
 
         $files = File::allFiles($subDirName[0], true);
         foreach ($files as $file) { /* @var \SplFileInfo $file */
-            File::move($file->getRealPath(), $storagePath.'/'.$file->getFilename());
+            File::move($file->getRealPath(), $storagePath.'/'.$releaseName.'/'.$file->getFilename());
         }
 
         File::deleteDirectory($subDirName[0]);
+    }
+
+    /**
+     * Check if the source has already been downloaded
+     *
+     * @param $version
+     *
+     * @return bool
+     */
+    protected function isSourceAlreadyFetched($version)
+    {
+        $storagePath = $this->config['download_path'].'/'.$version;
+        if(! File::exists($storagePath) || empty(File::directories($storagePath))
+        ) {
+            return false;
+        }
+
+        return true;
     }
 }

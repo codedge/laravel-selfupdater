@@ -42,17 +42,18 @@ class SourceRepository implements SourceRepositoryTypeContract
     /**
      * Perform the actual update process.
      *
+     * @param string $version Define the version you want to update to
      * @param bool $forceFetching Forces a fresh download of the latest update version
      *
      * @return bool
      */
-    public function update($forceFetching = true) : bool
+    public function update($version = '', $forceFetching = true) : bool
     {
         if ($forceFetching) {
-            $this->fetch();
+            $this->fetch($version);
         }
 
-        return $this->sourceRepository->update();
+        return $this->sourceRepository->update($version);
     }
 
     /**
