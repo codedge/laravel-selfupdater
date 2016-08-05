@@ -19,7 +19,7 @@ class UpdateFailed extends Event
     protected $sourceRepository;
 
     /**
-     * @var  string
+     * @var string
      */
     protected $eventName = 'Update failed';
 
@@ -34,7 +34,7 @@ class UpdateFailed extends Event
     }
 
     /**
-     * Get the event name
+     * Get the event name.
      *
      * @return string
      */
