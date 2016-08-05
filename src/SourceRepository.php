@@ -42,8 +42,8 @@ class SourceRepository implements SourceRepositoryTypeContract
     /**
      * Perform the actual update process.
      *
-     * @param string $version Define the version you want to update to
-     * @param bool $forceFetching Forces a fresh download of the latest update version
+     * @param string $version       Define the version you want to update to
+     * @param bool   $forceFetching Forces a fresh download of the latest update version
      *
      * @return bool
      */

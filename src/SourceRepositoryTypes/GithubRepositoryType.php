@@ -107,7 +107,6 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     public function update($version = '') : bool
     {
         if ($this->hasCorrectPermissionForUpdate(base_path())) {
-
             if (! empty($version)) {
                 $sourcePath = $this->config['download_path'].DIRECTORY_SEPARATOR.$version;
             } else {
@@ -209,7 +208,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     }
 
     /**
-     * Check if the source has already been downloaded
+     * Check if the source has already been downloaded.
      *
      * @param $version
      *
@@ -218,7 +217,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     protected function isSourceAlreadyFetched($version)
     {
         $storagePath = $this->config['download_path'].'/'.$version;
-        if(! File::exists($storagePath) || empty(File::directories($storagePath))
+        if (! File::exists($storagePath) || empty(File::directories($storagePath))
         ) {
             return false;
         }
