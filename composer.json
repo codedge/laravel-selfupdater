@@ -35,7 +35,7 @@
     }
   },
   "require": {
-    "php": ">=5.5",
+    "php": ">=5.6",
     "ext-zip": "*",
     "illuminate/support": "5.*",
     "guzzlehttp/guzzle": "6.*"
