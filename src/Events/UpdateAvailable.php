@@ -14,7 +14,7 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 class UpdateAvailable extends Event
 {
     /**
-     * @var  string
+     * @var string
      */
     protected $eventName = 'Update available';
 
@@ -34,7 +34,7 @@ class UpdateAvailable extends Event
     }
 
     /**
-     * Get the event name
+     * Get the event name.
      *
      * @return string
      */
@@ -44,7 +44,7 @@ class UpdateAvailable extends Event
     }
 
     /**
-     * Get the new version
+     * Get the new version.
      *
      * @param string $prepend
      * @param string $append

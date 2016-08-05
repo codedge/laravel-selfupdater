@@ -56,7 +56,7 @@ return [
 
     'mail_to' => [
         'address' => env('SELF_UPDATE_MAILTO_ADDRESS', ''),
-        'name' => env('SELF_UPDATE_MAILTO_NAME', '')
-    ]
+        'name' => env('SELF_UPDATE_MAILTO_NAME', ''),
+    ],
 
 ];

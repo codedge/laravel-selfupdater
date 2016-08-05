@@ -16,12 +16,12 @@ use Monolog\Logger;
 class SendUpdateAvailableNotification implements ShouldQueue
 {
     /**
-     * @var  Logger
+     * @var Logger
      */
     protected $logger;
 
     /**
-     * @var  Mailer
+     * @var Mailer
      */
     protected $mailer;
 
@@ -44,7 +44,7 @@ class SendUpdateAvailableNotification implements ShouldQueue
      */
     public function handle(UpdateAvailable $event)
     {
-        if(config('self-update.log_events')) {
+        if (config('self-update.log_events')) {
             $this->logger->addInfo('['.$event->getName().'] event: Notification triggered.');
         }
 
@@ -53,7 +53,7 @@ class SendUpdateAvailableNotification implements ShouldQueue
             [
                 'newVersion' => $event->getVersionAvailable(),
             ],
-            function ($m) use($event) {
+            function ($m) use ($event) {
                 $m->subject($event->getName());
                 $m->from(config('mail.from.address'), config('mail.from.name'));
                 $m->to(config('self-update.mail_to.address'), config('self-update.mail_to.name'));

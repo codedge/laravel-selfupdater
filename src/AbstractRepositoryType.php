@@ -19,10 +19,11 @@ abstract class AbstractRepositoryType
      *
      * @param string $file
      * @param string $targetDir
-     * @param bool $deleteZipArchive
+     * @param bool   $deleteZipArchive
+     *
+     * @throws \Exception
      *
      * @return bool
-     * @throws \Exception
      */
     protected function unzipArchive($file = '', $targetDir = '', $deleteZipArchive = true) : bool
     {
@@ -75,12 +76,12 @@ abstract class AbstractRepositoryType
     }
 
     /**
-     * Download a file to a given location
+     * Download a file to a given location.
      *
      * @param Client $client
      * @param string $source
      * @param string $storagePath
-     * 
+     *
      * @return mixed|\Psr\Http\Message\ResponseInterface
      */
     protected function downloadRelease(Client $client, $source, $storagePath)
