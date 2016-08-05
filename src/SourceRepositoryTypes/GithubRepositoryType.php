@@ -4,7 +4,9 @@ namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\AbstractRepositoryType;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateFailed;
+use Codedge\Updater\Events\UpdateSucceeded;
 use File;
 use GuzzleHttp\Client;
 
@@ -60,7 +62,12 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             throw new \Exception('Currently installed version cannot be determined.');
         }
 
-        return version_compare($version, $this->getVersionAvailable(), '<');
+        if (version_compare($version, $this->getVersionAvailable(), '<')) {
+            event(new UpdateAvailable($this));
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -122,6 +129,8 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             $filesCollection->each(function ($file) { /* @var \SplFileInfo $file */
                 File::move($file->getRealPath(), base_path($file->getFilename()));
             });
+
+            event(new UpdateSucceeded($this));
 
             return true;
         }
