@@ -14,6 +14,11 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 class UpdateAvailable extends Event
 {
     /**
+     * @var  string
+     */
+    protected $eventName = 'Update available';
+
+    /**
      * @var SourceRepositoryTypeContract
      */
     protected $sourceRepository;
@@ -26,5 +31,28 @@ class UpdateAvailable extends Event
     public function __construct(SourceRepositoryTypeContract $sourceRepository)
     {
         $this->sourceRepository = $sourceRepository;
+    }
+
+    /**
+     * Get the event name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->eventName;
+    }
+
+    /**
+     * Get the new version
+     *
+     * @param string $prepend
+     * @param string $append
+     *
+     * @return string
+     */
+    public function getVersionAvailable($prepend = '', $append = '')
+    {
+        return $this->sourceRepository->getVersionAvailable($prepend, $append);
     }
 }

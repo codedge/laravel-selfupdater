@@ -34,4 +34,29 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Event Logging
+    |--------------------------------------------------------------------------
+    |
+    | Configure if fired events should be logged
+    |
+    */
+
+    'log_events' => env('SELF_UPDATE_LOG_EVENTS', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mail To Settings
+    |--------------------------------------------------------------------------
+    |
+    | Configure if fired events should be logged
+    |
+    */
+
+    'mail_to' => [
+        'address' => env('SELF_UPDATE_MAILTO_ADDRESS', ''),
+        'name' => env('SELF_UPDATE_MAILTO_NAME', '')
+    ]
+
 ];
