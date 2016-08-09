@@ -2,7 +2,6 @@
 
 namespace Codedge\Updater\Events;
 
-use App\Events\Event;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 
 /**
@@ -11,7 +10,7 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
  * @author Holger Lösken <holger.loesken@codedge.de>
  * @copyright See LICENSE file that was distributed with this source code.
  */
-class UpdateAvailable extends Event
+class UpdateAvailable
 {
     /**
      * @var string
