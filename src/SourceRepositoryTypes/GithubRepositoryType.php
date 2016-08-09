@@ -185,30 +185,4 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             self::GITHUB_API_URL.'/repos/'.$this->config['repository_vendor'].'/'.$this->config['repository_name'].'/releases'
         );
     }
-
-    /**
-     * Github archives have a sub-folder inside,
-     * but we want to have all the content in the main download folder.
-     *
-     * @param string $storagePath
-     * @param string $releaseName
-     */
-    protected function createReleaseFolder($storagePath, $releaseName)
-    {
-        $subDirName = File::directories($storagePath);
-        $directories = File::directories($subDirName[0]);
-
-        File::makeDirectory($storagePath.'/'.$releaseName);
-
-        foreach ($directories as $directory) { /* @var string $directory */
-            File::moveDirectory($directory, $storagePath.'/'.$releaseName.'/'.File::name($directory));
-        }
-
-        $files = File::allFiles($subDirName[0], true);
-        foreach ($files as $file) { /* @var \SplFileInfo $file */
-            File::move($file->getRealPath(), $storagePath.'/'.$releaseName.'/'.$file->getFilename());
-        }
-
-        File::deleteDirectory($subDirName[0]);
-    }
 }
