@@ -1,5 +1,6 @@
 # Laravel Application Self-Updater
 
+[![Build Status](https://travis-ci.org/codedge/laravel-selfupdater.svg?branch=master)](https://travis-ci.org/codedge/laravel-selfupdater)
 [![StyleCI](https://styleci.io/repos/64463948/shield)](https://styleci.io/repos/64463948)
 
 This package provides some basic methods to implement a self updating
