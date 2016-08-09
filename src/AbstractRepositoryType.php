@@ -99,7 +99,7 @@ abstract class AbstractRepositoryType
     /**
      * Check if the source has already been downloaded.
      *
-     * @param $version
+     * @param string $version A specific version
      *
      * @return bool
      */
