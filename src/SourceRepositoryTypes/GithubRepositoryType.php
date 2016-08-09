@@ -26,11 +26,6 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     protected $client;
 
     /**
-     * @var array
-     */
-    protected $config;
-
-    /**
      * Github constructor.
      *
      * @param Client $client
@@ -214,23 +209,5 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         }
 
         File::deleteDirectory($subDirName[0]);
-    }
-
-    /**
-     * Check if the source has already been downloaded.
-     *
-     * @param $version
-     *
-     * @return bool
-     */
-    protected function isSourceAlreadyFetched($version)
-    {
-        $storagePath = $this->config['download_path'].'/'.$version;
-        if (! File::exists($storagePath) || empty(File::directories($storagePath))
-        ) {
-            return false;
-        }
-
-        return true;
     }
 }

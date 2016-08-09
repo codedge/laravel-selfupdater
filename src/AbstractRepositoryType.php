@@ -15,6 +15,11 @@ use GuzzleHttp\Client;
 abstract class AbstractRepositoryType
 {
     /**
+     * @var array
+     */
+    protected $config;
+
+    /**
      * Unzip an archive.
      *
      * @param string $file
@@ -89,5 +94,23 @@ abstract class AbstractRepositoryType
         return $client->request(
             'GET', $source, ['sink' => $storagePath]
         );
+    }
+
+    /**
+     * Check if the source has already been downloaded.
+     *
+     * @param $version
+     *
+     * @return bool
+     */
+    protected function isSourceAlreadyFetched($version) : bool
+    {
+        $storagePath = $this->config['download_path'].'/'.$version;
+        if (! File::exists($storagePath) || empty(File::directories($storagePath))
+        ) {
+            return false;
+        }
+
+        return true;
     }
 }
