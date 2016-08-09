@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/codedge/laravel-selfupdater.svg?branch=master)](https://travis-ci.org/codedge/laravel-selfupdater)
 [![StyleCI](https://styleci.io/repos/64463948/shield)](https://styleci.io/repos/64463948)
+[![codecov](https://codecov.io/gh/codedge/laravel-selfupdater/branch/master/graph/badge.svg)](https://codecov.io/gh/codedge/laravel-selfupdater)
 
 This package provides some basic methods to implement a self updating
 functionality for your Laravel 5 application. Already bundled are some
