@@ -1,5 +1,7 @@
 # Laravel Application Self-Updater
 
+[![StyleCI](https://styleci.io/repos/64463948/shield)](https://styleci.io/repos/64463948)
+
 This package provides some basic methods to implement a self updating
 functionality for your Laravel 5 application. Already bundled are some
 methods to provide a self-update mechanism via Github.
