@@ -154,7 +154,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      */
     public function getVersionInstalled($prepend = '', $append = '') : string
     {
-        return '';
+        return $prepend.$this->config['version_installed'].$append;
     }
 
     /**
