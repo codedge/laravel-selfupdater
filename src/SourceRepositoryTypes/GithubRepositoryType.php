@@ -91,17 +91,17 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         }
 
         if (! empty($version)) {
-            $release = $releaseCollection->where('tag_name', $version)->first();
+            $release = $releaseCollection->where('name', $version)->first();
         }
 
         $storageFilename = "{$release->tag_name}.zip";
 
-        if (! $this->isSourceAlreadyFetched($release->tag_name)) {
+        if (! $this->isSourceAlreadyFetched($release->name)) {
             $storageFile = $storagePath.$storageFilename;
             $this->downloadRelease($this->client, $release->zipball_url, $storageFile);
 
             $this->unzipArchive($storageFile, $storagePath);
-            $this->createReleaseFolder($storagePath, $release->tag_name);
+            $this->createReleaseFolder($storagePath, $release->name);
         }
     }
 
@@ -169,7 +169,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         $response = $this->getRepositoryReleases();
         $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()));
 
-        return $prepend.$releaseCollection->first()->tag_name.$append;
+        return $prepend.$releaseCollection->first()->name.$append;
     }
 
     /**
@@ -187,7 +187,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
 
         return $this->client->request(
             'GET',
-            self::GITHUB_API_URL.'/repos/'.$this->config['repository_vendor'].'/'.$this->config['repository_name'].'/releases'
+            self::GITHUB_API_URL.'/repos/'.$this->config['repository_vendor'].'/'.$this->config['repository_name'].'/tags'
         );
     }
 }
