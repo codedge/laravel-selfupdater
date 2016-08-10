@@ -3,6 +3,7 @@
 namespace Codedge\Updater\Tests\SourceRepositoryTypes;
 
 use Codedge\Updater\Events\UpdateAvailable;
+use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 
@@ -47,7 +48,6 @@ class GithubRepositoryTypeTest extends TestCase
         $currentVersion = 'v100.1';
         $this->assertFalse($class->isNewVersionAvailable($currentVersion));
 
-
     }
 
     public function testGetVersionAvailableFailsWithException()
@@ -64,4 +64,11 @@ class GithubRepositoryTypeTest extends TestCase
         $this->assertStringStartsWith('v', $class->getVersionAvailable('v'));
         $this->assertStringEndsWith('version', $class->getVersionAvailable('', 'version'));
     }
+
+    /*public function testUpdateTriggerUpdateFailedEvent()
+    {
+        $class = new GithubRepositoryType($this->client, $this->config);
+        $this->expectsEvents(UpdateFailed::class);
+        $class->update();
+    }*/
 }
