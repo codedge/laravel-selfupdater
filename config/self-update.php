@@ -11,7 +11,18 @@ return [
     |
     */
 
-    'default' => env('SELF_UPDATE_SOURCE', 'github'),
+    'default' => env('SELF_UPDATER_SOURCE', 'github'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Version installed
+    |--------------------------------------------------------------------------
+    |
+    | Set this to the version of your software installed on your system.
+    |
+    */
+
+    'version_installed' => env('SELF_UPDATER_VERSION_INSTALLED', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -30,7 +41,7 @@ return [
             'repository_vendor' => env('SELF_UPDATER_REPO_VENDOR', ''),
             'repository_name' => env('SELF_UPDATER_REPO_NAME', ''),
             'repository_url' => '',
-            'download_path' => env('SELF_UPDATE_DOWNLOAD_PATH', storage_path('self-update/github/')),
+            'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', storage_path('self-update/github/')),
         ],
     ],
 
@@ -43,7 +54,7 @@ return [
     |
     */
 
-    'log_events' => env('SELF_UPDATE_LOG_EVENTS', false),
+    'log_events' => env('SELF_UPDATER_LOG_EVENTS', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,8 +66,8 @@ return [
     */
 
     'mail_to' => [
-        'address' => env('SELF_UPDATE_MAILTO_ADDRESS', ''),
-        'name' => env('SELF_UPDATE_MAILTO_NAME', ''),
+        'address' => env('SELF_UPDATER_MAILTO_ADDRESS', ''),
+        'name' => env('SELF_UPDATER_MAILTO_NAME', ''),
     ],
 
 ];
