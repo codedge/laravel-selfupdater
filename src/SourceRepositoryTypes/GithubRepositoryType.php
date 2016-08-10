@@ -70,13 +70,18 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
      * @param string $version
-     *
      * @return mixed
+     * @throws \Exception
      */
     public function fetch($version = '')
     {
         $response = $this->getRepositoryReleases();
         $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()));
+
+        if($releaseCollection->isEmpty()) {
+            throw new \Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
+        }
+
         $release = $releaseCollection->first();
 
         $storagePath = $this->config['download_path'];
