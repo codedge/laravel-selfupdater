@@ -41,7 +41,7 @@
     "guzzlehttp/guzzle": "6.*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.5",
+    "phpunit/phpunit": "^4.8",
     "orchestra/testbench": "3.2.*",
     "mockery/mockery": "^0.9.5"
   }
