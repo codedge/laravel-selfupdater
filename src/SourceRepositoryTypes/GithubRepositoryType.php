@@ -47,7 +47,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    public function isNewVersionAvailable($currentVersion = '') : bool
+    public function isNewVersionAvailable($currentVersion = '')
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
@@ -114,7 +114,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    public function update($version = '') : bool
+    public function update($version = '')
     {
         if ($this->hasCorrectPermissionForUpdate(base_path())) {
             if (! empty($version)) {
@@ -152,7 +152,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return string
      */
-    public function getVersionInstalled($prepend = '', $append = '') : string
+    public function getVersionInstalled($prepend = '', $append = '')
     {
         return $prepend.$this->config['version_installed'].$append;
     }
@@ -166,7 +166,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return string
      */
-    public function getVersionAvailable($prepend = '', $append = '') : string
+    public function getVersionAvailable($prepend = '', $append = '')
     {
         $response = $this->getRepositoryReleases();
         $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()));

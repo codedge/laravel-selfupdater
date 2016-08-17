@@ -30,7 +30,7 @@ abstract class AbstractRepositoryType
      *
      * @return bool
      */
-    protected function unzipArchive($file = '', $targetDir = '', $deleteZipArchive = true) : bool
+    protected function unzipArchive($file = '', $targetDir = '', $deleteZipArchive = true)
     {
         if (empty($file) || ! File::exists($file)) {
             throw new \InvalidArgumentException("Archive [{$file}] cannot be found or is empty.");
@@ -65,7 +65,7 @@ abstract class AbstractRepositoryType
      *
      * @return bool
      */
-    protected function hasCorrectPermissionForUpdate($directory) : bool
+    protected function hasCorrectPermissionForUpdate($directory)
     {
         $files = File::allFiles($directory);
 
@@ -103,7 +103,7 @@ abstract class AbstractRepositoryType
      *
      * @return bool
      */
-    protected function isSourceAlreadyFetched($version) : bool
+    protected function isSourceAlreadyFetched($version)
     {
         $storagePath = $this->config['download_path'].'/'.$version;
         if (! File::exists($storagePath) || empty(File::directories($storagePath))

@@ -18,7 +18,7 @@ interface SourceRepositoryTypeContract
      *
      * @return bool
      */
-    public function update() : bool;
+    public function update();
 
     /**
      * Check repository if a newer version than the installed one is available.
@@ -29,7 +29,7 @@ interface SourceRepositoryTypeContract
      *
      * @return bool
      */
-    public function isNewVersionAvailable($currentVersion = '') : bool;
+    public function isNewVersionAvailable($currentVersion = '');
 
     /**
      * Get the version that is currenly installed.
@@ -40,7 +40,7 @@ interface SourceRepositoryTypeContract
      *
      * @return string
      */
-    public function getVersionInstalled($prepend = '', $append = '') : string;
+    public function getVersionInstalled($prepend = '', $append = '');
 
     /**
      * Get the latest version that has been published in a certain repository.
@@ -51,5 +51,5 @@ interface SourceRepositoryTypeContract
      *
      * @return string
      */
-    public function getVersionAvailable($prepend = '', $append = '') : string;
+    public function getVersionAvailable($prepend = '', $append = '');
 }
