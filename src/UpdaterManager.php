@@ -117,7 +117,7 @@ class UpdaterManager implements UpdaterContract
     {
         $this->app['config']['self-update']['repository_types'][$name]['version_installed']
             = $this->app['config']['self-update']['version_installed'];
-        
+
         return $this->app['config']['self-update']['repository_types'][$name];
     }
 
