@@ -13,6 +13,13 @@ that needs some updating mechanism, as you do not want to bother your
 lovely users with Git commands ;-)
 
 ## Install with Composer
+
+There are currently two branches:
+* `master`: Compatible with PHP 7.x
+* `5.x`: Compatible with PHP 5.5 + 5.6
+
+_Please select the right branch for your PHP version accordingly._
+
 To install the library using [Composer](https://getcomposer.org/):
 ```sh
 $ composer require codedge/laravel-selfupdater:"dev-master"
