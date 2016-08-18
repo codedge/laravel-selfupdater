@@ -36,6 +36,8 @@ class SourceRepository implements SourceRepositoryTypeContract
      */
     public function fetch($version = '')
     {
+        $version = !empty($version) ? $version : $this->getVersionAvailable();
+
         return $this->sourceRepository->fetch($version);
     }
 
@@ -49,6 +51,8 @@ class SourceRepository implements SourceRepositoryTypeContract
      */
     public function update($version = '', $forceFetching = true)
     {
+        $version = !empty($version) ? $version : $this->getVersionAvailable();
+
         if ($forceFetching) {
             $this->fetch($version);
         }
