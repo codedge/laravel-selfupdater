@@ -97,7 +97,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             $release = $releaseCollection->where('name', $version)->first();
         }
 
-        $storageFilename = "{$release->tag_name}.zip";
+        $storageFilename = "{$release->name}.zip";
 
         if (! $this->isSourceAlreadyFetched($release->name)) {
             $storageFile = $storagePath.$storageFilename;
