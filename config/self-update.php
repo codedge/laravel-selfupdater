@@ -41,7 +41,7 @@ return [
             'repository_vendor' => env('SELF_UPDATER_REPO_VENDOR', ''),
             'repository_name' => env('SELF_UPDATER_REPO_NAME', ''),
             'repository_url' => '',
-            'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', storage_path('self-update/github/')),
+            'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
         ],
     ],
 
