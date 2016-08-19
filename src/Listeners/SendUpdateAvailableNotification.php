@@ -70,7 +70,7 @@ class SendUpdateAvailableNotification
                 'newVersion' => $event->getVersionAvailable(),
             ],
             function ($m) use ($event, $sendToAddress, $sendToName) {
-                $m->subject($event->getName());
+                $m->subject($event->getEventName());
                 $m->from(config('mail.from.address'), config('mail.from.name'));
                 $m->to($sendToAddress, $sendToName);
             }
