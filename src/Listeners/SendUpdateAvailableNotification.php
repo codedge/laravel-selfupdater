@@ -44,7 +44,7 @@ class SendUpdateAvailableNotification
     public function handle(UpdateAvailable $event)
     {
         if (config('self-update.log_events')) {
-            $this->logger->addInfo('['.$event->getName().'] event: Notification triggered.');
+            $this->logger->addInfo('['.$event->getEventName().'] event: Notification triggered.');
         }
 
         $sendToAddress = config('self-update.mail_to.address');
