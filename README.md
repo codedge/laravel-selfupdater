@@ -10,7 +10,7 @@ methods to provide a self-update mechanism via Github.
 
 Usually you need this when distributing a self-hosted Laravel application
 that needs some updating mechanism, as you do not want to bother your
-lovely users with Git commands ;-)
+lovely users with Git and/or Composer commands ;-)
 
 ## Install with Composer
 
@@ -20,14 +20,14 @@ There are currently two branches:
 
 _Please select the right branch for your PHP version accordingly._
 
-To install the library using [Composer](https://getcomposer.org/):
+To install the latest version from the master using [Composer](https://getcomposer.org/):
 ```sh
-$ composer require codedge/laravel-selfupdater:"dev-master"
+$ composer require codedge/laravel-selfupdater
 ```
 
 This adds the _codedge/laravel-selfupdater_ package to your `composer.json` and downloads the project.
 
-Additionally you need to include the service provider in your `config/app.php` `[1]` and optionally the _facade_ `[2]`:
+You need to include the service provider in your `config/app.php` `[1]` and optionally the _facade_ `[2]`:
 ```php
 // config/app.php
 
@@ -38,28 +38,38 @@ return [
     'providers' => [
         // ...
         
-        /*
-         * Application Service Providers...
-         */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
         Codedge\Updater\UpdaterServiceProvider::class, // [1]
     ],
     
     // ...
     
     'aliases' => [
-        'App' => Illuminate\Support\Facades\App::class,
-        'Artisan' => Illuminate\Support\Facades\Artisan::class,
-        
         // ...
         
-        'View' => Illuminate\Support\Facades\View::class,
         'Updater' => Codedge\Updater\UpdaterManager::class, // [2]
 
 ]
+```
+
+Additionally add the listener to your `app/Providers/EventServiceProvider.php`:
+
+```php
+// app/Providers/EventServiceProvider.php
+
+/**
+ * The event handler mappings for the application.
+ *
+ * @var array
+ */
+protected $listen = [
+    // ...
+    
+    \Codedge\Updater\Events\UpdateAvailable::class => [
+        \Codedge\Updater\Listeners\SendUpdateAvailableNotification::class
+    ],
+
+];
+
 ```
 
 ## Configuration
@@ -71,6 +81,12 @@ After installing the package you need to publish the configuration file via
  **Note:** Please enter correct value for vendor and repository name in
  your `config/self-updater.php` if you want to use Github as source for
  your updates.
+ 
+### Notifications via email
+You need to specify a recipient email address and a recipient name to receive
+update available notifications.
+You can specify these values by adding `SELF_UPDATER_MAILTO_NAME` and
+`SELF_UPDATER_MAILTO_ADDRESS` to your `.env` file.
 
 ## Usage
 To start an update process, i. e. in a controller, just use:
