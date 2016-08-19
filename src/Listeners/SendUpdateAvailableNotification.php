@@ -3,9 +3,8 @@
 namespace Codedge\Updater\Listeners;
 
 use Codedge\Updater\Events\UpdateAvailable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailer;
-use Monolog\Logger;
+use Illuminate\Log\Writer;
 
 /**
  * UpdateListener.php.
@@ -13,10 +12,11 @@ use Monolog\Logger;
  * @author Holger Lösken <holger.loesken@codedge.de>
  * @copyright See LICENSE file that was distributed with this source code.
  */
-class SendUpdateAvailableNotification implements ShouldQueue
+class SendUpdateAvailableNotification
 {
+
     /**
-     * @var Logger
+     * @var  \Monolog\Logger
      */
     protected $logger;
 
@@ -28,12 +28,12 @@ class SendUpdateAvailableNotification implements ShouldQueue
     /**
      * SendUpdateAvailableNotification constructor.
      *
-     * @param Logger $logger
+     * @param Writer $logger
      * @param Mailer $mailer
      */
-    public function __construct(Logger $logger, Mailer $mailer)
+    public function __construct(Writer $logger, Mailer $mailer)
     {
-        $this->logger = $logger;
+        $this->logger = $logger->getMonolog();
         $this->mailer = $mailer;
     }
 
