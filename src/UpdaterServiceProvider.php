@@ -2,6 +2,7 @@
 
 namespace Codedge\Updater;
 
+use Codedge\Updater\Commands\CheckForUpdate;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
@@ -50,7 +51,18 @@ class UpdaterServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/self-update.php', 'self-update');
 
+        $this->registerCommands();
         $this->registerManager();
+    }
+
+    /**
+     * Register the package its commands.
+     */
+    protected function registerCommands()
+    {
+        $this->commands([
+            CheckForUpdate::class,
+        ]);
     }
 
     /**

@@ -18,18 +18,18 @@ class UpdateAvailable
     protected $eventName = 'Update available';
 
     /**
-     * @var SourceRepositoryTypeContract
+     * @var string
      */
-    protected $sourceRepository;
+    protected $versionAvailable;
 
     /**
      * UpdateFailed constructor.
      *
-     * @param SourceRepositoryTypeContract $sourceRepository
+     * @param string $versionAvailable
      */
-    public function __construct(SourceRepositoryTypeContract $sourceRepository)
+    public function __construct($versionAvailable)
     {
-        $this->sourceRepository = $sourceRepository;
+        $this->versionAvailable = $versionAvailable;
     }
 
     /**
@@ -37,7 +37,7 @@ class UpdateAvailable
      *
      * @return string
      */
-    public function getName()
+    public function getEventName()
     {
         return $this->eventName;
     }
@@ -52,6 +52,6 @@ class UpdateAvailable
      */
     public function getVersionAvailable($prepend = '', $append = '')
     {
-        return $this->sourceRepository->getVersionAvailable($prepend, $append);
+        return $prepend.$this->versionAvailable.$append;
     }
 }

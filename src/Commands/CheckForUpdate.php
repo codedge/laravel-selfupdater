@@ -10,7 +10,9 @@ class CheckForUpdate extends Command
     /**
      * @var string
      */
-    protected $signature = 'updater:check-for-update';
+    protected $signature = 'updater:check-for-update
+                            {--prefixVersionWith= : Prefix the currently installed version with something.}
+                            {--suffixVersionWith= : Suffix the currently installed version with something.}';
 
     /**
      * @var string
@@ -29,6 +31,7 @@ class CheckForUpdate extends Command
      */
     public function __construct(UpdaterManager $updater)
     {
+        parent::__construct();
         $this->updater = $updater;
     }
 
@@ -37,7 +40,11 @@ class CheckForUpdate extends Command
      */
     public function handle()
     {
-        $isAvail = $this->updater->source()->isNewVersionAvailable();
+        $prefix = $this->option('prefixVersionWith');
+        $suffix = $this->option('suffixVersionWith');
+
+        $currentVersion = $this->updater->source()->getVersionInstalled($prefix, $suffix);
+        $isAvail = $this->updater->source()->isNewVersionAvailable($currentVersion);
 
         if ($isAvail) {
             $newVersion = $this->updater->source()->getVersionAvailable();
