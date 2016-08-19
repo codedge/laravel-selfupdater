@@ -52,7 +52,7 @@ class SourceRepository implements SourceRepositoryTypeContract
     public function update($version = '', $forceFetching = true) : bool
     {
         $version = $version ?: $this->getVersionAvailable();
-        
+
         if ($forceFetching) {
             $this->fetch($version);
         }
