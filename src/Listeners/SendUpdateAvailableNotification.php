@@ -14,9 +14,8 @@ use Illuminate\Log\Writer;
  */
 class SendUpdateAvailableNotification
 {
-
     /**
-     * @var  \Monolog\Logger
+     * @var \Monolog\Logger
      */
     protected $logger;
 
@@ -54,17 +53,17 @@ class SendUpdateAvailableNotification
         if (empty($sendToAddress)) {
             $this->logger->addCritical(
                 '['.$event->getEventName().'] event: '
-                . 'Missing recipient email address. Please set SELF_UPDATER_MAILTO_ADDRESS in your .env file.'
+                .'Missing recipient email address. Please set SELF_UPDATER_MAILTO_ADDRESS in your .env file.'
             );
         }
 
         if (empty($sendToName)) {
             $this->logger->addWarning(
                 '['.$event->getEventName().'] event: '
-                . 'Missing recipient email name. Please set SELF_UPDATER_MAILTO_NAME in your .env file.'
+                .'Missing recipient email name. Please set SELF_UPDATER_MAILTO_NAME in your .env file.'
             );
         }
-        
+
         $this->mailer->send(
             'vendor.self-update.mails.update-available',
             [
