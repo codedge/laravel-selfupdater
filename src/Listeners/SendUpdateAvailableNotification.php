@@ -48,15 +48,32 @@ class SendUpdateAvailableNotification
             $this->logger->addInfo('['.$event->getName().'] event: Notification triggered.');
         }
 
+        $sendToAddress = config('self-update.mail_to.address');
+        $sendToName = config('self-update.mail_to.name');
+
+        if (empty($sendToAddress)) {
+            $this->logger->addCritical(
+                '['.$event->getEventName().'] event: '
+                . 'Missing recipient email address. Please set SELF_UPDATER_MAILTO_ADDRESS in your .env file.'
+            );
+        }
+
+        if (empty($sendToName)) {
+            $this->logger->addWarning(
+                '['.$event->getEventName().'] event: '
+                . 'Missing recipient email name. Please set SELF_UPDATER_MAILTO_NAME in your .env file.'
+            );
+        }
+        
         $this->mailer->send(
-            'vendors.mails.update-available',
+            'vendor.self-update.mails.update-available',
             [
                 'newVersion' => $event->getVersionAvailable(),
             ],
-            function ($m) use ($event) {
+            function ($m) use ($event, $sendToAddress, $sendToName) {
                 $m->subject($event->getName());
                 $m->from(config('mail.from.address'), config('mail.from.name'));
-                $m->to(config('self-update.mail_to.address'), config('self-update.mail_to.name'));
+                $m->to($sendToAddress, $sendToName);
             }
         );
     }
