@@ -58,7 +58,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         }
 
         if (version_compare($version, $this->getVersionAvailable(), '<')) {
-            event(new UpdateAvailable($this));
+            event(new UpdateAvailable($this->getVersionAvailable()));
 
             return true;
         }
