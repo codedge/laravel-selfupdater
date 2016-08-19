@@ -133,6 +133,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
                 File::copy($file->getRealPath(), base_path($file->getFilename()));
             });
 
+            File::deleteDirectory($sourcePath);
             event(new UpdateSucceeded($this));
 
             return true;
