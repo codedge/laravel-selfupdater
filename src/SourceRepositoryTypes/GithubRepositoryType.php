@@ -35,6 +35,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     {
         $this->client = $client;
         $this->config = $config;
+        $this->config['version_installed'] = config('self-update.version_installed');
     }
 
     /**
