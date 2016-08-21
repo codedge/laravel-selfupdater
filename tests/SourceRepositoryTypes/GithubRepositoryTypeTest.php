@@ -37,7 +37,7 @@ class GithubRepositoryTypeTest extends TestCase
     {
         parent::setUp();
         $this->config = $this->app['config']['self-update']['repository_types']['github'];
-        $this->releasesAsJson = fopen('Data/releases.json', 'r');
+        $this->releasesAsJson = fopen('tests/Data/releases.json', 'r');
 
         $response = new Response(
             200,
