@@ -88,6 +88,12 @@ update available notifications.
 You can specify these values by adding `SELF_UPDATER_MAILTO_NAME` and
 `SELF_UPDATER_MAILTO_ADDRESS` to your `.env` file.
 
+| Config name              | Description |
+| -----------              | ----------- |
+| SELF_UPDATER_MAILTO_NAME | Name of email recipient |
+| SELF_UPDATER_MAILTO_ADDRESS    | Address of email recipient |
+| SELF_UPDATER_MAILTO_UPDATE_AVAILABLE_SUBJECT | Subject of update available email |
+
 ## Usage
 To start an update process, i. e. in a controller, just use:
 ```php

@@ -68,6 +68,7 @@ return [
     'mail_to' => [
         'address' => env('SELF_UPDATER_MAILTO_ADDRESS', ''),
         'name' => env('SELF_UPDATER_MAILTO_NAME', ''),
+        'subject_update_available' => env('SELF_UPDATER_MAILTO_UPDATE_AVAILABLE_SUBJECT','Update available')
     ],
 
 ];
