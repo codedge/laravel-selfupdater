@@ -49,6 +49,7 @@ class SendUpdateAvailableNotification
 
         $sendToAddress = config('self-update.mail_to.address');
         $sendToName = config('self-update.mail_to.name');
+        $subject = config('self-update.mail_to.subject_update_available');
 
         if (empty($sendToAddress)) {
             $this->logger->addCritical(
@@ -69,8 +70,8 @@ class SendUpdateAvailableNotification
             [
                 'newVersion' => $event->getVersionAvailable(),
             ],
-            function ($m) use ($event, $sendToAddress, $sendToName) {
-                $m->subject($event->getEventName());
+            function ($m) use ($subject, $sendToAddress, $sendToName) {
+                $m->subject($subject);
                 $m->from(config('mail.from.address'), config('mail.from.name'));
                 $m->to($sendToAddress, $sendToName);
             }
