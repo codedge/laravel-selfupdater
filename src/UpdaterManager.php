@@ -53,7 +53,7 @@ class UpdaterManager implements UpdaterContract
      */
     public function source($name = '')
     {
-        $name = !empty($name) ? $name : $this->getDefaultSourceRepository();
+        $name = ! empty($name) ? $name : $this->getDefaultSourceRepository();
 
         return $this->sources[$name] = $this->get($name);
     }
