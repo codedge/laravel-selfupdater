@@ -52,10 +52,8 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
-        if (empty($version) && empty($currentVersion)) {
+        if (! $version) {
             throw new \InvalidArgumentException('No currently installed version specified.');
-        } elseif (empty($version) && empty($this->getVersionInstalled())) {
-            throw new \Exception('Currently installed version cannot be determined.');
         }
 
         if (version_compare($version, $this->getVersionAvailable(), '<')) {
