@@ -2,26 +2,24 @@
 
 namespace Codedge\Updater\Tests;
 
+use Codedge\Updater\UpdaterFacade;
+use Codedge\Updater\UpdaterServiceProvider;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
-    /**
-     * @var array
-     */
-    protected $config;
-
-
     protected $client;
 
-    public function setUp()
+    /**
+     * @param \Illuminate\Foundation\Application $app
+     */
+    protected function getEnvironmentSetUp($app)
     {
-        parent::setUp();
-
-        $this->config = [
+        $app['config']->set('self-update', [
             'default' => 'github',
+            'version_installed' => '',
             'repository_types' => [
                 'github' => [
                     'type' => 'github',
@@ -36,9 +34,7 @@ class TestCase extends BaseTestCase
                 'address' => '',
                 'name' => '',
             ],
-        ];
-
-        $this->client = new Client();
+        ]);
     }
 
     /**
@@ -48,7 +44,7 @@ class TestCase extends BaseTestCase
     protected function getPackageProviders($app)
     {
         return [
-            'Codedge\Updater\UpdaterServiceProvider',
+            UpdaterServiceProvider::class,
         ];
     }
 
@@ -59,7 +55,7 @@ class TestCase extends BaseTestCase
     protected function getPackageAliases($app)
     {
         return [
-            'Updater' => 'Codedge\Updater\UpdaterFacade',
+            'Updater' => UpdaterFacade::class,
         ];
     }
 }
