@@ -133,7 +133,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             });
 
             File::deleteDirectory($sourcePath);
-            event(new UpdateSucceeded($this));
+            event(new UpdateSucceeded($version));
 
             return true;
         }

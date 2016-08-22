@@ -2,17 +2,17 @@
 
 namespace Codedge\Updater\Listeners;
 
-use Codedge\Updater\Events\UpdateAvailable;
+use Codedge\Updater\Events\UpdateSucceeded;
 use Illuminate\Mail\Mailer;
 use Illuminate\Log\Writer;
 
 /**
- * SendUpdateAvailableNotification.php.
+ * SendUpdateSucceededNotification.php.
  *
  * @author Holger Lösken <holger.loesken@codedge.de>
  * @copyright See LICENSE file that was distributed with this source code.
  */
-class SendUpdateAvailableNotification
+class SendUpdateSucceededNotification
 {
     /**
      * @var \Monolog\Logger
@@ -39,9 +39,9 @@ class SendUpdateAvailableNotification
     /**
      * Handle the event.
      *
-     * @param UpdateAvailable $event
+     * @param UpdateSucceeded $event
      */
-    public function handle(UpdateAvailable $event)
+    public function handle(UpdateSucceeded $event)
     {
         if (config('self-update.log_events')) {
             $this->logger->addInfo('['.$event->getEventName().'] event: Notification triggered.');
@@ -49,7 +49,7 @@ class SendUpdateAvailableNotification
 
         $sendToAddress = config('self-update.mail_to.address');
         $sendToName = config('self-update.mail_to.name');
-        $subject = config('self-update.mail_to.subject_update_available');
+        $subject = config('self-update.mail_to.subject_update_succeeded');
 
         if (empty($sendToAddress)) {
             $this->logger->addCritical(

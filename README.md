@@ -67,6 +67,9 @@ protected $listen = [
     \Codedge\Updater\Events\UpdateAvailable::class => [
         \Codedge\Updater\Listeners\SendUpdateAvailableNotification::class
     ],
+    \Codedge\Updater\Events\UpdateSucceeded::class => [
+        \Codedge\Updater\Listeners\SendUpdateSucceededNotification::class
+    ],
 
 ];
 
@@ -93,6 +96,7 @@ You can specify these values by adding `SELF_UPDATER_MAILTO_NAME` and
 | SELF_UPDATER_MAILTO_NAME | Name of email recipient |
 | SELF_UPDATER_MAILTO_ADDRESS    | Address of email recipient |
 | SELF_UPDATER_MAILTO_UPDATE_AVAILABLE_SUBJECT | Subject of update available email |
+| SELF_UPDATER_MAILTO_UPDATE_SUCCEEDED_SUBJECT | Subject of update succeeded email |
 
 ## Usage
 To start an update process, i. e. in a controller, just use:
