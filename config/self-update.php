@@ -41,8 +41,24 @@ return [
             'repository_vendor' => env('SELF_UPDATER_REPO_VENDOR', ''),
             'repository_name' => env('SELF_UPDATER_REPO_NAME', ''),
             'repository_url' => '',
-            'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', storage_path('self-update/github/')),
+            'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
         ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Exclude folders from update
+    |--------------------------------------------------------------------------
+    |
+    | Specifiy folders which should not be updated and will be skipped during the
+    | update process.
+    |
+    */
+
+    'exclude_folders' => [
+        'node_modules',
+        'bower',
+        'vendor',
     ],
 
     /*
@@ -68,6 +84,7 @@ return [
     'mail_to' => [
         'address' => env('SELF_UPDATER_MAILTO_ADDRESS', ''),
         'name' => env('SELF_UPDATER_MAILTO_NAME', ''),
+        'subject_update_available' => env('SELF_UPDATER_MAILTO_UPDATE_AVAILABLE_SUBJECT','Update available')
     ],
 
 ];
