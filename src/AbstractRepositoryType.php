@@ -67,13 +67,14 @@ abstract class AbstractRepositoryType
     /**
      * Check a given directory recursively if all files are writeable.
      *
-     * @return bool
      * @throws \Exception
+     *
+     * @return bool
      */
     protected function hasCorrectPermissionForUpdate() : bool
     {
         if (! $this->pathToUpdate) {
-            throw new \Exception("No directory set for update. Please set the update with: setPathToUpdate(path).");
+            throw new \Exception('No directory set for update. Please set the update with: setPathToUpdate(path).');
         }
 
         $collection = collect($this->pathToUpdate->files())->each(function ($file) { /* @var \SplFileInfo $file */
@@ -124,8 +125,8 @@ abstract class AbstractRepositoryType
     /**
      * Set the paths to be updated.
      *
-     * @param string $path Path where the update should be run into
-     * @param array $exclude List of folder names that shall not be updated
+     * @param string $path    Path where the update should be run into
+     * @param array  $exclude List of folder names that shall not be updated
      */
     protected function setPathToUpdate(string $path, array $exclude)
     {
@@ -158,6 +159,4 @@ abstract class AbstractRepositoryType
 
         File::deleteDirectory($subDirName[0]);
     }
-
-
 }
