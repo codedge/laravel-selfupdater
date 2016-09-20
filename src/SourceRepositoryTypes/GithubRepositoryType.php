@@ -127,11 +127,11 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             }
 
             // Move all directories first
-            collect((new Finder())->in($sourcePath)->exclude($this->config['exclude_folders'])->directories()->sort(function($a, $b) {
+            collect((new Finder())->in($sourcePath)->exclude($this->config['exclude_folders'])->directories()->sort(function ($a, $b) {
                 return strlen($b->getRealpath()) - strlen($a->getRealpath());
             }))->each(function ($directory) { /** @var \SplFileInfo $directory */
-                if(count(array_intersect(File::directories(
-                        $directory->getRealPath()),$this->config['exclude_folders']) ==0)
+                if (count(array_intersect(File::directories(
+                        $directory->getRealPath()), $this->config['exclude_folders']) == 0)
                 ) {
                     File::moveDirectory(
                         $directory->getRealPath(),
