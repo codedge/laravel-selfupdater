@@ -36,6 +36,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         $this->client = $client;
         $this->config = $config;
         $this->config['version_installed'] = config('self-update.version_installed');
+        $this->config['exclude_folders'] = config('self-update.exclude_folders');
     }
 
     /**
@@ -52,10 +53,8 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
-        if (empty($version) && empty($currentVersion)) {
+        if (! $version) {
             throw new \InvalidArgumentException('No currently installed version specified.');
-        } elseif (empty($version) && empty($this->getVersionInstalled())) {
-            throw new \Exception('Currently installed version cannot be determined.');
         }
 
         if (version_compare($version, $this->getVersionAvailable(), '<')) {
@@ -117,25 +116,30 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      */
     public function update($version = '')
     {
-        if ($this->hasCorrectPermissionForUpdate(base_path())) {
+        $this->setPathToUpdate(base_path(), $this->config['exclude_folders']);
+
+        if ($this->hasCorrectPermissionForUpdate()) {
             if (! empty($version)) {
                 $sourcePath = $this->config['download_path'].DIRECTORY_SEPARATOR.$version;
             } else {
                 $sourcePath = File::directories($this->config['download_path'])[0];
             }
 
-            $directoriesCollection = collect(File::directories($sourcePath));
+            $directoriesCollection = collect($this->pathToUpdate->directories());
+
+            // Move all directories first
             $directoriesCollection->each(function ($directory) {
                 File::moveDirectory($directory, base_path(File::name($directory)), true);
             });
 
+            // Now move all the files left in the main directory
             $filesCollection = collect(File::allFiles($sourcePath, true));
             $filesCollection->each(function ($file) { /* @var \SplFileInfo $file */
                 File::copy($file->getRealPath(), base_path($file->getFilename()));
             });
 
             File::deleteDirectory($sourcePath);
-            event(new UpdateSucceeded($this));
+            event(new UpdateSucceeded($version));
 
             return true;
         }

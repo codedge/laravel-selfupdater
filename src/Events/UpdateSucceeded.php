@@ -2,8 +2,6 @@
 
 namespace Codedge\Updater\Events;
 
-use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
-
 /**
  * UpdateFailed.php.
  *
@@ -13,23 +11,23 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 class UpdateSucceeded
 {
     /**
-     * @var SourceRepositoryTypeContract
-     */
-    protected $sourceRepository;
-
-    /**
      * @var string
      */
     protected $eventName = 'Update succeeded';
 
     /**
+     * @var string The version of the new software package.
+     */
+    protected $versionUpdatedTo;
+
+    /**
      * UpdateFailed constructor.
      *
-     * @param SourceRepositoryTypeContract $sourceRepository
+     * @param $versionUpdatedTo
      */
-    public function __construct(SourceRepositoryTypeContract $sourceRepository)
+    public function __construct($versionUpdatedTo)
     {
-        $this->sourceRepository = $sourceRepository;
+        $this->versionUpdatedTo = $versionUpdatedTo;
     }
 
     /**
@@ -37,8 +35,21 @@ class UpdateSucceeded
      *
      * @return string
      */
-    public function getName()
+    public function getEventName()
     {
         return $this->eventName;
+    }
+
+    /**
+     * Get the new version.
+     *
+     * @param string $prepend
+     * @param string $append
+     *
+     * @return string
+     */
+    public function getVersionUpdatedTo($prepend = '', $append = '')
+    {
+        return $prepend.$this->versionUpdatedTo.$append;
     }
 }
