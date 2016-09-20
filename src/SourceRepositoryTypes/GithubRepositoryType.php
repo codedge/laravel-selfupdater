@@ -125,16 +125,23 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
                 $sourcePath = File::directories($this->config['download_path'])[0];
             }
 
-            $directoriesCollection = collect($this->pathToUpdate->directories());
-
             // Move all directories first
-            $directoriesCollection->each(function ($directory) {
-                File::moveDirectory($directory, base_path(File::name($directory)), true);
+            collect((new Finder())->in($sourcePath)->exclude($this->config['exclude_folders'])->directories()->sort(function($a, $b) {
+                return strlen($b->getRealpath()) - strlen($a->getRealpath());
+            }))->each(function ($directory) { /** @var \SplFileInfo $directory */
+                if(count(array_intersect(File::directories(
+                        $directory->getRealPath()),$this->config['exclude_folders']) ==0)
+                ) {
+                    File::moveDirectory(
+                        $directory->getRealPath(),
+                        base_path($directory->getRelativePath()).'/'.$directory->getBasename()
+                    );
+                }
+                File::deleteDirectory($directory->getRealPath());
             });
 
             // Now move all the files left in the main directory
-            $filesCollection = collect(File::allFiles($sourcePath, true));
-            $filesCollection->each(function ($file) { /* @var \SplFileInfo $file */
+            collect(File::allFiles($sourcePath, true))->each(function ($file) { /* @var \SplFileInfo $file */
                 File::copy($file->getRealPath(), base_path($file->getFilename()));
             });
 
