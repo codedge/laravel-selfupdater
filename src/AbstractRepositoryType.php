@@ -5,6 +5,7 @@ namespace Codedge\Updater;
 use Codedge\Updater\Events\HasWrongPermissions;
 use File;
 use GuzzleHttp\Client;
+use Symfony\Component\Finder\Finder;
 
 /**
  * AbstractRepositoryType.php.
@@ -18,6 +19,11 @@ abstract class AbstractRepositoryType
      * @var array
      */
     protected $config;
+
+    /**
+     * @var Finder|SplFileInfo[]
+     */
+    protected $pathToUpdate;
 
     /**
      * Unzip an archive.
@@ -61,15 +67,16 @@ abstract class AbstractRepositoryType
     /**
      * Check a given directory recursively if all files are writeable.
      *
-     * @param $directory
-     *
      * @return bool
+     * @throws \Exception
      */
-    protected function hasCorrectPermissionForUpdate($directory) : bool
+    protected function hasCorrectPermissionForUpdate() : bool
     {
-        $files = File::allFiles($directory);
+        if (! $this->pathToUpdate) {
+            throw new \Exception("No directory set for update. Please set the update with: setPathToUpdate(path).");
+        }
 
-        $collection = collect($files)->each(function ($file) { /* @var \SplFileInfo $file */
+        $collection = collect($this->pathToUpdate->files())->each(function ($file) { /* @var \SplFileInfo $file */
             if (! File::isWritable($file->getRealPath())) {
                 event(new HasWrongPermissions($this));
 
@@ -115,6 +122,19 @@ abstract class AbstractRepositoryType
     }
 
     /**
+     * Set the paths to be updated.
+     *
+     * @param string $path Path where the update should be run into
+     * @param array $exclude List of folder names that shall not be updated
+     */
+    protected function setPathToUpdate(string $path, array $exclude)
+    {
+        $finder = (new Finder())->in($path)->exclude($exclude);
+
+        $this->pathToUpdate = $finder;
+    }
+
+    /**
      * Create a releas sub-folder inside the storage dir.
      *
      * @param string $storagePath
@@ -138,4 +158,6 @@ abstract class AbstractRepositoryType
 
         File::deleteDirectory($subDirName[0]);
     }
+
+
 }
