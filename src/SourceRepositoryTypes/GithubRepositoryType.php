@@ -9,6 +9,7 @@ use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
 use File;
 use GuzzleHttp\Client;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Github.php.
