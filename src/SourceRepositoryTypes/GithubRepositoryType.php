@@ -189,12 +189,11 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     public function getVersionAvailable($prepend = '', $append = '') : string
     {
         if ($this->versionFileExists()) {
-            $version =  $prepend.$this->getVersionFile().$append;
+            $version = $prepend.$this->getVersionFile().$append;
         } else {
             $response = $this->getRepositoryReleases();
             $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()));
             $version = $prepend.$releaseCollection->first()->name.$append;
-
         }
 
         return $version;
@@ -220,7 +219,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     }
 
     /**
-     * Check if the file with the new version already exists
+     * Check if the file with the new version already exists.
      *
      * @return bool
      */
@@ -230,7 +229,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     }
 
     /**
-     * Write the version file
+     * Write the version file.
      *
      * @param $content
      *
@@ -242,7 +241,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     }
 
     /**
-     * Get the content of the version file
+     * Get the content of the version file.
      *
      * @return string
      */
@@ -252,7 +251,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
     }
 
     /**
-     * Delete the version file
+     * Delete the version file.
      *
      * @return bool
      */
