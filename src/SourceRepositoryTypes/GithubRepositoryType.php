@@ -133,7 +133,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
                 if (count(array_intersect(File::directories(
                         $directory->getRealPath()), $this->config['exclude_folders']) == 0)
                 ) {
-                    File::moveDirectory(
+                    File::copyDirectory(
                         $directory->getRealPath(),
                         base_path($directory->getRelativePath()).'/'.$directory->getBasename()
                     );
