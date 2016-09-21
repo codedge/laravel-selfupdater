@@ -224,7 +224,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    protected function versionFileExists() : bool
+    protected function versionFileExists()
     {
         return Storage::exists(static::NEW_VERSION_FILE);
     }
@@ -236,7 +236,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    protected function setVersionFile(string $content) : bool
+    protected function setVersionFile($content)
     {
         return Storage::put(static::NEW_VERSION_FILE, $content);
     }
@@ -246,7 +246,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return string
      */
-    protected function getVersionFile() : string
+    protected function getVersionFile()
     {
         return Storage::get(static::NEW_VERSION_FILE);
     }
@@ -256,7 +256,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    protected function deleteVersionFile() : bool
+    protected function deleteVersionFile()
     {
         return Storage::delete(static::NEW_VERSION_FILE);
     }
