@@ -10,6 +10,7 @@ use Codedge\Updater\Events\UpdateSucceeded;
 use File;
 use GuzzleHttp\Client;
 use Symfony\Component\Finder\Finder;
+use Storage;
 
 /**
  * Github.php.
@@ -20,6 +21,7 @@ use Symfony\Component\Finder\Finder;
 class GithubRepositoryType extends AbstractRepositoryType implements SourceRepositoryTypeContract
 {
     const GITHUB_API_URL = 'https://api.github.com';
+    const NEW_VERSION_FILE = 'self-updater-new-version';
 
     /**
      * @var Client
@@ -59,7 +61,10 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         }
 
         if (version_compare($version, $this->getVersionAvailable(), '<')) {
-            event(new UpdateAvailable($this->getVersionAvailable()));
+            if (! $this->versionFileExists()) {
+                $this->setVersionFile($this->getVersionAvailable());
+                event(new UpdateAvailable($this->getVersionAvailable()));
+            }
 
             return true;
         }
@@ -147,6 +152,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             });
 
             File::deleteDirectory($sourcePath);
+            $this->deleteVersionFile();
             event(new UpdateSucceeded($version));
 
             return true;
@@ -182,10 +188,16 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      */
     public function getVersionAvailable($prepend = '', $append = '') : string
     {
-        $response = $this->getRepositoryReleases();
-        $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()));
+        if ($this->versionFileExists()) {
+            $version =  $prepend.$this->getVersionFile().$append;
+        } else {
+            $response = $this->getRepositoryReleases();
+            $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()));
+            $version = $prepend.$releaseCollection->first()->name.$append;
 
-        return $prepend.$releaseCollection->first()->name.$append;
+        }
+
+        return $version;
     }
 
     /**
@@ -205,5 +217,47 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             'GET',
             self::GITHUB_API_URL.'/repos/'.$this->config['repository_vendor'].'/'.$this->config['repository_name'].'/tags'
         );
+    }
+
+    /**
+     * Check if the file with the new version already exists
+     *
+     * @return bool
+     */
+    protected function versionFileExists() : bool
+    {
+        return Storage::exists(static::NEW_VERSION_FILE);
+    }
+
+    /**
+     * Write the version file
+     *
+     * @param $content
+     *
+     * @return bool
+     */
+    protected function setVersionFile(string $content) : bool
+    {
+        return Storage::put(static::NEW_VERSION_FILE, $content);
+    }
+
+    /**
+     * Get the content of the version file
+     *
+     * @return string
+     */
+    protected function getVersionFile() : string
+    {
+        return Storage::get(static::NEW_VERSION_FILE);
+    }
+
+    /**
+     * Delete the version file
+     *
+     * @return bool
+     */
+    protected function deleteVersionFile() : bool
+    {
+        return Storage::delete(static::NEW_VERSION_FILE);
     }
 }
