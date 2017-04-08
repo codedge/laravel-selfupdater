@@ -95,4 +95,22 @@ return [
         'subject_update_succeeded' => env('SELF_UPDATER_MAILTO_UPDATE_SUCCEEDED_SUBJECT', 'Update succeeded'),
     ],
 
+    /*
+    |---------------------------------------------------------------------------
+    | Register custom artisan commands
+    |---------------------------------------------------------------------------
+    */
+
+    'artisan_commands' => [
+        'pre_update' => [
+            //'command:signature' => [
+            //    'class' => Command class
+            //    'params' => []
+            //]
+        ],
+        'post_update' => [
+
+        ]
+    ]
+
 ];

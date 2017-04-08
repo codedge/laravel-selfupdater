@@ -63,6 +63,14 @@ class UpdaterServiceProvider extends ServiceProvider
         $this->commands([
             CheckForUpdate::class,
         ]);
+
+        // Register custom commands from config
+        collect(config('self-update.artisan_commands.pre_update'))->each(function ($command) {
+            $this->commands([$command['class']]);
+        });
+        collect(config('self-update.artisan_commands.post_update'))->each(function ($command) {
+            $this->commands([$command['class']]);
+        });
     }
 
     /**

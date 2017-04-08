@@ -3,6 +3,7 @@
 namespace Codedge\Updater;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use Illuminate\Support\Facades\Artisan;
 
 /**
  * SourceRepository.
@@ -57,7 +58,11 @@ class SourceRepository implements SourceRepositoryTypeContract
             $this->fetch($version);
         }
 
-        return $this->sourceRepository->update($version);
+        $this->preUpdateArtisanCommands();
+        $updateStatus = $this->sourceRepository->update($version);
+        $this->postUpdateArtisanCommands();
+
+        return $updateStatus;
     }
 
     /**
@@ -98,5 +103,25 @@ class SourceRepository implements SourceRepositoryTypeContract
     public function getVersionAvailable($prepend = '', $append = '') : string
     {
         return $this->sourceRepository->getVersionAvailable($prepend, $append);
+    }
+
+    /**
+     * Run pre update artisan commands from config.
+     */
+    protected function preUpdateArtisanCommands()
+    {
+        collect(config('self-update.artisan_commands.pre_update'))->every(function ($commandParams, $commandKey) {
+            Artisan::call($commandKey, $commandParams['params']);
+        });
+    }
+
+    /**
+     * Run post update artisan commands from config.
+     */
+    protected function postUpdateArtisanCommands()
+    {
+        collect(config('self-update.artisan_commands.post_update'))->every(function ($commandParams, $commandKey) {
+            Artisan::call($commandKey, $commandParams['params']);
+        });
     }
 }
