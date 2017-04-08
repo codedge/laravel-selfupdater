@@ -2,8 +2,8 @@
 
 namespace Codedge\Updater\Commands;
 
-use Codedge\Updater\UpdaterManager;
 use Illuminate\Console\Command;
+use Codedge\Updater\UpdaterManager;
 
 class CheckForUpdate extends Command
 {

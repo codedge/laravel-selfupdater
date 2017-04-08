@@ -2,8 +2,8 @@
 
 namespace Codedge\Updater;
 
-use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Illuminate\Support\Facades\Artisan;
+use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 
 /**
  * SourceRepository.
