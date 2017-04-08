@@ -4,6 +4,10 @@ php:
   - 7.0
   - 7.1
 
+branches:
+  except:
+    - 5.x
+
 install:
   - travis_retry composer install --no-interaction --prefer-source
 
