@@ -1,5 +1,7 @@
 # Laravel Application Self-Updater
 
+[![Latest Stable Version](https://poser.pugx.org/codedge/laravel-selfupdater/v/stable?format=flat-square)](https://packagist.org/packages/codedge/laravel-selfupdater)
+[![Total Downloads](https://poser.pugx.org/codedge/laravel-selfupdater/downloads?format=flat-square)](https://packagist.org/packages/codedge/laravel-selfupdater)
 [![Build Status](https://travis-ci.org/codedge/laravel-selfupdater.svg?branch=master)](https://travis-ci.org/codedge/laravel-selfupdater)
 [![StyleCI](https://styleci.io/repos/64463948/shield)](https://styleci.io/repos/64463948)
 [![codecov](https://codecov.io/gh/codedge/laravel-selfupdater/branch/master/graph/badge.svg)](https://codecov.io/gh/codedge/laravel-selfupdater)
@@ -81,10 +83,34 @@ After installing the package you need to publish the configuration file via
  $ php artisan vendor:publish --provider="Codedge\Updater\UpdaterServiceProvider"
  ```
  
- **Note:** Please enter correct value for vendor and repository name in
- your `config/self-updater.php` if you want to use Github as source for
- your updates.
- 
+**Note:** Please enter correct value for vendor and repository name in your `config/self-updater.php` if you want to
+use Github as source for your updates.
+
+### Running artisan commands
+Artisan commands can be run before or after the update process and can be configured in `config/self-updater.php`:
+
+__Example:__
+```php
+'artisan_commands' => [
+    'pre_update' => [
+        'updater:prepare' => [
+            'class' => \App\Console\Commands\PreUpdateTasks::class,
+            'params' => []
+        ],
+    ],
+    'post_update' => [
+        'postupdate:cleanup' => [
+            'class' => \App\Console\Commands\PostUpdateCleanup::class,
+            'params' => [
+                'log' => 1,
+                'reset' => false,
+                // etc.
+            ]
+        ]
+    ]
+]
+```
+
 ### Notifications via email
 You need to specify a recipient email address and a recipient name to receive
 update available notifications.

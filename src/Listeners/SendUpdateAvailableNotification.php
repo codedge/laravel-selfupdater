@@ -2,9 +2,9 @@
 
 namespace Codedge\Updater\Listeners;
 
-use Codedge\Updater\Events\UpdateAvailable;
-use Illuminate\Mail\Mailer;
 use Illuminate\Log\Writer;
+use Illuminate\Mail\Mailer;
+use Codedge\Updater\Events\UpdateAvailable;
 
 /**
  * SendUpdateAvailableNotification.php.

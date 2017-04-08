@@ -2,15 +2,15 @@
 
 namespace Codedge\Updater\SourceRepositoryTypes;
 
-use Codedge\Updater\AbstractRepositoryType;
-use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
-use Codedge\Updater\Events\UpdateAvailable;
-use Codedge\Updater\Events\UpdateFailed;
-use Codedge\Updater\Events\UpdateSucceeded;
 use File;
+use Storage;
 use GuzzleHttp\Client;
 use Symfony\Component\Finder\Finder;
-use Storage;
+use Codedge\Updater\Events\UpdateFailed;
+use Codedge\Updater\AbstractRepositoryType;
+use Codedge\Updater\Events\UpdateAvailable;
+use Codedge\Updater\Events\UpdateSucceeded;
+use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 
 /**
  * Github.php.
