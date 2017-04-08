@@ -97,13 +97,6 @@ class GithubRepositoryTypeTest extends TestCase
 
     }
 
-    public function testGetVersionAvailableFailsWithException()
-    {
-        $class = new GithubRepositoryType($this->client, []);
-        $this->expectException(\Exception::class);
-        $class->getVersionAvailable();
-    }
-
     public function testGetVersionAvailable()
     {
         $class = new GithubRepositoryType($this->client, $this->config);
