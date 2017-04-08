@@ -2,9 +2,9 @@
 
 namespace Codedge\Updater;
 
+use Illuminate\Support\ServiceProvider;
 use Codedge\Updater\Commands\CheckForUpdate;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Support\ServiceProvider;
 
 /**
  * UpdaterServiceProvider.php.
