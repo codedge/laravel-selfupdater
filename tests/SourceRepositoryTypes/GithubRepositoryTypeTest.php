@@ -72,7 +72,7 @@ class GithubRepositoryTypeTest extends TestCase
     public function testIsNewVersionAvailableFailsWithInvalidArgumentException()
     {
         $class = new GithubRepositoryType($this->client, $this->config);
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException("InvalidArgumentException");
         $class->isNewVersionAvailable();
     }
 
