@@ -10,18 +10,15 @@ namespace Codedge\Updater\Events;
  */
 class HasWrongPermissions
 {
-    /**
-     * @var SourceRepositoryTypeContract
-     */
-    protected $sourceRepository;
+    protected $repository;
 
     /**
      * UpdateFailed constructor.
      *
-     * @param SourceRepositoryTypeContract $sourceRepository
+     * @param $repository
      */
-    public function __construct(SourceRepositoryTypeContract $sourceRepository)
+    public function __construct($repository)
     {
-        $this->sourceRepository = $sourceRepository;
+        $this->repository = $repository;
     }
 }

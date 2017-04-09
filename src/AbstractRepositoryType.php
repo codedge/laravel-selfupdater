@@ -128,7 +128,7 @@ abstract class AbstractRepositoryType
      * @param string $path    Path where the update should be run into
      * @param array  $exclude List of folder names that shall not be updated
      */
-    protected function setPathToUpdate(string $path, array $exclude)
+    protected function setPathToUpdate($path, array $exclude)
     {
         $finder = (new Finder())->in($path)->exclude($exclude);
 
@@ -146,7 +146,7 @@ abstract class AbstractRepositoryType
         $subDirName = File::directories($storagePath);
         $directories = File::directories($subDirName[0]);
 
-        File::makeDirectory($storagePath.'/'.$releaseName);
+        File::makeDirectory($storagePath.'/'.$releaseName, 493, true, true);
 
         foreach ($directories as $directory) { /* @var string $directory */
             File::moveDirectory($directory, $storagePath.'/'.$releaseName.'/'.File::name($directory));
