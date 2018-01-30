@@ -48,7 +48,7 @@ return [
     'aliases' => [
         // ...
         
-        'Updater' => Codedge\Updater\UpdaterManager::class, // [2]
+        'Updater' => Codedge\Updater\UpdaterFacade::class, // [2]
 
 ]
 ```
