@@ -88,7 +88,7 @@ class UpdaterManager implements UpdaterContract
      */
     public function extend($source, Closure $callback)
     {
-        $this->customRepositoryTypes[$source] = $callback;
+        $this->customSourceCreators[$source] = $callback;
 
         return $this;
     }
