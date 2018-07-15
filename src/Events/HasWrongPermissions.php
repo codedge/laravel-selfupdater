@@ -2,6 +2,8 @@
 
 namespace Codedge\Updater\Events;
 
+use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+
 /**
  * HasWrongPermissions.php.
  *
