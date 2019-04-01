@@ -32,6 +32,7 @@ return [
     | A repository can be of different types, which can be specified here.
     | Current options:
     | - github
+    | - http
     |
     */
 
@@ -41,6 +42,12 @@ return [
             'repository_vendor' => env('SELF_UPDATER_REPO_VENDOR', ''),
             'repository_name' => env('SELF_UPDATER_REPO_NAME', ''),
             'repository_url' => '',
+            'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
+        ],
+        'http' => [
+            'type' => 'http',
+            'repository_url' => env('SELF_UPDATER_REPO_URL', ''),
+            'pkg_filename_format' => env('SELF_UPDATER_PKG_FILENAME_FORMAT', 'v_VERSION_'),
             'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
         ],
     ],

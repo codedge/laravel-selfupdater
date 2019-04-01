@@ -2,7 +2,7 @@
 
 namespace Codedge\Updater\Listeners;
 
-use Illuminate\Log\Writer;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Mail\Mailer;
 use Codedge\Updater\Events\UpdateAvailable;
 
@@ -15,11 +15,6 @@ use Codedge\Updater\Events\UpdateAvailable;
 class SendUpdateAvailableNotification
 {
     /**
-     * @var \Monolog\Logger
-     */
-    protected $logger;
-
-    /**
      * @var Mailer
      */
     protected $mailer;
@@ -27,12 +22,10 @@ class SendUpdateAvailableNotification
     /**
      * SendUpdateAvailableNotification constructor.
      *
-     * @param Writer $logger
      * @param Mailer $mailer
      */
-    public function __construct(Writer $logger, Mailer $mailer)
+    public function __construct(Mailer $mailer)
     {
-        $this->logger = $logger->getMonolog();
         $this->mailer = $mailer;
     }
 
@@ -44,7 +37,7 @@ class SendUpdateAvailableNotification
     public function handle(UpdateAvailable $event)
     {
         if (config('self-update.log_events')) {
-            $this->logger->addInfo('['.$event->getEventName().'] event: Notification triggered.');
+            Log::info('['.$event->getEventName().'] event: Notification triggered.');
         }
 
         $sendToAddress = config('self-update.mail_to.address');
@@ -52,14 +45,14 @@ class SendUpdateAvailableNotification
         $subject = config('self-update.mail_to.subject_update_available');
 
         if (empty($sendToAddress)) {
-            $this->logger->addCritical(
+            Log::critical(
                 '['.$event->getEventName().'] event: '
                 .'Missing recipient email address. Please set SELF_UPDATER_MAILTO_ADDRESS in your .env file.'
             );
         }
 
         if (empty($sendToName)) {
-            $this->logger->addWarning(
+            Log::warning(
                 '['.$event->getEventName().'] event: '
                 .'Missing recipient email name. Please set SELF_UPDATER_MAILTO_NAME in your .env file.'
             );
