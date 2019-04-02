@@ -73,6 +73,9 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
             throw new \InvalidArgumentException('No currently installed version specified.');
         }
 
+        // Remove the version file to forcefully update current version
+        $this->deleteVersionFile();
+        
         if (version_compare($version, $this->getVersionAvailable(), '<')) {
             if (! $this->versionFileExists()) {
                 $this->setVersionFile($this->getVersionAvailable());
@@ -101,7 +104,6 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
         }
 
         $release = $releaseCollection->first();
-
         $storagePath = $this->config['download_path'];
 
         if (! File::exists($storagePath)) {
@@ -121,8 +123,6 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
         if (! $this->isSourceAlreadyFetched($release->name)) {
             $storageFile = $storagePath.'/'.$storageFilename;
             $this->downloadRelease($this->client, $release->zipball_url, $storageFile);
-
-            // $this->createReleaseFolder($storagePath, $versionName);
             $this->unzipArchive($storageFile, $storagePath.'/'.$versionName);
         }
     }
@@ -139,11 +139,10 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
         $this->setPathToUpdate(base_path(), $this->config['exclude_folders']);
 
         if ($this->hasCorrectPermissionForUpdate()) {
-            if (! empty($version)) {
-                $sourcePath = $this->config['download_path'].DIRECTORY_SEPARATOR.$version;
-            } else {
-                $sourcePath = File::directories($this->config['download_path'])[0];
+            if (empty($version)) {
+                $version = $this->getVersionAvailable();
             }
+            $sourcePath = $this->config['download_path'].DIRECTORY_SEPARATOR.$this->prepend.$version.$this->append;
 
             // Move all directories first
             collect((new Finder())->in($sourcePath)->exclude($this->config['exclude_folders'])->directories()->sort(function ($a, $b) {
@@ -188,8 +187,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      */
     public function getVersionInstalled($prepend = '', $append = '') : string
     {
-        $this->updatePrependAppend($prepend, $append);
-        return $this->prepend.$this->config['version_installed'].$append;
+        return $this->config['version_installed'];
     }
 
     /**
@@ -203,35 +201,18 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      */
     public function getVersionAvailable($prepend = '', $append = '') : string
     {
-        $this->updatePrependAppend($prepend, $append);
         $version = '';
         if ($this->versionFileExists()) {
-            $version = $prepend.$this->getVersionFile().$append;
+            $version = $this->getVersionFile();
         } else {
             $releaseCollection = $this->getPackageReleases();
-            \Log::debug('release collection');
-            \Log::debug(print_r($releaseCollection, true));
-            if ($releaseCollection->isEmpty())
-            {
+            if ($releaseCollection->isEmpty()) {
                 throw new \Exception('Retrieved version list is empty.');
             }
-            $version = $prepend.$releaseCollection->first()->name.$append;
+            $version = $releaseCollection->first()->name;
         }
 
-        \Log::debug('Version available: ' . $version);
         return $version;
-    }
-    
-    /**
-     * Update both prepend and append with default if not empty.
-     *
-     * @param string $prepend Version string prepend prefix
-     * @param string $append  Version string append suffix
-     */
-    public function updatePrependAppend(&$prepend, &$append)
-    {
-        $prepend = $prepend ?: $this->prepend;
-        $append = $append ?: $this->append;
     }
 
     /**
@@ -243,8 +224,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      */
     protected function getPackageReleases()
     {
-        if (empty($url = $this->config['repository_url']))
-        {
+        if (empty($url = $this->config['repository_url'])) {
             throw new \Exception('No repository specified. Please enter a valid URL in your config.');
         }
 
@@ -257,8 +237,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
             $files);
         $collection = [];
         $url = preg_replace('/\/$/', '', $url);
-        for ($i = 0; $i < $count; ++$i)
-        {
+        for ($i = 0; $i < $count; ++$i) {
             $basename = preg_replace("/^$this->prepend/", '',
                           preg_replace("/$this->append$/", '',
                             preg_replace('/.zip$/', '', $files[1][$i])
