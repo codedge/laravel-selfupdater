@@ -7,8 +7,8 @@ use GuzzleHttp\Client;
 use Illuminate\Foundation\Application;
 use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
+use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 
 /**
  * Updater.php.

@@ -2,8 +2,8 @@
 
 namespace Codedge\Updater\Listeners;
 
-use Illuminate\Support\Facades\Log;
 use Illuminate\Mail\Mailer;
+use Illuminate\Support\Facades\Log;
 use Codedge\Updater\Events\UpdateSucceeded;
 
 /**

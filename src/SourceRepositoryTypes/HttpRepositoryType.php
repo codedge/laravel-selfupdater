@@ -6,11 +6,11 @@ use File;
 use Storage;
 use GuzzleHttp\Client;
 use Symfony\Component\Finder\Finder;
-use Illuminate\Database\Eloquent\Collection;
 use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\AbstractRepositoryType;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateSucceeded;
+use Illuminate\Database\Eloquent\Collection;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 
 /**
@@ -27,7 +27,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      * @var Client
      */
     protected $client;
-    
+
     /**
      * @var Version prepand string
      */
@@ -75,7 +75,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
 
         // Remove the version file to forcefully update current version
         $this->deleteVersionFile();
-        
+
         if (version_compare($version, $this->getVersionAvailable(), '<')) {
             if (! $this->versionFileExists()) {
                 $this->setVersionFile($this->getVersionAvailable());
@@ -112,13 +112,13 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
 
         if (! $version) {
             $release = $releaseCollection->where('name', $version)->first();
-            if (!$release) {
+            if (! $release) {
                 throw new \Exception('Given version was not found in release list.');
             }
         }
 
         $versionName = $this->prepend.$release->name.$this->append;
-        $storageFilename = $versionName . '.zip';
+        $storageFilename = $versionName.'.zip';
 
         if (! $this->isSourceAlreadyFetched($release->name)) {
             $storageFile = $storagePath.'/'.$storageFilename;
@@ -149,8 +149,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
                 return strlen($b->getRealpath()) - strlen($a->getRealpath());
             }))->each(function ($directory) { /** @var \SplFileInfo $directory */
                 if (count(array_intersect(File::directories(
-                        $directory->getRealPath()), $this->config['exclude_folders'])) == 0)
-                {
+                        $directory->getRealPath()), $this->config['exclude_folders'])) == 0) {
                     File::copyDirectory(
                         $directory->getRealPath(),
                         base_path($directory->getRelativePath()).'/'.$directory->getBasename()
@@ -237,14 +236,14 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
             $files);
         $collection = [];
         $url = preg_replace('/\/$/', '', $url);
-        for ($i = 0; $i < $count; ++$i) {
+        for ($i = 0; $i < $count; $i++) {
             $basename = preg_replace("/^$this->prepend/", '',
                           preg_replace("/$this->append$/", '',
                             preg_replace('/.zip$/', '', $files[1][$i])
                         ));
-            array_push($collection, (object)[
+            array_push($collection, (object) [
                 'name' => $basename,
-                'zipball_url' => $url . '/' . $files[1][$i],
+                'zipball_url' => $url.'/'.$files[1][$i],
             ]);
         }
         // Sort collection alphabetically descending to have newest package as first
