@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use Illuminate\Foundation\Application;
 use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 
 /**
@@ -170,6 +171,20 @@ class UpdaterManager implements UpdaterContract
         $client = new Client();
 
         return $this->sourceRepository(new GithubRepositoryType($client, $config));
+    }
+
+    /**
+     * Create an instance for the Http source repository.
+     *
+     * @param array $config
+     *
+     * @return SourceRepository
+     */
+    protected function createHttpRepository(array $config)
+    {
+        $client = new Client();
+
+        return $this->sourceRepository(new HttpRepositoryType($client, $config));
     }
 
     /**

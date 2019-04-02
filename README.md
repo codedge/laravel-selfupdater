@@ -165,6 +165,25 @@ of your software.
 Just make sure you set the proper repository in your `config/self-updater.php`
 file.
 
+### Using Http archives
+The package comes with an _Http_ source repository type to fetch 
+releases from an HTTP directory listing containing zip archives.
+
+To run with HTTP archives, use following settings in your `.env` file:
+
+| Config name              | Value / Description |
+| -----------              | ----------- |
+| SELF_UPDATER_SOURCE | `http` |
+| SELF_UPDATER_REPO_URL    | Archive URL, e.g. `http://archive.webapp/` |
+| SELF_UPDATER_PKG_FILENAME_FORMAT | Zip package filename format |
+| SELF_UPDATER_DOWNLOAD_PATH | Download path on the webapp host server|
+
+The archive URL should contain nothing more than a simple directory listing with corresponding zip-Archives.
+
+`SELF_UPDATER_PKG_FILENAME_FORMAT` contains the filename format for all webapp update packages. I.e. when the update packages listed on the archive URL contain names like `webapp-v1.2.0.zip`, `webapp-v1.3.5.zip`, ... then the format should be `webapp-v_VERSION_`. The `_VERSION_` part is used as semantic versionioning variable for `MAJOR.MINOR.PATCH` versioning. The zip-extension is automatically added.
+
+The target archive files must be zip archives and should contain all files on root level, not within an additional folder named like the archive itself.
+
 ## Extending and adding new source repository types
 You want to pull your new versions from elsewhere? Feel free to create
 your own source repository type somewhere but keep in mind for the new

@@ -2,8 +2,8 @@
 
 namespace Codedge\Updater\Listeners;
 
-use Illuminate\Log\Writer;
 use Illuminate\Mail\Mailer;
+use Illuminate\Support\Facades\Log;
 use Codedge\Updater\Events\UpdateSucceeded;
 
 /**
@@ -15,11 +15,6 @@ use Codedge\Updater\Events\UpdateSucceeded;
 class SendUpdateSucceededNotification
 {
     /**
-     * @var \Monolog\Logger
-     */
-    protected $logger;
-
-    /**
      * @var Mailer
      */
     protected $mailer;
@@ -27,12 +22,10 @@ class SendUpdateSucceededNotification
     /**
      * SendUpdateAvailableNotification constructor.
      *
-     * @param Writer $logger
      * @param Mailer $mailer
      */
-    public function __construct(Writer $logger, Mailer $mailer)
+    public function __construct(Mailer $mailer)
     {
-        $this->logger = $logger->getMonolog();
         $this->mailer = $mailer;
     }
 
@@ -44,7 +37,7 @@ class SendUpdateSucceededNotification
     public function handle(UpdateSucceeded $event)
     {
         if (config('self-update.log_events')) {
-            $this->logger->addInfo('['.$event->getEventName().'] event: Notification triggered.');
+            Log::info('['.$event->getEventName().'] event: Notification triggered.');
         }
 
         $sendToAddress = config('self-update.mail_to.address');
@@ -52,14 +45,14 @@ class SendUpdateSucceededNotification
         $subject = config('self-update.mail_to.subject_update_succeeded');
 
         if (empty($sendToAddress)) {
-            $this->logger->addCritical(
+            Log::critical(
                 '['.$event->getEventName().'] event: '
                 .'Missing recipient email address. Please set SELF_UPDATER_MAILTO_ADDRESS in your .env file.'
             );
         }
 
         if (empty($sendToName)) {
-            $this->logger->addWarning(
+            Log::warning(
                 '['.$event->getEventName().'] event: '
                 .'Missing recipient email name. Please set SELF_UPDATER_MAILTO_NAME in your .env file.'
             );
@@ -68,7 +61,7 @@ class SendUpdateSucceededNotification
         $this->mailer->send(
             'vendor.self-update.mails.update-available',
             [
-                'newVersion' => $event->getVersionAvailable(),
+                'newVersion' => $event->getVersionUpdatedTo(),
             ],
             function ($m) use ($subject, $sendToAddress, $sendToName) {
                 $m->subject($subject);
