@@ -248,6 +248,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
         }
         // Sort collection alphabetically descending to have newest package as first
         array_multisort($collection, SORT_DESC);
+
         return new Collection($collection);
     }
 
