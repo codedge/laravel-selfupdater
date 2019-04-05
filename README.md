@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.org/codedge/laravel-selfupdater.svg?branch=master)](https://travis-ci.org/codedge/laravel-selfupdater)
 [![StyleCI](https://styleci.io/repos/64463948/shield)](https://styleci.io/repos/64463948)
 [![codecov](https://codecov.io/gh/codedge/laravel-selfupdater/branch/master/graph/badge.svg)](https://codecov.io/gh/codedge/laravel-selfupdater)
+[![composer.lock](https://poser.pugx.org/codedge/laravel-selfupdater/composerlock?format=flat-square)](https://packagist.org/packages/codedge/laravel-selfupdater)
 
 This package provides some basic methods to implement a self updating
 functionality for your Laravel 5 application. Already bundled are some
@@ -15,12 +16,6 @@ that needs some updating mechanism, as you do not want to bother your
 lovely users with Git and/or Composer commands ;-)
 
 ## Install with Composer
-
-There are currently two branches:
-* `master`: Compatible with PHP 7.x
-* `5.x`: Compatible with PHP 5.5 + 5.6
-
-_Please select the right branch for your PHP version accordingly._
 
 To install the latest version from the master using [Composer](https://getcomposer.org/):
 ```sh
@@ -225,4 +220,4 @@ Please see the [contributing guide](CONTRIBUTING.md).
 Just a quickly sketched [roadmap](https://github.com/codedge/laravel-selfupdater/wiki/Roadmap) what still needs to be implemented.
 
 ## Licence
-The MIT License (MIT). Please see [Licencse file](LICENSE) for more information.
+The MIT License (MIT). Please see [Licence file](LICENSE) for more information.
