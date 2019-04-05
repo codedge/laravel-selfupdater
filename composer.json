@@ -37,6 +37,16 @@
   "config": {
     "sort-packages": true
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Codedge\\Updater\\UpdaterServiceProvider"
+      ],
+      "aliases": {
+        "Updater": "Codedge\\Updater\\UpdaterFacade"
+      }
+    }
+  },
   "require": {
     "php": ">=7.1",
     "ext-zip": "*",
