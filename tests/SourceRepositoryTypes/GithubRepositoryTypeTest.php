@@ -9,10 +9,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Exception\RequestException;
-use Mockery;
-use Psr\Http\Message\StreamInterface;
+use Illuminate\Support\Facades\Storage;
+use InvalidArgumentException;
+use Exception;
 
 class GithubRepositoryTypeTest extends TestCase
 {
@@ -63,16 +62,10 @@ class GithubRepositoryTypeTest extends TestCase
         );
     }
 
-    public function tearDown()
-    {
-        parent::tearDown();
-        Mockery::close();
-    }
-
     public function testIsNewVersionAvailableFailsWithInvalidArgumentException()
     {
         $class = new GithubRepositoryType($this->client, $this->config);
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $class->isNewVersionAvailable();
     }
 
@@ -80,6 +73,8 @@ class GithubRepositoryTypeTest extends TestCase
     {
         $class = new GithubRepositoryType($this->client, $this->config);
         $currentVersion = 'v1.1.0';
+
+        Storage::delete(GithubRepositoryType::NEW_VERSION_FILE);
 
         $this->expectsEvents(UpdateAvailable::class);
         $this->assertTrue($class->isNewVersionAvailable($currentVersion));
@@ -108,7 +103,7 @@ class GithubRepositoryTypeTest extends TestCase
     public function testFetchingFailsWithException()
     {
         $class = new GithubRepositoryType($this->client, $this->config);
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $class->fetch();
     }
 }

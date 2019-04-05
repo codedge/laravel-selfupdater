@@ -1,19 +1,20 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Codedge\Updater\Tests;
 
 use Codedge\Updater\UpdaterFacade;
 use Codedge\Updater\UpdaterServiceProvider;
-use GuzzleHttp\Client;
 use Illuminate\Foundation\Application;
-use Orchestra\Testbench\TestCase as BaseTestCase;
+use Orchestra\Testbench\TestCase as Orchestra;
 
-class TestCase extends BaseTestCase
+abstract class TestCase extends Orchestra
 {
     protected $client;
 
     /**
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
+     *
+     * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -27,6 +28,12 @@ class TestCase extends BaseTestCase
                     'repository_name' => 'laravel',
                     'repository_url' => '',
                     'download_path' => '/tmp',
+                ],
+                'http' => [
+                    'type' => 'http',
+                    'repository_url' => env('SELF_UPDATER_REPO_URL', ''),
+                    'pkg_filename_format' => env('SELF_UPDATER_PKG_FILENAME_FORMAT', 'v_VERSION_'),
+                    'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
                 ],
             ],
             'log_events' => false,
