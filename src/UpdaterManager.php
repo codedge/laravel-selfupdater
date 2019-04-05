@@ -9,6 +9,7 @@ use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
+use InvalidArgumentException;
 
 /**
  * Updater.php.
@@ -89,7 +90,7 @@ class UpdaterManager implements UpdaterContract
      */
     public function extend($source, Closure $callback)
     {
-        $this->customRepositoryTypes[$source] = $callback;
+        $this->customSourceCreators[$source] = $callback;
 
         return $this;
     }
@@ -114,9 +115,13 @@ class UpdaterManager implements UpdaterContract
      *
      * @return array
      */
-    protected function getConfig($name)
+    protected function getConfig(string $name): array
     {
-        return $this->app['config']['self-update']['repository_types'][$name];
+        if(isset($this->app['config']['self-update']['repository_types'][$name])) {
+            return $this->app['config']['self-update']['repository_types'][$name];
+        }
+
+        return [];
     }
 
     /**
@@ -144,7 +149,7 @@ class UpdaterManager implements UpdaterContract
     {
         $config = $this->getConfig($name);
 
-        if (is_null($config)) {
+        if (empty($config)) {
             throw new InvalidArgumentException("Source repository [{$name}] is not defined.");
         }
 
