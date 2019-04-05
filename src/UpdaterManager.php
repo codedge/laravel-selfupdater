@@ -4,12 +4,12 @@ namespace Codedge\Updater;
 
 use Closure;
 use GuzzleHttp\Client;
+use InvalidArgumentException;
 use Illuminate\Foundation\Application;
 use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
-use InvalidArgumentException;
 
 /**
  * Updater.php.
@@ -117,7 +117,7 @@ class UpdaterManager implements UpdaterContract
      */
     protected function getConfig(string $name): array
     {
-        if(isset($this->app['config']['self-update']['repository_types'][$name])) {
+        if (isset($this->app['config']['self-update']['repository_types'][$name])) {
             return $this->app['config']['self-update']['repository_types'][$name];
         }
 

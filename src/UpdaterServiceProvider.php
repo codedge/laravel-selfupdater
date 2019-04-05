@@ -2,7 +2,6 @@
 
 namespace Codedge\Updater;
 
-use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Illuminate\Support\ServiceProvider;
 use Codedge\Updater\Commands\CheckForUpdate;
 use Illuminate\Contracts\Container\Container;
