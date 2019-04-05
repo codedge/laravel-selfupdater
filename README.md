@@ -24,6 +24,11 @@ $ composer require codedge/laravel-selfupdater
 
 This adds the _codedge/laravel-selfupdater_ package to your `composer.json` and downloads the project.
 
+## Register the package
+
+Since Laravel 5.5 auto-discovery can be used to register packages - this is supported by this package.
+So if you run Laravel >=5.5 the steps `[1]` and `[2]` are not needed.
+
 You need to include the service provider in your `config/app.php` `[1]` and optionally the _facade_ `[2]`:
 ```php
 // config/app.php
@@ -43,12 +48,12 @@ return [
     'aliases' => [
         // ...
         
-        'Updater' => Codedge\Updater\UpdaterManager::class, // [2]
+        'Updater' => Codedge\Updater\UpdaterFacade::class, // [2]
 
 ]
 ```
 
-Additionally add the listener to your `app/Providers/EventServiceProvider.php`:
+Additionally add the listener to your `app/Providers/EventServiceProvider.php` `[3]`:
 
 ```php
 // app/Providers/EventServiceProvider.php
@@ -63,10 +68,10 @@ protected $listen = [
     
     \Codedge\Updater\Events\UpdateAvailable::class => [
         \Codedge\Updater\Listeners\SendUpdateAvailableNotification::class
-    ],
+    ], // [3]
     \Codedge\Updater\Events\UpdateSucceeded::class => [
         \Codedge\Updater\Listeners\SendUpdateSucceededNotification::class
-    ],
+    ], // [3]
 
 ];
 
