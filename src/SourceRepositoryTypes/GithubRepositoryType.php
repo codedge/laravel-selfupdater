@@ -148,7 +148,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
 
             // Now move all the files left in the main directory
             collect(File::allFiles($sourcePath, true))->each(function ($file) { /* @var \SplFileInfo $file */
-                if($file->getRealPath()) {
+                if ($file->getRealPath()) {
                     File::copy($file->getRealPath(), base_path($file->getFilename()));
                 }
             });
