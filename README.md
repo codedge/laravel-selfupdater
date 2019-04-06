@@ -1,5 +1,6 @@
 # Laravel Application Self-Updater
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/aa0283726f6c41c3bc463e2ad12d639d)](https://app.codacy.com/app/codedge/laravel-selfupdater?utm_source=github.com&utm_medium=referral&utm_content=codedge/laravel-selfupdater&utm_campaign=Badge_Grade_Dashboard)
 [![Latest Stable Version](https://poser.pugx.org/codedge/laravel-selfupdater/v/stable?format=flat-square)](https://packagist.org/packages/codedge/laravel-selfupdater)
 [![Total Downloads](https://poser.pugx.org/codedge/laravel-selfupdater/downloads?format=flat-square)](https://packagist.org/packages/codedge/laravel-selfupdater)
 [![Build Status](https://travis-ci.org/codedge/laravel-selfupdater.svg?branch=master)](https://travis-ci.org/codedge/laravel-selfupdater)
