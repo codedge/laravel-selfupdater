@@ -110,7 +110,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      */
     protected function preUpdateArtisanCommands()
     {
-        collect(config('self-update.artisan_commands.pre_update'))->every(function ($commandParams, $commandKey) {
+        collect(config('self-update.artisan_commands.pre_update'))->each(function ($commandParams, $commandKey) {
             Artisan::call($commandKey, $commandParams['params']);
         });
     }
@@ -120,7 +120,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      */
     protected function postUpdateArtisanCommands()
     {
-        collect(config('self-update.artisan_commands.post_update'))->every(function ($commandParams, $commandKey) {
+        collect(config('self-update.artisan_commands.post_update'))->each(function ($commandParams, $commandKey) {
             Artisan::call($commandKey, $commandParams['params']);
         });
     }
