@@ -3,13 +3,13 @@
 namespace Codedge\Updater;
 
 use Closure;
-use GuzzleHttp\Client;
-use InvalidArgumentException;
-use Illuminate\Foundation\Application;
-use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
-use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
+use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
+use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
+use GuzzleHttp\Client;
+use Illuminate\Foundation\Application;
+use InvalidArgumentException;
 
 /**
  * Updater.php.
