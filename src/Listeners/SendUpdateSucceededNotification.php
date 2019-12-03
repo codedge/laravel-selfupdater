@@ -2,9 +2,9 @@
 
 namespace Codedge\Updater\Listeners;
 
+use Codedge\Updater\Events\UpdateSucceeded;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Log;
-use Codedge\Updater\Events\UpdateSucceeded;
 
 /**
  * SendUpdateSucceededNotification.php.
