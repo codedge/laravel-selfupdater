@@ -2,16 +2,16 @@
 
 namespace Codedge\Updater\SourceRepositoryTypes;
 
-use File;
-use Storage;
-use GuzzleHttp\Client;
-use Symfony\Component\Finder\Finder;
-use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\AbstractRepositoryType;
-use Codedge\Updater\Events\UpdateAvailable;
-use Codedge\Updater\Events\UpdateSucceeded;
-use Illuminate\Database\Eloquent\Collection;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use Codedge\Updater\Events\UpdateAvailable;
+use Codedge\Updater\Events\UpdateFailed;
+use Codedge\Updater\Events\UpdateSucceeded;
+use File;
+use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Collection;
+use Storage;
+use Symfony\Component\Finder\Finder;
 
 /**
  * HttpRepositoryType.php.

@@ -2,10 +2,10 @@
 
 namespace Codedge\Updater;
 
+use Codedge\Updater\Events\HasWrongPermissions;
 use File;
 use GuzzleHttp\Client;
 use Symfony\Component\Finder\Finder;
-use Codedge\Updater\Events\HasWrongPermissions;
 
 /**
  * AbstractRepositoryType.php.
