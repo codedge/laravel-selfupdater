@@ -48,9 +48,9 @@
     }
   },
   "require": {
-    "php": ">=7.1",
+    "php": ">=7.2",
     "ext-zip": "*",
-    "illuminate/support": "5.*",
+    "laravel/framework": "^5.8|6.*",
     "guzzlehttp/guzzle": "6.*"
   },
   "require-dev": {
