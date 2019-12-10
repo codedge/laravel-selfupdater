@@ -1,7 +1,5 @@
-name: Tests (PHP)
-
+name: Tests
 on: [push]
-
 jobs:
   run:
     runs-on: ${{ matrix.operating-system }}
