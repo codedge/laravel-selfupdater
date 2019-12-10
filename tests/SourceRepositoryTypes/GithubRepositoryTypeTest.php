@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Codedge\Updater\Tests\SourceRepositoryTypes;
 
@@ -105,5 +105,22 @@ class GithubRepositoryTypeTest extends TestCase
         $class = new GithubRepositoryType($this->client, $this->config);
         $this->expectException(Exception::class);
         $class->fetch();
+    }
+
+    public function testHasAccessTokenSet()
+    {
+        $config = $this->config;
+        $config['private_access_token'] = 'abc123';
+
+        $class = new GithubRepositoryType($this->client, $config);
+        $this->assertTrue($class->hasAccessToken());
+        $this->assertEquals($class->getAccessToken(), 'Bearer abc123');
+    }
+
+    public function testHasAccessTokenNotSet()
+    {
+        $class = new GithubRepositoryType($this->client, $this->config);
+        $this->assertFalse($class->hasAccessToken());
+        $this->assertEquals($class->getAccessToken(), 'Bearer ');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\AbstractRepositoryType;
@@ -40,6 +42,8 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
         $this->config = $config;
         $this->config['version_installed'] = config('self-update.version_installed');
         $this->config['exclude_folders'] = config('self-update.exclude_folders');
+
+        $this->setAccessToken($config['private_access_token']);
     }
 
     /**
@@ -214,9 +218,20 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             throw new \Exception('No repository specified. Please enter a valid Github repository owner and name in your config.');
         }
 
+        $headers = [];
+
+        if ($this->hasAccessToken()) {
+            $headers = [
+                'Authorization' => $this->getAccessToken(),
+            ];
+        }
+
         return $this->client->request(
             'GET',
-            self::GITHUB_API_URL.'/repos/'.$this->config['repository_vendor'].'/'.$this->config['repository_name'].'/tags'
+            self::GITHUB_API_URL.'/repos/'.$this->config['repository_vendor'].'/'.$this->config['repository_name'].'/tags',
+            [
+                'headers' => $headers,
+            ]
         );
     }
 

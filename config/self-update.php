@@ -43,12 +43,14 @@ return [
             'repository_name' => env('SELF_UPDATER_REPO_NAME', ''),
             'repository_url' => '',
             'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
+            'private_access_token' => env('SELF_UPDATER_GITHUB_PRIVATE_ACCESS_TOKEN', ''),
         ],
         'http' => [
             'type' => 'http',
             'repository_url' => env('SELF_UPDATER_REPO_URL', ''),
             'pkg_filename_format' => env('SELF_UPDATER_PKG_FILENAME_FORMAT', 'v_VERSION_'),
             'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
+            'private_access_token' => env('SELF_UPDATER_HTTP_PRIVATE_ACCESS_TOKEN', ''),
         ],
     ],
 

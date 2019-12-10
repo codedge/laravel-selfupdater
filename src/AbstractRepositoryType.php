@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codedge\Updater;
 
 use Codedge\Updater\Events\HasWrongPermissions;
@@ -15,10 +17,17 @@ use Symfony\Component\Finder\Finder;
  */
 abstract class AbstractRepositoryType
 {
+    const ACCESS_TOKEN_PREFIX = 'Bearer ';
+
     /**
      * @var array
      */
     protected $config;
+
+    /**
+     * Access token for private repository access.
+     */
+    private $accessToken = '';
 
     /**
      * @var Finder|SplFileInfo[]
@@ -99,8 +108,21 @@ abstract class AbstractRepositoryType
      */
     protected function downloadRelease(Client $client, $source, $storagePath)
     {
+        $headers = [];
+
+        if ($this->hasAccessToken()) {
+            $headers = [
+                'Authorization' => $this->getAccessToken(),
+            ];
+        }
+
         return $client->request(
-            'GET', $source, ['sink' => $storagePath]
+            'GET',
+            $source,
+            [
+                'sink' => $storagePath,
+                'headers' => $headers,
+            ]
         );
     }
 
@@ -158,5 +180,41 @@ abstract class AbstractRepositoryType
         }
 
         File::deleteDirectory($subDirName[0]);
+    }
+
+    /**
+     * Get the access token.
+     *
+     * @param bool $withPrefix
+     *
+     * @return string
+     */
+    public function getAccessToken($withPrefix = true): string
+    {
+        if ($withPrefix) {
+            return self::ACCESS_TOKEN_PREFIX.$this->accessToken;
+        }
+
+        return $this->accessToken;
+    }
+
+    /**
+     * Set access token.
+     *
+     * @param string $token
+     */
+    public function setAccessToken(string $token): void
+    {
+        $this->accessToken = $token;
+    }
+
+    /**
+     * Check if an access token has been set.
+     *
+     * @return bool
+     */
+    public function hasAccessToken(): bool
+    {
+        return ! empty($this->accessToken);
     }
 }

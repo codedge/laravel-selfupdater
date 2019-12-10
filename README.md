@@ -16,6 +16,16 @@ Usually you need this when distributing a self-hosted Laravel application
 that needs some updating mechanism, as you do not want to bother your
 lovely users with Git and/or Composer commands ;-)
 
+## Compatibility
+
+* PHP:
+  * 7.2
+  * 7.3
+  * 7.4
+* Laravel:
+  * 5.8
+  * 6.x
+  
 ## Install with Composer
 
 To install the latest version from the master using [Composer](https://getcomposer.org/):
@@ -124,6 +134,13 @@ You can specify these values by adding `SELF_UPDATER_MAILTO_NAME` and
 | SELF_UPDATER_MAILTO_ADDRESS    | Address of email recipient |
 | SELF_UPDATER_MAILTO_UPDATE_AVAILABLE_SUBJECT | Subject of update available email |
 | SELF_UPDATER_MAILTO_UPDATE_SUCCEEDED_SUBJECT | Subject of update succeeded email |
+
+### Private repositories
+
+Private repositories can be accessed via (Bearer) tokens. Each repository inside the config file should have
+a `private_access_token` field, where you can set the token.
+
+**Note:** Do not prefix the token with `Bearer `. This is done automatically.
 
 ## Usage
 To start an update process, i. e. in a controller, just use:
