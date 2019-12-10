@@ -135,6 +135,13 @@ You can specify these values by adding `SELF_UPDATER_MAILTO_NAME` and
 | SELF_UPDATER_MAILTO_UPDATE_AVAILABLE_SUBJECT | Subject of update available email |
 | SELF_UPDATER_MAILTO_UPDATE_SUCCEEDED_SUBJECT | Subject of update succeeded email |
 
+### Private repositories
+
+Private repositories can be accessed via (Bearer) tokens. Each repository inside the config file should have
+a `private_access_token` field, where you can set the token.
+
+**Note:** Do not prefix the token with `Bearer `. This is done automatically.
+
 ## Usage
 To start an update process, i. e. in a controller, just use:
 ```php
