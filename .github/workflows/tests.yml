@@ -17,6 +17,9 @@ jobs:
         uses: shivammathur/setup-php@v1
         with:
           php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, intl, zip
+          coverage: xdebug
+          pecl: false
 
       - name: Cache dependencies
         uses: actions/cache@v1
