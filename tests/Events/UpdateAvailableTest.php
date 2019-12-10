@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Codedge\Updater\Tests\Events;
 
@@ -17,7 +17,7 @@ class UpdateAvailableTest extends TestCase
      */
     protected $versionAvailable;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->eventName = 'Update available';

@@ -32,7 +32,7 @@ class GithubRepositoryTypeTest extends TestCase
      */
     private $releasesAsJson;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->config = $this->app['config']['self-update']['repository_types']['github'];
