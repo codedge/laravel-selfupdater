@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Codedge\Updater\SourceRepositoryTypes;
 
@@ -10,6 +10,7 @@ use Codedge\Updater\Events\UpdateSucceeded;
 use File;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
+use Psr\Http\Message\ResponseInterface;
 use Storage;
 use Symfony\Component\Finder\Finder;
 
@@ -29,7 +30,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
     protected $client;
 
     /**
-     * @var Version prepand string
+     * @var Version prepend string
      */
     protected $prepend;
 
@@ -53,6 +54,8 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
         // Get prepend and append strings
         $this->prepend = preg_replace('/_VERSION_.*$/', '', $this->config['pkg_filename_format']);
         $this->append = preg_replace('/^.*_VERSION_/', '', $this->config['pkg_filename_format']);
+
+        $this->setAccessToken($config['private_access_token']);
     }
 
     /**
@@ -194,9 +197,10 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      * Example: 2.6.5 or v2.6.5.
      *
      * @param string $prepend Prepend a string to the latest version
-     * @param string $append  Append a string to the latest version
+     * @param string $append Append a string to the latest version
      *
      * @return string
+     * @throws \Exception
      */
     public function getVersionAvailable($prepend = '', $append = '') : string
     {
@@ -217,9 +221,9 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
     /**
      * Retrieve html body with list of all releases from archive URL.
      *
-     * @throws \Exception
+     * @return mixed|ResponseInterface
+     *@throws \Exception
      *
-     * @return mixed|\Psr\Http\Message\ResponseInterface
      */
     protected function getPackageReleases()
     {

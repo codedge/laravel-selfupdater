@@ -16,6 +16,16 @@ Usually you need this when distributing a self-hosted Laravel application
 that needs some updating mechanism, as you do not want to bother your
 lovely users with Git and/or Composer commands ;-)
 
+## Compatibility
+
+* PHP:
+  * 7.2
+  * 7.3
+  * 7.4
+* Laravel:
+  * 5.8
+  * 6.x
+  
 ## Install with Composer
 
 To install the latest version from the master using [Composer](https://getcomposer.org/):
