@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\SourceRepositoryTypes;
 
@@ -197,10 +199,11 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      * Example: 2.6.5 or v2.6.5.
      *
      * @param string $prepend Prepend a string to the latest version
-     * @param string $append Append a string to the latest version
+     * @param string $append  Append a string to the latest version
+     *
+     * @throws \Exception
      *
      * @return string
-     * @throws \Exception
      */
     public function getVersionAvailable($prepend = '', $append = '') : string
     {
@@ -221,9 +224,9 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
     /**
      * Retrieve html body with list of all releases from archive URL.
      *
-     * @return mixed|ResponseInterface
      *@throws \Exception
      *
+     * @return mixed|ResponseInterface
      */
     protected function getPackageReleases()
     {

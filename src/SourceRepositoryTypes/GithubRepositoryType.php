@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\SourceRepositoryTypes;
 
@@ -218,9 +220,9 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
 
         $headers = [];
 
-        if($this->hasAccessToken()) {
+        if ($this->hasAccessToken()) {
             $headers = [
-                'Authorization' => $this->getAccessToken()
+                'Authorization' => $this->getAccessToken(),
             ];
         }
 
@@ -228,7 +230,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             'GET',
             self::GITHUB_API_URL.'/repos/'.$this->config['repository_vendor'].'/'.$this->config['repository_name'].'/tags',
             [
-                'headers' => $headers
+                'headers' => $headers,
             ]
         );
     }

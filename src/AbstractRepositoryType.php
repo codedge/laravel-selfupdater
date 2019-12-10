@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater;
 
@@ -108,9 +110,9 @@ abstract class AbstractRepositoryType
     {
         $headers = [];
 
-        if($this->hasAccessToken()) {
+        if ($this->hasAccessToken()) {
             $headers = [
-                'Authorization' => $this->getAccessToken()
+                'Authorization' => $this->getAccessToken(),
             ];
         }
 
@@ -189,8 +191,8 @@ abstract class AbstractRepositoryType
      */
     public function getAccessToken($withPrefix = true): string
     {
-        if($withPrefix) {
-            return self::ACCESS_TOKEN_PREFIX . $this->accessToken;
+        if ($withPrefix) {
+            return self::ACCESS_TOKEN_PREFIX.$this->accessToken;
         }
 
         return $this->accessToken;
@@ -213,6 +215,6 @@ abstract class AbstractRepositoryType
      */
     public function hasAccessToken(): bool
     {
-        return !empty($this->accessToken);
+        return ! empty($this->accessToken);
     }
 }
