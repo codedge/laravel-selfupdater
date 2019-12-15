@@ -44,8 +44,7 @@ jobs:
         name: Push coverage to codecov
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
-          flags: unittests #optional
-          name: codecov-umbrella #optional
-          yml: ./codecov.yml #optional
-          fail_ci_if_error: true #optional (default = false)
+          flags: unittests
+          name: codecov-umbrella
+          yml: ./codecov.yml
+          fail_ci_if_error: true
