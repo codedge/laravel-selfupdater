@@ -39,3 +39,13 @@ jobs:
         run: ./vendor/bin/phpunit
         env:
           APP_ENV: testing
+
+      - uses: codecov/codecov-action@v1
+        name: Push coverage to codecov
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests #optional
+          name: codecov-umbrella #optional
+          yml: ./codecov.yml #optional
+          fail_ci_if_error: true #optional (default = false)
