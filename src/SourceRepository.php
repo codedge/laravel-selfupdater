@@ -50,7 +50,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      *
      * @return bool
      */
-    public function update($version = '', $forceFetching = true) : bool
+    public function update($version = '', $forceFetching = true): bool
     {
         $version = $version ?: $this->getVersionAvailable();
 
@@ -72,7 +72,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      *
      * @return bool
      */
-    public function isNewVersionAvailable($currentVersion = '') : bool
+    public function isNewVersionAvailable($currentVersion = ''): bool
     {
         return $this->sourceRepository->isNewVersionAvailable($currentVersion);
     }
@@ -86,7 +86,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      *
      * @return string
      */
-    public function getVersionInstalled($prepend = '', $append = '') : string
+    public function getVersionInstalled($prepend = '', $append = ''): string
     {
         return $this->sourceRepository->getVersionInstalled($prepend, $append);
     }
@@ -100,7 +100,7 @@ class SourceRepository implements SourceRepositoryTypeContract
      *
      * @return string
      */
-    public function getVersionAvailable($prepend = '', $append = '') : string
+    public function getVersionAvailable($prepend = '', $append = ''): string
     {
         return $this->sourceRepository->getVersionAvailable($prepend, $append);
     }

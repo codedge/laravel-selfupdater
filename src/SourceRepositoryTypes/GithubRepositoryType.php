@@ -9,8 +9,8 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
-use Illuminate\Support\Facades\File;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\File;
 use Storage;
 use Symfony\Component\Finder\Finder;
 
@@ -56,7 +56,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    public function isNewVersionAvailable($currentVersion = '') : bool
+    public function isNewVersionAvailable($currentVersion = ''): bool
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
@@ -124,7 +124,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    public function update($version = '') : bool
+    public function update($version = ''): bool
     {
         $this->setPathToUpdate(base_path(), $this->config['exclude_folders']);
 
@@ -139,7 +139,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
             collect((new Finder())->in($sourcePath)->exclude($this->config['exclude_folders'])->directories()->sort(function ($a, $b) {
                 return strlen($b->getRealpath()) - strlen($a->getRealpath());
             }))->each(function (/** @var \SplFileInfo $directory */ $directory) {
-                if (!$this->isDirectoryExcluded(
+                if (! $this->isDirectoryExcluded(
                     File::directories($directory->getRealPath()), $this->config['exclude_folders'])
                 ) {
                     File::copyDirectory(
@@ -179,7 +179,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return string
      */
-    public function getVersionInstalled($prepend = '', $append = '') : string
+    public function getVersionInstalled($prepend = '', $append = ''): string
     {
         return $prepend.$this->config['version_installed'].$append;
     }
@@ -193,7 +193,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return string
      */
-    public function getVersionAvailable($prepend = '', $append = '') : string
+    public function getVersionAvailable($prepend = '', $append = ''): string
     {
         if ($this->versionFileExists()) {
             $version = $prepend.$this->getVersionFile().$append;
@@ -241,7 +241,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    protected function versionFileExists() : bool
+    protected function versionFileExists(): bool
     {
         return Storage::exists(static::NEW_VERSION_FILE);
     }
@@ -253,7 +253,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    protected function setVersionFile(string $content) : bool
+    protected function setVersionFile(string $content): bool
     {
         return Storage::put(static::NEW_VERSION_FILE, $content);
     }
@@ -263,7 +263,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return string
      */
-    protected function getVersionFile() : string
+    protected function getVersionFile(): string
     {
         return Storage::get(static::NEW_VERSION_FILE);
     }
@@ -273,7 +273,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
      *
      * @return bool
      */
-    protected function deleteVersionFile() : bool
+    protected function deleteVersionFile(): bool
     {
         return Storage::delete(static::NEW_VERSION_FILE);
     }
