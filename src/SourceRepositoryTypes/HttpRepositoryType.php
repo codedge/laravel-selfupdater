@@ -12,9 +12,9 @@ use Codedge\Updater\Events\UpdateSucceeded;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 use Storage;
-use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
 
 /**
