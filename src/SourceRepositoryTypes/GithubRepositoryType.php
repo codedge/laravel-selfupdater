@@ -11,8 +11,8 @@ use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
-use Storage;
 use Illuminate\Support\Str;
+use Storage;
 use Symfony\Component\Finder\Finder;
 
 /**
