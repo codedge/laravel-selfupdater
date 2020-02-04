@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\File;
 use Psr\Http\Message\ResponseInterface;
 use Storage;
+use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -109,7 +110,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
         }
 
         $release = $releaseCollection->first();
-        $storagePath = $this->config['download_path'];
+        $storagePath = Str::finish($this->config['download_path'], '/');
 
         if (! File::exists($storagePath)) {
             File::makeDirectory($storagePath, 493, true, true);

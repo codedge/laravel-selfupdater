@@ -12,6 +12,7 @@ use Codedge\Updater\Events\UpdateSucceeded;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 use Storage;
+use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -96,7 +97,7 @@ class GithubRepositoryType extends AbstractRepositoryType implements SourceRepos
 
         $release = $releaseCollection->first();
 
-        $storagePath = $this->config['download_path'];
+        $storagePath = Str::finish($this->config['download_path'], '/');
 
         if (! File::exists($storagePath)) {
             File::makeDirectory($storagePath, 493, true, true);
