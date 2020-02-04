@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Codedge\Updater;
 
 use Codedge\Updater\Events\HasWrongPermissions;
-use File;
+use Illuminate\Support\Facades\File;
 use GuzzleHttp\Client;
 use Symfony\Component\Finder\Finder;
 
@@ -216,5 +216,18 @@ abstract class AbstractRepositoryType
     public function hasAccessToken(): bool
     {
         return ! empty($this->accessToken);
+    }
+
+    /**
+     * Check if files in one array (i. e. directory) are also exist in a second one.
+     *
+     * @param array $directory
+     * @param array $excludedDirs
+     *
+     * @return bool
+     */
+    public function isDirectoryExcluded(array $directory, array $excludedDirs): bool
+    {
+        return count(array_intersect($directory, $excludedDirs)) ? true : false;
     }
 }

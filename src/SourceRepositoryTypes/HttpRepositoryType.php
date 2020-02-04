@@ -9,7 +9,7 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
-use File;
+use Illuminate\Support\Facades\File;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Psr\Http\Message\ResponseInterface;
@@ -153,13 +153,15 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
             collect((new Finder())->in($sourcePath)->exclude($this->config['exclude_folders'])->directories()->sort(function ($a, $b) {
                 return strlen($b->getRealpath()) - strlen($a->getRealpath());
             }))->each(function ($directory) { /** @var \SplFileInfo $directory */
-                if (count(array_intersect(File::directories(
-                        $directory->getRealPath()), $this->config['exclude_folders'])) == 0) {
+                if (!$this->isDirectoryExcluded(
+                    File::directories($directory->getRealPath()), $this->config['exclude_folders'])
+                ) {
                     File::copyDirectory(
                         $directory->getRealPath(),
                         base_path($directory->getRelativePath()).'/'.$directory->getBasename()
                     );
                 }
+
                 File::deleteDirectory($directory->getRealPath());
             });
 
