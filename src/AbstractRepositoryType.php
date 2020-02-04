@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Codedge\Updater;
 
 use Codedge\Updater\Events\HasWrongPermissions;
-use File;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -45,7 +45,7 @@ abstract class AbstractRepositoryType
      *
      * @return bool
      */
-    protected function unzipArchive($file = '', $targetDir = '', $deleteZipArchive = true) : bool
+    protected function unzipArchive($file = '', $targetDir = '', $deleteZipArchive = true): bool
     {
         if (empty($file) || ! File::exists($file)) {
             throw new \InvalidArgumentException("Archive [{$file}] cannot be found or is empty.");
@@ -80,7 +80,7 @@ abstract class AbstractRepositoryType
      *
      * @return bool
      */
-    protected function hasCorrectPermissionForUpdate() : bool
+    protected function hasCorrectPermissionForUpdate(): bool
     {
         if (! $this->pathToUpdate) {
             throw new \Exception('No directory set for update. Please set the update with: setPathToUpdate(path).');
@@ -133,7 +133,7 @@ abstract class AbstractRepositoryType
      *
      * @return bool
      */
-    protected function isSourceAlreadyFetched($version) : bool
+    protected function isSourceAlreadyFetched($version): bool
     {
         $storagePath = $this->config['download_path'].'/'.$version;
         if (! File::exists($storagePath) || empty(File::directories($storagePath))
@@ -216,5 +216,18 @@ abstract class AbstractRepositoryType
     public function hasAccessToken(): bool
     {
         return ! empty($this->accessToken);
+    }
+
+    /**
+     * Check if files in one array (i. e. directory) are also exist in a second one.
+     *
+     * @param array $directory
+     * @param array $excludedDirs
+     *
+     * @return bool
+     */
+    public function isDirectoryExcluded(array $directory, array $excludedDirs): bool
+    {
+        return count(array_intersect($directory, $excludedDirs)) ? true : false;
     }
 }

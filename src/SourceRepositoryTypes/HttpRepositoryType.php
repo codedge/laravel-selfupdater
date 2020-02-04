@@ -9,9 +9,9 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
-use File;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\File;
 use Psr\Http\Message\ResponseInterface;
 use Storage;
 use Symfony\Component\Finder\Finder;
@@ -70,7 +70,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @return bool
      */
-    public function isNewVersionAvailable($currentVersion = '') : bool
+    public function isNewVersionAvailable($currentVersion = ''): bool
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
@@ -139,7 +139,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @return bool
      */
-    public function update($version = '') : bool
+    public function update($version = ''): bool
     {
         $this->setPathToUpdate(base_path(), $this->config['exclude_folders']);
 
@@ -153,13 +153,15 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
             collect((new Finder())->in($sourcePath)->exclude($this->config['exclude_folders'])->directories()->sort(function ($a, $b) {
                 return strlen($b->getRealpath()) - strlen($a->getRealpath());
             }))->each(function ($directory) { /** @var \SplFileInfo $directory */
-                if (count(array_intersect(File::directories(
-                        $directory->getRealPath()), $this->config['exclude_folders'])) == 0) {
+                if (! $this->isDirectoryExcluded(
+                    File::directories($directory->getRealPath()), $this->config['exclude_folders'])
+                ) {
                     File::copyDirectory(
                         $directory->getRealPath(),
                         base_path($directory->getRelativePath()).'/'.$directory->getBasename()
                     );
                 }
+
                 File::deleteDirectory($directory->getRealPath());
             });
 
@@ -189,7 +191,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @return string
      */
-    public function getVersionInstalled($prepend = '', $append = '') : string
+    public function getVersionInstalled($prepend = '', $append = ''): string
     {
         return $this->config['version_installed'];
     }
@@ -205,7 +207,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @return string
      */
-    public function getVersionAvailable($prepend = '', $append = '') : string
+    public function getVersionAvailable($prepend = '', $append = ''): string
     {
         $version = '';
         if ($this->versionFileExists()) {
@@ -264,7 +266,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @return bool
      */
-    protected function versionFileExists() : bool
+    protected function versionFileExists(): bool
     {
         return Storage::exists(static::NEW_VERSION_FILE);
     }
@@ -276,7 +278,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @return bool
      */
-    protected function setVersionFile(string $content) : bool
+    protected function setVersionFile(string $content): bool
     {
         return Storage::put(static::NEW_VERSION_FILE, $content);
     }
@@ -286,7 +288,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @return string
      */
-    protected function getVersionFile() : string
+    protected function getVersionFile(): string
     {
         return Storage::get(static::NEW_VERSION_FILE);
     }
@@ -296,7 +298,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @return bool
      */
-    protected function deleteVersionFile() : bool
+    protected function deleteVersionFile(): bool
     {
         return Storage::delete(static::NEW_VERSION_FILE);
     }
