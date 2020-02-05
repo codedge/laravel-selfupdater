@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Codedge\Updater;
 
 use Codedge\Updater\Events\HasWrongPermissions;
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\Finder;
@@ -17,22 +18,20 @@ use Symfony\Component\Finder\Finder;
  */
 abstract class AbstractRepositoryType
 {
-    const ACCESS_TOKEN_PREFIX = 'Bearer ';
-
     /**
      * @var array
      */
     protected $config;
 
     /**
-     * Access token for private repository access.
-     */
-    private $accessToken = '';
-
-    /**
      * @var Finder|SplFileInfo[]
      */
     protected $pathToUpdate;
+
+    /**
+     * @var string
+     */
+    public $storagePath;
 
     /**
      * Unzip an archive.
@@ -41,7 +40,7 @@ abstract class AbstractRepositoryType
      * @param string $targetDir
      * @param bool   $deleteZipArchive
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -55,7 +54,7 @@ abstract class AbstractRepositoryType
         $res = $zip->open($file);
 
         if (! $res) {
-            throw new \Exception("Cannot open zip archive [{$file}].");
+            throw new Exception("Cannot open zip archive [{$file}].");
         }
 
         if (empty($targetDir)) {
@@ -76,14 +75,14 @@ abstract class AbstractRepositoryType
     /**
      * Check a given directory recursively if all files are writeable.
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
     protected function hasCorrectPermissionForUpdate(): bool
     {
         if (! $this->pathToUpdate) {
-            throw new \Exception('No directory set for update. Please set the update with: setPathToUpdate(path).');
+            throw new Exception('No directory set for update. Please set the update with: setPathToUpdate(path).');
         }
 
         $collection = collect($this->pathToUpdate->files())->each(function ($file) { /* @var \SplFileInfo $file */
@@ -101,12 +100,12 @@ abstract class AbstractRepositoryType
      * Download a file to a given location.
      *
      * @param Client $client
-     * @param string $source
+     * @param string $source Url for the source (.zip)
      * @param string $storagePath
      *
      * @return mixed|\Psr\Http\Message\ResponseInterface
      */
-    protected function downloadRelease(Client $client, $source, $storagePath)
+    protected function downloadRelease(Client $client, string $source, $storagePath)
     {
         $headers = [];
 
@@ -158,65 +157,27 @@ abstract class AbstractRepositoryType
     }
 
     /**
-     * Create a releas sub-folder inside the storage dir.
+     * Create a release sub-folder inside the storage dir.
      *
-     * @param string $storagePath
+     * @param string $releaseFolder
      * @param string $releaseName
      */
-    public function createReleaseFolder($storagePath, $releaseName)
+    public function createReleaseFolder(string $releaseFolder, $releaseName)
     {
-        $subDirName = File::directories($storagePath);
-        $directories = File::directories($subDirName[0]);
+        $folders = File::directories($releaseFolder);
 
-        File::makeDirectory($storagePath.'/'.$releaseName);
-
-        foreach ($directories as $directory) { /* @var string $directory */
-            File::moveDirectory($directory, $storagePath.'/'.$releaseName.'/'.File::name($directory));
+        if(count($folders) === 1) {
+            // Only one sub-folder inside extracted directory
+            File::moveDirectory($folders[0], $this->storagePath . $releaseName);
+            File::deleteDirectory($folders[0]);
+            File::deleteDirectory($releaseFolder);
+        } else {
+            // Release (with all files and folders) is already inside, so we need to only rename the folder
+            File::moveDirectory($releaseFolder, $this->storagePath . $releaseName);
         }
-
-        $files = File::allFiles($subDirName[0], true);
-        foreach ($files as $file) { /* @var \SplFileInfo $file */
-            File::move($file->getRealPath(), $storagePath.'/'.$releaseName.'/'.$file->getFilename());
-        }
-
-        File::deleteDirectory($subDirName[0]);
     }
 
-    /**
-     * Get the access token.
-     *
-     * @param bool $withPrefix
-     *
-     * @return string
-     */
-    public function getAccessToken($withPrefix = true): string
-    {
-        if ($withPrefix) {
-            return self::ACCESS_TOKEN_PREFIX.$this->accessToken;
-        }
 
-        return $this->accessToken;
-    }
-
-    /**
-     * Set access token.
-     *
-     * @param string $token
-     */
-    public function setAccessToken(string $token): void
-    {
-        $this->accessToken = $token;
-    }
-
-    /**
-     * Check if an access token has been set.
-     *
-     * @return bool
-     */
-    public function hasAccessToken(): bool
-    {
-        return ! empty($this->accessToken);
-    }
 
     /**
      * Check if files in one array (i. e. directory) are also exist in a second one.
@@ -230,4 +191,5 @@ abstract class AbstractRepositoryType
     {
         return count(array_intersect($directory, $excludedDirs)) ? true : false;
     }
+
 }

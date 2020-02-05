@@ -261,46 +261,4 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
 
         return new Collection($collection);
     }
-
-    /**
-     * Check if the file with the new version already exists.
-     *
-     * @return bool
-     */
-    protected function versionFileExists(): bool
-    {
-        return Storage::exists(static::NEW_VERSION_FILE);
-    }
-
-    /**
-     * Write the version file.
-     *
-     * @param $content
-     *
-     * @return bool
-     */
-    protected function setVersionFile(string $content): bool
-    {
-        return Storage::put(static::NEW_VERSION_FILE, $content);
-    }
-
-    /**
-     * Get the content of the version file.
-     *
-     * @return string
-     */
-    protected function getVersionFile(): string
-    {
-        return Storage::get(static::NEW_VERSION_FILE);
-    }
-
-    /**
-     * Delete the version file.
-     *
-     * @return bool
-     */
-    protected function deleteVersionFile(): bool
-    {
-        return Storage::delete(static::NEW_VERSION_FILE);
-    }
 }

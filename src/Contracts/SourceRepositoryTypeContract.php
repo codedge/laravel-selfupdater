@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Codedge\Updater\Contracts;
 
@@ -11,14 +11,16 @@ interface SourceRepositoryTypeContract
      *
      * @return mixed
      */
-    public function fetch($version = '');
+    public function fetch(string $version = '');
 
     /**
      * Perform the actual update process.
      *
+     * @param string $version
+     *
      * @return bool
      */
-    public function update(): bool;
+    public function update(string $version = ''): bool;
 
     /**
      * Check repository if a newer version than the installed one is available.
@@ -29,7 +31,7 @@ interface SourceRepositoryTypeContract
      *
      * @return bool
      */
-    public function isNewVersionAvailable($currentVersion = ''): bool;
+    public function isNewVersionAvailable(string $currentVersion = ''): bool;
 
     /**
      * Get the version that is currenly installed.
@@ -40,7 +42,7 @@ interface SourceRepositoryTypeContract
      *
      * @return string
      */
-    public function getVersionInstalled($prepend = '', $append = ''): string;
+    public function getVersionInstalled(string $prepend = '', string $append = ''): string;
 
     /**
      * Get the latest version that has been published in a certain repository.
@@ -51,5 +53,5 @@ interface SourceRepositoryTypeContract
      *
      * @return string
      */
-    public function getVersionAvailable($prepend = '', $append = ''): string;
+    public function getVersionAvailable(string $prepend = '', string $append = ''): string;
 }
