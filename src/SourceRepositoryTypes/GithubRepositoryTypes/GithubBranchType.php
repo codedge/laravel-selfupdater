@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 
@@ -50,8 +52,8 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
             $release = $releaseCollection->where('sha', $version)->first();
         }
 
-        $storageFolder = $this->storagePath . $release->sha . '-' . now()->timestamp;
-        $storageFilename = $storageFolder . '.zip';
+        $storageFolder = $this->storagePath.$release->sha.'-'.now()->timestamp;
+        $storageFilename = $storageFolder.'.zip';
 
         if (! $this->isSourceAlreadyFetched($release->sha)) {
             $this->downloadRelease($this->client, $this->generateZipUrl($release->sha), $storageFilename);
@@ -92,7 +94,7 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
         return false;
     }
 
-    public function getVersionAvailable(string $prepend = '', string $append = '' ): string
+    public function getVersionAvailable(string $prepend = '', string $append = ''): string
     {
         if ($this->versionFileExists()) {
             $version = $prepend.$this->getVersionFile().$append;
@@ -108,11 +110,11 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
     protected function getRepositoryReleases(): ResponseInterface
     {
         $url = self::GITHUB_API_URL
-               . DIRECTORY_SEPARATOR . 'repos'
-               . DIRECTORY_SEPARATOR . $this->config['repository_vendor']
-               . DIRECTORY_SEPARATOR . $this->config['repository_name']
-               . DIRECTORY_SEPARATOR . 'commits'
-               . '?sha=' . $this->config['use_branch'];
+               .DIRECTORY_SEPARATOR.'repos'
+               .DIRECTORY_SEPARATOR.$this->config['repository_vendor']
+               .DIRECTORY_SEPARATOR.$this->config['repository_name']
+               .DIRECTORY_SEPARATOR.'commits'
+               .'?sha='.$this->config['use_branch'];
 
         $headers = [];
 
@@ -122,15 +124,15 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
             ];
         }
 
-        return $this->client->request('GET', $url, [ 'headers' => $headers, ]);
+        return $this->client->request('GET', $url, ['headers' => $headers]);
     }
 
     private function generateZipUrl(string $name): string
     {
         return self::GITHUB_URL
-               . DIRECTORY_SEPARATOR . $this->config['repository_vendor']
-               . DIRECTORY_SEPARATOR . $this->config['repository_name']
-               . DIRECTORY_SEPARATOR . 'archive'
-               . DIRECTORY_SEPARATOR . $name . '.zip';
+               .DIRECTORY_SEPARATOR.$this->config['repository_vendor']
+               .DIRECTORY_SEPARATOR.$this->config['repository_name']
+               .DIRECTORY_SEPARATOR.'archive'
+               .DIRECTORY_SEPARATOR.$name.'.zip';
     }
 }

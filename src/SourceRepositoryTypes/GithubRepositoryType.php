@@ -50,7 +50,7 @@ class GithubRepositoryType extends AbstractRepositoryType
     {
         $this->checkValidRepository();
 
-        if($this->useBranchForVersions()) {
+        if ($this->useBranchForVersions()) {
             return new GithubBranchType($this->config, $this->client);
         }
 
@@ -73,19 +73,19 @@ class GithubRepositoryType extends AbstractRepositoryType
                                   ->exclude($this->config['exclude_folders'])
                                   ->directories()
                                   ->sort(function ($a, $b) {
-                return strlen($b->getRealpath()) - strlen($a->getRealpath());
-            }))->each(function (/** @var \SplFileInfo $directory */ $directory) {
-                if (! $this->isDirectoryExcluded(
+                                      return strlen($b->getRealpath()) - strlen($a->getRealpath());
+                                  }))->each(function (/** @var \SplFileInfo $directory */ $directory) {
+                                      if (! $this->isDirectoryExcluded(
                     File::directories($directory->getRealPath()), $this->config['exclude_folders'])
                 ) {
-                    File::copyDirectory(
+                                          File::copyDirectory(
                         $directory->getRealPath(),
                         base_path($directory->getRelativePath()).DIRECTORY_SEPARATOR.$directory->getBasename()
                     );
-                }
+                                      }
 
-                File::deleteDirectory($directory->getRealPath());
-            });
+                                      File::deleteDirectory($directory->getRealPath());
+                                  });
 
             // Now move all the files left in the main directory
             collect(File::allFiles($sourcePath, true))->each(function ($file) { /* @var \SplFileInfo $file */

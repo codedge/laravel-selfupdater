@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\Traits;
 
@@ -24,7 +26,7 @@ trait SupportPrivateAccessToken
     public function getAccessToken($withPrefix = true): string
     {
         if ($withPrefix) {
-            return self::$accessTokenPrefix . $this->accessToken;
+            return self::$accessTokenPrefix.$this->accessToken;
         }
 
         return $this->accessToken;
