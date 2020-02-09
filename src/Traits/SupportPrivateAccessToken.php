@@ -19,7 +19,7 @@ trait SupportPrivateAccessToken
     public function getAccessToken($withPrefix = true): string
     {
         if ($withPrefix) {
-            return $this->accessTokenPrefix . $this->accessToken;
+            return $this->accessTokenPrefix.$this->accessToken;
         }
 
         return $this->accessToken;

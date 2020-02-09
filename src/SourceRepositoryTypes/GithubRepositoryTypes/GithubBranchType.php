@@ -10,7 +10,8 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use InvalidArgumentException;use Psr\Http\Message\ResponseInterface;
+use InvalidArgumentException;
+use Psr\Http\Message\ResponseInterface;
 
 final class GithubBranchType extends GithubRepositoryType implements GithubRepositoryTypeContract
 {
@@ -84,7 +85,7 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
 
         $versionAvailable = $this->getVersionAvailable();
 
-        #dd($version, $versionAvailable, version_compare($version, $versionAvailable, '<'));
+        //dd($version, $versionAvailable, version_compare($version, $versionAvailable, '<'));
 
         if (version_compare($version, $versionAvailable, '<')) {
             if (! $this->versionFileExists()) {
