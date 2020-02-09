@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 
@@ -96,7 +98,6 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
      *
      * @return void
      * @throws Exception
-     *
      */
     public function fetch($version = ''): void
     {
@@ -106,7 +107,7 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
 
 
         if ($releaseCollection->isEmpty()) {
-            throw new Exception( 'Cannot find a release to update. Please check the repository you\'re pulling from');
+            throw new Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
         }
 
         $release = $releaseCollection->first();
@@ -119,8 +120,8 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
             $release = $releaseCollection->where('name', $version)->first();
         }
 
-        $storageFolder = $this->storagePath . $release->name . '-' . now()->timestamp;
-        $storageFilename = $storageFolder . '.zip';
+        $storageFolder = $this->storagePath.$release->name.'-'.now()->timestamp;
+        $storageFilename = $storageFolder.'.zip';
 
         if (! $this->isSourceAlreadyFetched($release->name)) {
             $this->downloadRelease($this->client, $release->zipball_url, $storageFilename);
@@ -132,8 +133,8 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
     protected function getRepositoryReleases(): ResponseInterface
     {
         $url = self::GITHUB_API_URL
-               . '/repos/' . $this->config['repository_vendor']
-               . '/' . $this->config['repository_name']
+               .'/repos/'.$this->config['repository_vendor']
+               .'/'.$this->config['repository_name']
                .'/tags';
 
         $headers = [];
@@ -144,6 +145,6 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
             ];
         }
 
-        return $this->client->request('GET', $url, [ 'headers' => $headers, ]);
+        return $this->client->request('GET', $url, ['headers' => $headers]);
     }
 }

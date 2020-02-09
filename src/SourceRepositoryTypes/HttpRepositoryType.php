@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
-use Storage;
 use Symfony\Component\Finder\Finder;
 
 /**

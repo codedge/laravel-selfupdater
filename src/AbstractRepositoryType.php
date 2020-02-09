@@ -166,18 +166,16 @@ abstract class AbstractRepositoryType
     {
         $folders = File::directories($releaseFolder);
 
-        if(count($folders) === 1) {
+        if (count($folders) === 1) {
             // Only one sub-folder inside extracted directory
-            File::moveDirectory($folders[0], $this->storagePath . $releaseName);
+            File::moveDirectory($folders[0], $this->storagePath.$releaseName);
             File::deleteDirectory($folders[0]);
             File::deleteDirectory($releaseFolder);
         } else {
             // Release (with all files and folders) is already inside, so we need to only rename the folder
-            File::moveDirectory($releaseFolder, $this->storagePath . $releaseName);
+            File::moveDirectory($releaseFolder, $this->storagePath.$releaseName);
         }
     }
-
-
 
     /**
      * Check if files in one array (i. e. directory) are also exist in a second one.
@@ -191,5 +189,4 @@ abstract class AbstractRepositoryType
     {
         return count(array_intersect($directory, $excludedDirs)) ? true : false;
     }
-
 }
