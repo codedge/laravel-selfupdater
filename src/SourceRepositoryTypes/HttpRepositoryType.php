@@ -9,11 +9,13 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
+use Codedge\Updater\Traits\SupportPrivateAccessToken;
+use Codedge\Updater\Traits\UseVersionFile;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
-use Storage;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -24,6 +26,8 @@ use Symfony\Component\Finder\Finder;
  */
 class HttpRepositoryType extends AbstractRepositoryType implements SourceRepositoryTypeContract
 {
+    use UseVersionFile, SupportPrivateAccessToken;
+
     const NEW_VERSION_FILE = 'self-updater-new-version';
 
     /**
@@ -109,7 +113,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
         }
 
         $release = $releaseCollection->first();
-        $storagePath = $this->config['download_path'];
+        $storagePath = Str::finish($this->config['download_path'], '/');
 
         if (! File::exists($storagePath)) {
             File::makeDirectory($storagePath, 493, true, true);
@@ -259,47 +263,5 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
         array_multisort($collection, SORT_DESC);
 
         return new Collection($collection);
-    }
-
-    /**
-     * Check if the file with the new version already exists.
-     *
-     * @return bool
-     */
-    protected function versionFileExists(): bool
-    {
-        return Storage::exists(static::NEW_VERSION_FILE);
-    }
-
-    /**
-     * Write the version file.
-     *
-     * @param $content
-     *
-     * @return bool
-     */
-    protected function setVersionFile(string $content): bool
-    {
-        return Storage::put(static::NEW_VERSION_FILE, $content);
-    }
-
-    /**
-     * Get the content of the version file.
-     *
-     * @return string
-     */
-    protected function getVersionFile(): string
-    {
-        return Storage::get(static::NEW_VERSION_FILE);
-    }
-
-    /**
-     * Delete the version file.
-     *
-     * @return bool
-     */
-    protected function deleteVersionFile(): bool
-    {
-        return Storage::delete(static::NEW_VERSION_FILE);
     }
 }

@@ -11,5 +11,5 @@ interface UpdaterContract
      *
      * @return mixed
      */
-    public function source($name = '');
+    public function source(string $name = '');
 }

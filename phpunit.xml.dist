@@ -10,6 +10,10 @@
          processIsolation="false"
          stopOnFailure="true">
 
+    <extensions>
+        <extension class="Codedge\Updater\Tests\Hooks\BypassFinalHook"/>
+    </extensions>
+
     <testsuites>
         <testsuite name="Laravel Application Self-Updater Test Suite">
             <directory>tests</directory>

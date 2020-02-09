@@ -44,6 +44,7 @@ return [
             'repository_url' => '',
             'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
             'private_access_token' => env('SELF_UPDATER_GITHUB_PRIVATE_ACCESS_TOKEN', ''),
+            'use_branch' => env('SELF_UPDATER_USE_BRANCH', ''),
         ],
         'http' => [
             'type' => 'http',

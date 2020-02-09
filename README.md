@@ -168,7 +168,7 @@ public function update(UpdaterManager $updater)
     // .. and shorthand for this:
     $updater->source()->update;
     
-    $updater->fetch() // Same as above...
+    $updater->fetch(); // Same as above...
 }
 ```
 
@@ -182,6 +182,28 @@ of your software.
 
 Just make sure you set the proper repository in your `config/self-updater.php`
 file.
+
+#### Tag-based updates
+
+This is the default. Updates will be fetched by using a tagged commit, aka release.
+
+#### Branch-based updates
+
+Select the branch that should be used via the `use_branch` setting [inside the configuration](https://github.com/codedge/laravel-selfupdater/blob/master/config/self-update.php).
+
+```php
+// ...
+'repository_types' => [
+    'github' => [
+        'type' => 'github',
+        'repository_vendor' => env('SELF_UPDATER_REPO_VENDOR', ''),
+        'repository_name' => env('SELF_UPDATER_REPO_NAME', ''),
+        // ...
+        'use_branch' => 'v2',
+   ],          
+   // ...
+];
+```
 
 ### Using Http archives
 The package comes with an _Http_ source repository type to fetch 

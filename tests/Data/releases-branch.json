@@ -1,0 +1,713 @@
+[
+  {
+    "sha": "e8f19f9b63b5b92f31ddc4a3463dcc231301adea",
+    "node_id": "MDY6Q29tbWl0MTQ3MTYzNjg6ZThmMTlmOWI2M2I1YjkyZjMxZGRjNGEzNDYzZGNjMjMxMzAxYWRlYQ==",
+    "commit": {
+      "author": {
+        "name": "David Bomba",
+        "email": "turbo124@gmail.com",
+        "date": "2020-02-06T21:09:15Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-02-06T21:09:15Z"
+      },
+      "message": "Fixes for invoice save (#3295)\n\n* Working on Invoice Designs\r\n\r\n* Fixes for invoice save\r\n\r\n* Threshold changes for sending large accounts on ?first_load=true",
+      "tree": {
+        "sha": "39da8e926d8b6aa10ab83c2ad1675903c1203881",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/trees/39da8e926d8b6aa10ab83c2ad1675903c1203881"
+      },
+      "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/commits/e8f19f9b63b5b92f31ddc4a3463dcc231301adea",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJePIB7CRBK7hj4Ov3rIwAAdHIIAIxEO/eDZpiS21K0HKujX9LD\nQBaDXexTnOc9aKHuHvJdgcMuvVTGfsyE+XzPDk3rL4nHQkAGpHKsvljIXt8gx6k9\nRWng7jzrixdX3iyG28RdNX5GgpZkNe0jGOVCigePM27mgbGK3rHGRYkevFsJSjdZ\n3GeggMKeuwQ4p8Jr5+Jxo2PAd64eqWDjDG/wJLraYuDoWpEg00+HD0B3adMAyYH3\nsjPUkPAf/JfUMlSAK5e9Dn8uBBzk6RxLyLUlXoxSUgur33ITgcIAarO6fo+YwnF8\nUvs6sfU/Ls+DO4kLVjMujZFRPFzVFdageMdLz2UsSflAYMQN1GmMTEx2iL9F3Ns=\n=UEcw\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 39da8e926d8b6aa10ab83c2ad1675903c1203881\nparent 82720f180162edf50bfe780bbe4e7a092af7bc6e\nauthor David Bomba <turbo124@gmail.com> 1581023355 +1100\ncommitter GitHub <noreply@github.com> 1581023355 +1100\n\nFixes for invoice save (#3295)\n\n* Working on Invoice Designs\r\n\r\n* Fixes for invoice save\r\n\r\n* Threshold changes for sending large accounts on ?first_load=true\r\n"
+      }
+    },
+    "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/e8f19f9b63b5b92f31ddc4a3463dcc231301adea",
+    "html_url": "https://github.com/invoiceninja/invoiceninja/commit/e8f19f9b63b5b92f31ddc4a3463dcc231301adea",
+    "comments_url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/e8f19f9b63b5b92f31ddc4a3463dcc231301adea/comments",
+    "author": {
+      "login": "turbo124",
+      "id": 5827962,
+      "node_id": "MDQ6VXNlcjU4Mjc5NjI=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5827962?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/turbo124",
+      "html_url": "https://github.com/turbo124",
+      "followers_url": "https://api.github.com/users/turbo124/followers",
+      "following_url": "https://api.github.com/users/turbo124/following{/other_user}",
+      "gists_url": "https://api.github.com/users/turbo124/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/turbo124/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/turbo124/subscriptions",
+      "organizations_url": "https://api.github.com/users/turbo124/orgs",
+      "repos_url": "https://api.github.com/users/turbo124/repos",
+      "events_url": "https://api.github.com/users/turbo124/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/turbo124/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "82720f180162edf50bfe780bbe4e7a092af7bc6e",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/82720f180162edf50bfe780bbe4e7a092af7bc6e",
+        "html_url": "https://github.com/invoiceninja/invoiceninja/commit/82720f180162edf50bfe780bbe4e7a092af7bc6e"
+      }
+    ]
+  },
+  {
+    "sha": "82720f180162edf50bfe780bbe4e7a092af7bc6e",
+    "node_id": "MDY6Q29tbWl0MTQ3MTYzNjg6ODI3MjBmMTgwMTYyZWRmNTBiZmU3ODBiYmU0ZTdhMDkyYWY3YmM2ZQ==",
+    "commit": {
+      "author": {
+        "name": "David Bomba",
+        "email": "turbo124@gmail.com",
+        "date": "2020-02-06T12:30:50Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-02-06T12:30:50Z"
+      },
+      "message": "Fixes for client transformer (#3291)",
+      "tree": {
+        "sha": "b3add464062aae661acbfc84d18d140dc9397ff3",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/trees/b3add464062aae661acbfc84d18d140dc9397ff3"
+      },
+      "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/commits/82720f180162edf50bfe780bbe4e7a092af7bc6e",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJePAb6CRBK7hj4Ov3rIwAAdHIIABrHbc2bRnCu1BNExXJlCNrV\nDUZH0fDegjaHZd3dFzI1QuIk0mn0pVlaG4M7X9f+vsY2RLLpw2uGFYR4wyiGHvqv\nv8Typxa53MXmfjQdmznvJ8FztOaiNZPduQJbdyUVMmKKuyIg8vUVHNjxG/m5mOe5\nLqI3XMC7Rb21m6WDdo+SQvI4xQi8zqdhMAd5BHFvuIXRhbZ3ExnUDm7yA7mrhfRo\nLsVoxdVHTVFeToZLQCl9nwhzgGNfe7asCULDONcb7OyrBxTF6JJjsynaTKr3XZ4J\nSvWsqPs/OIyWCJXDK50CviaFff5uDrya9BzObg68CaXE9LdGUZn0/mytKQTUl5o=\n=w0LM\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree b3add464062aae661acbfc84d18d140dc9397ff3\nparent f519fc765b2176256bec74ee4cc38bd7f4254c98\nauthor David Bomba <turbo124@gmail.com> 1580992250 +1100\ncommitter GitHub <noreply@github.com> 1580992250 +1100\n\nFixes for client transformer (#3291)\n\n"
+      }
+    },
+    "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/82720f180162edf50bfe780bbe4e7a092af7bc6e",
+    "html_url": "https://github.com/invoiceninja/invoiceninja/commit/82720f180162edf50bfe780bbe4e7a092af7bc6e",
+    "comments_url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/82720f180162edf50bfe780bbe4e7a092af7bc6e/comments",
+    "author": {
+      "login": "turbo124",
+      "id": 5827962,
+      "node_id": "MDQ6VXNlcjU4Mjc5NjI=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5827962?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/turbo124",
+      "html_url": "https://github.com/turbo124",
+      "followers_url": "https://api.github.com/users/turbo124/followers",
+      "following_url": "https://api.github.com/users/turbo124/following{/other_user}",
+      "gists_url": "https://api.github.com/users/turbo124/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/turbo124/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/turbo124/subscriptions",
+      "organizations_url": "https://api.github.com/users/turbo124/orgs",
+      "repos_url": "https://api.github.com/users/turbo124/repos",
+      "events_url": "https://api.github.com/users/turbo124/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/turbo124/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "f519fc765b2176256bec74ee4cc38bd7f4254c98",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/f519fc765b2176256bec74ee4cc38bd7f4254c98",
+        "html_url": "https://github.com/invoiceninja/invoiceninja/commit/f519fc765b2176256bec74ee4cc38bd7f4254c98"
+      }
+    ]
+  },
+  {
+    "sha": "f519fc765b2176256bec74ee4cc38bd7f4254c98",
+    "node_id": "MDY6Q29tbWl0MTQ3MTYzNjg6ZjUxOWZjNzY1YjIxNzYyNTZiZWM3NGVlNGNjMzhiZDdmNDI1NGM5OA==",
+    "commit": {
+      "author": {
+        "name": "David Bomba",
+        "email": "turbo124@gmail.com",
+        "date": "2020-02-06T12:00:22Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-02-06T12:00:22Z"
+      },
+      "message": "Improvements for eager loading (#3290)\n\n* Working on invoice designs\r\n\r\n* Working on Invoice Designs\r\n\r\n* Improve eager loads\r\n\r\n* Improvements for eager loading",
+      "tree": {
+        "sha": "775effc7d6d9e605edb0df74ead0d4b0c798603f",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/trees/775effc7d6d9e605edb0df74ead0d4b0c798603f"
+      },
+      "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/commits/f519fc765b2176256bec74ee4cc38bd7f4254c98",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJeO//WCRBK7hj4Ov3rIwAAdHIIAKxXXR+F85+6NyiMeO5nKoUt\n3Z8rdBakmP90uDEhDKJEyy8QUVsFjfY740EYsZWdKeO0R05DikCjvKAmvsNoeK7H\nh2UuSsRkqU1lFw6hvb8FCEkQTTACcX60+x4iY3eUPDybnOx6ZNVP5KX5DSnbEz6i\nu3sk4HacB34Hs+9OtFW8WmmWW17PO24urhpPbswKAXTzq2WjiVbLIvEIqLlkr8EK\nIqAvkSyOtNiEg69zE+8cehs0m3uL5fkYVBGRZFKkTSUKdTm0hJ4q3IGJzCqfRMHc\nP9uxw6f4uGDPjfKfLzDVisNwBLrRr6OPJbFSa/Hkx2kNJSWR+IF5w6d+BNwNE9o=\n=SPfi\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 775effc7d6d9e605edb0df74ead0d4b0c798603f\nparent 4f82f1b9037530baa8775e41e16d82e8db97110f\nauthor David Bomba <turbo124@gmail.com> 1580990422 +1100\ncommitter GitHub <noreply@github.com> 1580990422 +1100\n\nImprovements for eager loading (#3290)\n\n* Working on invoice designs\r\n\r\n* Working on Invoice Designs\r\n\r\n* Improve eager loads\r\n\r\n* Improvements for eager loading\r\n"
+      }
+    },
+    "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/f519fc765b2176256bec74ee4cc38bd7f4254c98",
+    "html_url": "https://github.com/invoiceninja/invoiceninja/commit/f519fc765b2176256bec74ee4cc38bd7f4254c98",
+    "comments_url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/f519fc765b2176256bec74ee4cc38bd7f4254c98/comments",
+    "author": {
+      "login": "turbo124",
+      "id": 5827962,
+      "node_id": "MDQ6VXNlcjU4Mjc5NjI=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5827962?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/turbo124",
+      "html_url": "https://github.com/turbo124",
+      "followers_url": "https://api.github.com/users/turbo124/followers",
+      "following_url": "https://api.github.com/users/turbo124/following{/other_user}",
+      "gists_url": "https://api.github.com/users/turbo124/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/turbo124/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/turbo124/subscriptions",
+      "organizations_url": "https://api.github.com/users/turbo124/orgs",
+      "repos_url": "https://api.github.com/users/turbo124/repos",
+      "events_url": "https://api.github.com/users/turbo124/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/turbo124/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "4f82f1b9037530baa8775e41e16d82e8db97110f",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/4f82f1b9037530baa8775e41e16d82e8db97110f",
+        "html_url": "https://github.com/invoiceninja/invoiceninja/commit/4f82f1b9037530baa8775e41e16d82e8db97110f"
+      }
+    ]
+  },
+  {
+    "sha": "4f82f1b9037530baa8775e41e16d82e8db97110f",
+    "node_id": "MDY6Q29tbWl0MTQ3MTYzNjg6NGY4MmYxYjkwMzc1MzBiYWE4Nzc1ZTQxZTE2ZDgyZThkYjk3MTEwZg==",
+    "commit": {
+      "author": {
+        "name": "David Bomba",
+        "email": "turbo124@gmail.com",
+        "date": "2020-02-06T09:35:51Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-02-06T09:35:51Z"
+      },
+      "message": "Improve eager loads (#3289)\n\n* Working on invoice designs\r\n\r\n* Working on Invoice Designs\r\n\r\n* Improve eager loads",
+      "tree": {
+        "sha": "c90d89cb7de4928dfe90c89c66f6eccc8cf2b334",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/trees/c90d89cb7de4928dfe90c89c66f6eccc8cf2b334"
+      },
+      "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/commits/4f82f1b9037530baa8775e41e16d82e8db97110f",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJeO933CRBK7hj4Ov3rIwAAdHIIAKaHxLBX5lI7Mt9dON7aGoZN\ni8eummqa4kN0d2johWZs4cN653I8bf/NN0lpe3tEYppgEvl9f+9LVwA1cwTvHj7Y\nqO3uRoVypSXNA2oQdLs0rW+MHoRSDwNTEjcq4wZjiJUDbpTn3lUYTgmQCFqGl1km\nMWnuVph7WxC6Z5zLTgn2kYhOJwU3y9VL0F8Cwk83xjr2bX5NgIibbJMucrV6knmG\npAV6vi6L6AM8SO+gCcxJGWFhzGkRHabuBpsa7JbVnCu26mixWPBQ5pudAcgDIAck\nVXGb8upRAGJiWfF9M21gaH6jLNSu4Pk96Fxcx0Xt6jXKCCBmnlhe/gKLvvxMNN4=\n=K6S6\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree c90d89cb7de4928dfe90c89c66f6eccc8cf2b334\nparent 797c3fb3f69ecb96b34035aa79505064140d6777\nauthor David Bomba <turbo124@gmail.com> 1580981751 +1100\ncommitter GitHub <noreply@github.com> 1580981751 +1100\n\nImprove eager loads (#3289)\n\n* Working on invoice designs\r\n\r\n* Working on Invoice Designs\r\n\r\n* Improve eager loads\r\n"
+      }
+    },
+    "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/4f82f1b9037530baa8775e41e16d82e8db97110f",
+    "html_url": "https://github.com/invoiceninja/invoiceninja/commit/4f82f1b9037530baa8775e41e16d82e8db97110f",
+    "comments_url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/4f82f1b9037530baa8775e41e16d82e8db97110f/comments",
+    "author": {
+      "login": "turbo124",
+      "id": 5827962,
+      "node_id": "MDQ6VXNlcjU4Mjc5NjI=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5827962?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/turbo124",
+      "html_url": "https://github.com/turbo124",
+      "followers_url": "https://api.github.com/users/turbo124/followers",
+      "following_url": "https://api.github.com/users/turbo124/following{/other_user}",
+      "gists_url": "https://api.github.com/users/turbo124/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/turbo124/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/turbo124/subscriptions",
+      "organizations_url": "https://api.github.com/users/turbo124/orgs",
+      "repos_url": "https://api.github.com/users/turbo124/repos",
+      "events_url": "https://api.github.com/users/turbo124/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/turbo124/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "797c3fb3f69ecb96b34035aa79505064140d6777",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/797c3fb3f69ecb96b34035aa79505064140d6777",
+        "html_url": "https://github.com/invoiceninja/invoiceninja/commit/797c3fb3f69ecb96b34035aa79505064140d6777"
+      }
+    ]
+  },
+  {
+    "sha": "797c3fb3f69ecb96b34035aa79505064140d6777",
+    "node_id": "MDY6Q29tbWl0MTQ3MTYzNjg6Nzk3YzNmYjNmNjllY2I5NmIzNDAzNWFhNzk1MDUwNjQxNDBkNjc3Nw==",
+    "commit": {
+      "author": {
+        "name": "David Bomba",
+        "email": "turbo124@gmail.com",
+        "date": "2020-02-05T21:54:20Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-02-05T21:54:20Z"
+      },
+      "message": "Fixes for refunds (#3288)\n\n* Working on invoice designs\r\n\r\n* Fix unusual form request issue in tests vs production\r\n\r\n* Fixes for form requests\r\n\r\n* Fixes for refunds",
+      "tree": {
+        "sha": "28f699160d7a3e854e55b2e24320a2d11307a728",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/trees/28f699160d7a3e854e55b2e24320a2d11307a728"
+      },
+      "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/commits/797c3fb3f69ecb96b34035aa79505064140d6777",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJeOzmMCRBK7hj4Ov3rIwAAdHIIAJqJ8uxd53mEgQzxGG63Se9W\n6YZnUGJCVXZK4Pf0woPXXDnSIH/MgwFpKPUyPyGnL33vzvxVz9GgFeQd6dxXRUax\nmgeFffEN8n7Pe2UoTNflhmOgCn9R3dQccfeJUo6NcFuFnkdCbp+SaBaW3tUN/B73\nufRTCwFy0vs7cGpQbnCJTjDyLOHFuB5RZ1ADAqhdeaXSTr7W8ka/TLKdlXJbrMZz\naBbPckhFvoM1tjT18d5Y5jgMFshwGVcbNFHmsFeCnEnKZGowckIGl44SVQO9rJF0\nlxNpkjUROLm5g6K1A8NQK7y1Sjp0nn+agcuPB+hEmIGO1YJ/y8PzVTkUpl+O5gU=\n=hsEC\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 28f699160d7a3e854e55b2e24320a2d11307a728\nparent 11960e25e75d3deaa87db459b3002f6f9d3af1ae\nauthor David Bomba <turbo124@gmail.com> 1580939660 +1100\ncommitter GitHub <noreply@github.com> 1580939660 +1100\n\nFixes for refunds (#3288)\n\n* Working on invoice designs\r\n\r\n* Fix unusual form request issue in tests vs production\r\n\r\n* Fixes for form requests\r\n\r\n* Fixes for refunds\r\n"
+      }
+    },
+    "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/797c3fb3f69ecb96b34035aa79505064140d6777",
+    "html_url": "https://github.com/invoiceninja/invoiceninja/commit/797c3fb3f69ecb96b34035aa79505064140d6777",
+    "comments_url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/797c3fb3f69ecb96b34035aa79505064140d6777/comments",
+    "author": {
+      "login": "turbo124",
+      "id": 5827962,
+      "node_id": "MDQ6VXNlcjU4Mjc5NjI=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5827962?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/turbo124",
+      "html_url": "https://github.com/turbo124",
+      "followers_url": "https://api.github.com/users/turbo124/followers",
+      "following_url": "https://api.github.com/users/turbo124/following{/other_user}",
+      "gists_url": "https://api.github.com/users/turbo124/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/turbo124/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/turbo124/subscriptions",
+      "organizations_url": "https://api.github.com/users/turbo124/orgs",
+      "repos_url": "https://api.github.com/users/turbo124/repos",
+      "events_url": "https://api.github.com/users/turbo124/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/turbo124/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "11960e25e75d3deaa87db459b3002f6f9d3af1ae",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/11960e25e75d3deaa87db459b3002f6f9d3af1ae",
+        "html_url": "https://github.com/invoiceninja/invoiceninja/commit/11960e25e75d3deaa87db459b3002f6f9d3af1ae"
+      }
+    ]
+  },
+  {
+    "sha": "11960e25e75d3deaa87db459b3002f6f9d3af1ae",
+    "node_id": "MDY6Q29tbWl0MTQ3MTYzNjg6MTE5NjBlMjVlNzVkM2RlYWE4N2RiNDU5YjMwMDJmNmY5ZDNhZjFhZQ==",
+    "commit": {
+      "author": {
+        "name": "David Bomba",
+        "email": "turbo124@gmail.com",
+        "date": "2020-02-05T10:28:56Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-02-05T10:28:56Z"
+      },
+      "message": "Fixes for refunds (#3285)\n\n* Working self-updater package\r\n\r\n* Fixes for travis\r\n\r\n* Working on invoice designs\r\n\r\n* Working on invoice builder\r\n\r\n* Tests for invoice design\r\n\r\n* Working on invoice designs\r\n\r\n* Minor fixes\r\n\r\n* Working on Invoice Design Engine\r\n\r\n* Working on invoice designs\r\n\r\n* Fixes for refunds",
+      "tree": {
+        "sha": "1a2cb027fb192259cea9a6ee13f464f6db252a35",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/trees/1a2cb027fb192259cea9a6ee13f464f6db252a35"
+      },
+      "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/commits/11960e25e75d3deaa87db459b3002f6f9d3af1ae",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJeOpjoCRBK7hj4Ov3rIwAAdHIIAEzQrvqzY8HunVtC4oGlJAae\ny+WkFyvQmNL1JB1DOgBryLD5JemLToo6DHF1NFO8WTRb9s/rdBiTs0Pt5KgW6vDz\nVs2jXJN1S5fAai4JD6zZ+bAvv082MIxYVHkq7cwTlSvX/u8WnupewkqjRVvmkdPN\nlQyIpocl8c7MmRPfBK3SMPYnmxEBwHgr+M0ZMKCCkd+6maYTgNLfpLc9eWg1whfv\nBMn4VIO7PtA2HTT+N7Az9+cUFQrHCfOtEZ/lchPq1m1UmNm5eI46SWooNtp7HGvz\n77NA1apt4XAir20muFFBofSJF0cy6gYqfFJqb2dMFdPAI42eG0dgXwiG6ZKi3dE=\n=WXkG\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 1a2cb027fb192259cea9a6ee13f464f6db252a35\nparent 3ec996ee5de0f623dd8f252d3b4b6ad53cd951e6\nauthor David Bomba <turbo124@gmail.com> 1580898536 +1100\ncommitter GitHub <noreply@github.com> 1580898536 +1100\n\nFixes for refunds (#3285)\n\n* Working self-updater package\r\n\r\n* Fixes for travis\r\n\r\n* Working on invoice designs\r\n\r\n* Working on invoice builder\r\n\r\n* Tests for invoice design\r\n\r\n* Working on invoice designs\r\n\r\n* Minor fixes\r\n\r\n* Working on Invoice Design Engine\r\n\r\n* Working on invoice designs\r\n\r\n* Fixes for refunds\r\n"
+      }
+    },
+    "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/11960e25e75d3deaa87db459b3002f6f9d3af1ae",
+    "html_url": "https://github.com/invoiceninja/invoiceninja/commit/11960e25e75d3deaa87db459b3002f6f9d3af1ae",
+    "comments_url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/11960e25e75d3deaa87db459b3002f6f9d3af1ae/comments",
+    "author": {
+      "login": "turbo124",
+      "id": 5827962,
+      "node_id": "MDQ6VXNlcjU4Mjc5NjI=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5827962?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/turbo124",
+      "html_url": "https://github.com/turbo124",
+      "followers_url": "https://api.github.com/users/turbo124/followers",
+      "following_url": "https://api.github.com/users/turbo124/following{/other_user}",
+      "gists_url": "https://api.github.com/users/turbo124/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/turbo124/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/turbo124/subscriptions",
+      "organizations_url": "https://api.github.com/users/turbo124/orgs",
+      "repos_url": "https://api.github.com/users/turbo124/repos",
+      "events_url": "https://api.github.com/users/turbo124/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/turbo124/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "3ec996ee5de0f623dd8f252d3b4b6ad53cd951e6",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/3ec996ee5de0f623dd8f252d3b4b6ad53cd951e6",
+        "html_url": "https://github.com/invoiceninja/invoiceninja/commit/3ec996ee5de0f623dd8f252d3b4b6ad53cd951e6"
+      }
+    ]
+  },
+  {
+    "sha": "3ec996ee5de0f623dd8f252d3b4b6ad53cd951e6",
+    "node_id": "MDY6Q29tbWl0MTQ3MTYzNjg6M2VjOTk2ZWU1ZGUwZjYyM2RkOGYyNTJkM2I0YjZhZDUzY2Q5NTFlNg==",
+    "commit": {
+      "author": {
+        "name": "David Bomba",
+        "email": "turbo124@gmail.com",
+        "date": "2020-02-05T04:06:03Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-02-05T04:06:03Z"
+      },
+      "message": "Invoice Designer (#3283)\n\n* Working self-updater package\r\n\r\n* Fixes for travis\r\n\r\n* Working on invoice designs\r\n\r\n* Working on invoice builder\r\n\r\n* Tests for invoice design\r\n\r\n* Working on invoice designs\r\n\r\n* Minor fixes\r\n\r\n* Minor fixes for randomdataseeder",
+      "tree": {
+        "sha": "ba7528f0e6564bcfb0da9d5c91a631a8b9e7bb4d",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/trees/ba7528f0e6564bcfb0da9d5c91a631a8b9e7bb4d"
+      },
+      "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/commits/3ec996ee5de0f623dd8f252d3b4b6ad53cd951e6",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJeOj8rCRBK7hj4Ov3rIwAAdHIIAF9Gc9+5Z7G5KwY8lggyfE++\nn8uJZm6q+FyDGP/curpuG6ODo3HxRkKMZ1ZaXYHYkuiFkYsWygvhrb0MFNmQqynD\nHtHfEB6aQ6WuFyTmCMk++cvWtl5t/QvsYcKKaLDvomlmvZ+qMuxD9dse/WQqRnx+\nD435mxbf68H1Z7FWeqzm4z6sVA3W2/CogP+4fPrs+OQLlLmo1TVMjogsSIlMyVhn\n08CTmpc3U+s/Ne20hmxLEgYG/hL/d3IC9wb/Zf61YYeePujrgQp5zzzDQekc1trj\nTIWTXrzmrohShpyI3xBuIFrZFUAs+acNoD3q+hPHFN1egBhIelAOioWE5fYCAtU=\n=icfl\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree ba7528f0e6564bcfb0da9d5c91a631a8b9e7bb4d\nparent c2524f55da70f141f438beaab6b920c48e9de832\nauthor David Bomba <turbo124@gmail.com> 1580875563 +1100\ncommitter GitHub <noreply@github.com> 1580875563 +1100\n\nInvoice Designer (#3283)\n\n* Working self-updater package\r\n\r\n* Fixes for travis\r\n\r\n* Working on invoice designs\r\n\r\n* Working on invoice builder\r\n\r\n* Tests for invoice design\r\n\r\n* Working on invoice designs\r\n\r\n* Minor fixes\r\n\r\n* Minor fixes for randomdataseeder\r\n"
+      }
+    },
+    "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/3ec996ee5de0f623dd8f252d3b4b6ad53cd951e6",
+    "html_url": "https://github.com/invoiceninja/invoiceninja/commit/3ec996ee5de0f623dd8f252d3b4b6ad53cd951e6",
+    "comments_url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/3ec996ee5de0f623dd8f252d3b4b6ad53cd951e6/comments",
+    "author": {
+      "login": "turbo124",
+      "id": 5827962,
+      "node_id": "MDQ6VXNlcjU4Mjc5NjI=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5827962?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/turbo124",
+      "html_url": "https://github.com/turbo124",
+      "followers_url": "https://api.github.com/users/turbo124/followers",
+      "following_url": "https://api.github.com/users/turbo124/following{/other_user}",
+      "gists_url": "https://api.github.com/users/turbo124/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/turbo124/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/turbo124/subscriptions",
+      "organizations_url": "https://api.github.com/users/turbo124/orgs",
+      "repos_url": "https://api.github.com/users/turbo124/repos",
+      "events_url": "https://api.github.com/users/turbo124/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/turbo124/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "c2524f55da70f141f438beaab6b920c48e9de832",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/c2524f55da70f141f438beaab6b920c48e9de832",
+        "html_url": "https://github.com/invoiceninja/invoiceninja/commit/c2524f55da70f141f438beaab6b920c48e9de832"
+      }
+    ]
+  },
+  {
+    "sha": "c2524f55da70f141f438beaab6b920c48e9de832",
+    "node_id": "MDY6Q29tbWl0MTQ3MTYzNjg6YzI1MjRmNTVkYTcwZjE0MWY0MzhiZWFhYjZiOTIwYzQ4ZTlkZTgzMg==",
+    "commit": {
+      "author": {
+        "name": "michael-hampton",
+        "email": "michaelhamptondesign@yahoo.com",
+        "date": "2020-02-04T22:47:54Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-02-04T22:47:54Z"
+      },
+      "message": "Update MarkPaid.php (#3282)",
+      "tree": {
+        "sha": "be0307961da2caecc8bf7906cfb1980569064b6f",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/trees/be0307961da2caecc8bf7906cfb1980569064b6f"
+      },
+      "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/commits/c2524f55da70f141f438beaab6b920c48e9de832",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJeOfSaCRBK7hj4Ov3rIwAAdHIIAEUF50ma1BVw1AmeJ/vXdt5R\nybb8OoA7L5Sx87dQG3HRimf1AvdOfhOypKD9fU3kosWrenXjDABu5PjR8vOXx2cw\nAudYOapL34QsewTUMJYPMX7cxgBrP4o+8eZtXsRpnRwUKTIzRDnPOKWUYO+sBLYR\nuj+cXFrVX/qCzNDS/buytymov/et2Oo+mMqNHAsaCfiR2+TYWT8odGayoWMF3Q9u\ntFhze/TSheH0DYLMPgy+DfWaTsA3wcBUDEQzwS3797aGcM4k2goVnA07cDl9rloy\nVCCkT82bu0VWV7xTogVrbA60YlnYR/BSSD6y8TiX/GN8UEyUdTReSNmUiyGAuEc=\n=EXp6\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree be0307961da2caecc8bf7906cfb1980569064b6f\nparent cda534e99652045ab102f5f38c39e51f65e42c57\nauthor michael-hampton <michaelhamptondesign@yahoo.com> 1580856474 +0000\ncommitter GitHub <noreply@github.com> 1580856474 +1100\n\nUpdate MarkPaid.php (#3282)\n\n"
+      }
+    },
+    "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/c2524f55da70f141f438beaab6b920c48e9de832",
+    "html_url": "https://github.com/invoiceninja/invoiceninja/commit/c2524f55da70f141f438beaab6b920c48e9de832",
+    "comments_url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/c2524f55da70f141f438beaab6b920c48e9de832/comments",
+    "author": {
+      "login": "michael-hampton",
+      "id": 28355563,
+      "node_id": "MDQ6VXNlcjI4MzU1NTYz",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/28355563?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/michael-hampton",
+      "html_url": "https://github.com/michael-hampton",
+      "followers_url": "https://api.github.com/users/michael-hampton/followers",
+      "following_url": "https://api.github.com/users/michael-hampton/following{/other_user}",
+      "gists_url": "https://api.github.com/users/michael-hampton/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/michael-hampton/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/michael-hampton/subscriptions",
+      "organizations_url": "https://api.github.com/users/michael-hampton/orgs",
+      "repos_url": "https://api.github.com/users/michael-hampton/repos",
+      "events_url": "https://api.github.com/users/michael-hampton/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/michael-hampton/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "cda534e99652045ab102f5f38c39e51f65e42c57",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/cda534e99652045ab102f5f38c39e51f65e42c57",
+        "html_url": "https://github.com/invoiceninja/invoiceninja/commit/cda534e99652045ab102f5f38c39e51f65e42c57"
+      }
+    ]
+  },
+  {
+    "sha": "cda534e99652045ab102f5f38c39e51f65e42c57",
+    "node_id": "MDY6Q29tbWl0MTQ3MTYzNjg6Y2RhNTM0ZTk5NjUyMDQ1YWIxMDJmNWYzOGMzOWU1MWY2NWU0MmM1Nw==",
+    "commit": {
+      "author": {
+        "name": "David Bomba",
+        "email": "turbo124@gmail.com",
+        "date": "2020-02-04T07:51:44Z"
+      },
+      "committer": {
+        "name": "GitHub",
+        "email": "noreply@github.com",
+        "date": "2020-02-04T07:51:44Z"
+      },
+      "message": "Explicitly call the service() method, rather than obfuscate. (#3281)\n\n* Include fix as describe by @michael-hampton here #3280\r\n\r\n* Refactor createinvitations away from jobs\r\n\r\n* Clean up\r\n\r\n* Fixes for service() refactoring\r\n\r\n* Fixes for services refactor",
+      "tree": {
+        "sha": "9d90b8620cb84f23f5057f56c28cab1021c1f227",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/trees/9d90b8620cb84f23f5057f56c28cab1021c1f227"
+      },
+      "url": "https://api.github.com/repos/invoiceninja/invoiceninja/git/commits/cda534e99652045ab102f5f38c39e51f65e42c57",
+      "comment_count": 0,
+      "verification": {
+        "verified": true,
+        "reason": "valid",
+        "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsBcBAABCAAQBQJeOSKQCRBK7hj4Ov3rIwAAdHIIAB1QArn60MhvPO0tzSS0igeZ\npUtecfLSOmoyVC5jnNSgD/WOWiHFry130Y7IMNa6NQChMaSjCgEHU5AgCWmUaOj9\nkpQN/9/AsYo00AqwyySfCNUcWYfIaFZpViId+R5WVaQuUelpsRuacAbdHQ4CiIrY\nLtte68jHtMwGUkVwgK5+ATbsgGGXhJ6gUNIbei+ltxnA6JpbLLYda36ESmZULMj3\n5zVFcaIh4FUn8y0SkYE7hpRnKlAVgguMexwDOtxLXOQLgGtCX0QvbfUKxI9pDY/K\nMTp3End2WLaiBJC+6EOwYhritaRXmTqWg3N2VBNtALfA9EBGeFc/m+xUpbvNkaY=\n=mEeD\n-----END PGP SIGNATURE-----\n",
+        "payload": "tree 9d90b8620cb84f23f5057f56c28cab1021c1f227\nparent c25de936edd8db6baec45d67fd31da4cdda4c4fa\nauthor David Bomba <turbo124@gmail.com> 1580802704 +1100\ncommitter GitHub <noreply@github.com> 1580802704 +1100\n\nExplicitly call the service() method, rather than obfuscate. (#3281)\n\n* Include fix as describe by @michael-hampton here #3280\r\n\r\n* Refactor createinvitations away from jobs\r\n\r\n* Clean up\r\n\r\n* Fixes for service() refactoring\r\n\r\n* Fixes for services refactor\r\n"
+      }
+    },
+    "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/cda534e99652045ab102f5f38c39e51f65e42c57",
+    "html_url": "https://github.com/invoiceninja/invoiceninja/commit/cda534e99652045ab102f5f38c39e51f65e42c57",
+    "comments_url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/cda534e99652045ab102f5f38c39e51f65e42c57/comments",
+    "author": {
+      "login": "turbo124",
+      "id": 5827962,
+      "node_id": "MDQ6VXNlcjU4Mjc5NjI=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5827962?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/turbo124",
+      "html_url": "https://github.com/turbo124",
+      "followers_url": "https://api.github.com/users/turbo124/followers",
+      "following_url": "https://api.github.com/users/turbo124/following{/other_user}",
+      "gists_url": "https://api.github.com/users/turbo124/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/turbo124/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/turbo124/subscriptions",
+      "organizations_url": "https://api.github.com/users/turbo124/orgs",
+      "repos_url": "https://api.github.com/users/turbo124/repos",
+      "events_url": "https://api.github.com/users/turbo124/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/turbo124/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "web-flow",
+      "id": 19864447,
+      "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/19864447?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/web-flow",
+      "html_url": "https://github.com/web-flow",
+      "followers_url": "https://api.github.com/users/web-flow/followers",
+      "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+      "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+      "organizations_url": "https://api.github.com/users/web-flow/orgs",
+      "repos_url": "https://api.github.com/users/web-flow/repos",
+      "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/web-flow/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "c25de936edd8db6baec45d67fd31da4cdda4c4fa",
+        "url": "https://api.github.com/repos/invoiceninja/invoiceninja/commits/c25de936edd8db6baec45d67fd31da4cdda4c4fa",
+        "html_url": "https://github.com/invoiceninja/invoiceninja/commit/c25de936edd8db6baec45d67fd31da4cdda4c4fa"
+      }
+    ]
+  }
+]
