@@ -4,11 +4,23 @@ namespace Codedge\Updater\Tests;
 
 use Codedge\Updater\UpdaterFacade;
 use Codedge\Updater\UpdaterServiceProvider;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
+    /**
+     * @var array
+     */
+    protected $mockedResponses = [
+        'tag' => 'releases-tag.json',
+        'branch' => 'releases-branch.json',
+    ];
+
     protected $client;
 
     /**
@@ -29,6 +41,7 @@ abstract class TestCase extends Orchestra
                     'repository_url' => '',
                     'download_path' => '/tmp',
                     'private_access_token' => '',
+                    'use_branch' => '',
                 ],
                 'http' => [
                     'type' => 'http',
@@ -44,6 +57,19 @@ abstract class TestCase extends Orchestra
                 'name' => '',
             ],
         ]);
+    }
+
+    protected function getMockedClient(string $type): Client
+    {
+        $response = new Response(
+            200, [ 'Content-Type' => 'application/json' ],
+            \GuzzleHttp\Psr7\stream_for(fopen('tests/Data/'.$this->mockedResponses[$type], 'r')));
+
+        $handler = HandlerStack::create(new MockHandler([
+            $response, $response, $response, $response
+        ]));
+
+        return new Client(['handler' => $handler]);
     }
 
     /**

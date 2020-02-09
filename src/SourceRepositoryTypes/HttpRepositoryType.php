@@ -9,6 +9,8 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
+use Codedge\Updater\Traits\SupportPrivateAccessToken;
+use Codedge\Updater\Traits\UseVersionFile;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\File;
@@ -25,6 +27,8 @@ use Symfony\Component\Finder\Finder;
  */
 class HttpRepositoryType extends AbstractRepositoryType implements SourceRepositoryTypeContract
 {
+    use UseVersionFile, SupportPrivateAccessToken;
+
     const NEW_VERSION_FILE = 'self-updater-new-version';
 
     /**

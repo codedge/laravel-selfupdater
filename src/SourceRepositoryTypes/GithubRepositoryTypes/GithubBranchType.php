@@ -8,7 +8,7 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Psr\Http\Message\ResponseInterface;
+use InvalidArgumentException;use Psr\Http\Message\ResponseInterface;
 
 final class GithubBranchType extends GithubRepositoryType implements GithubRepositoryTypeContract
 {
@@ -80,11 +80,15 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
             throw new InvalidArgumentException('No currently installed version specified.');
         }
 
-        if (version_compare($version, $this->getVersionAvailable(), '<')) {
+        $versionAvailable = $this->getVersionAvailable();
+
+        #dd($version, $versionAvailable, version_compare($version, $versionAvailable, '<'));
+
+        if (version_compare($version, $versionAvailable, '<')) {
             if (! $this->versionFileExists()) {
-                $this->setVersionFile($this->getVersionAvailable());
-                event(new UpdateAvailable($this->getVersionAvailable()));
+                $this->setVersionFile($versionAvailable);
             }
+            event(new UpdateAvailable($versionAvailable));
 
             return true;
         }

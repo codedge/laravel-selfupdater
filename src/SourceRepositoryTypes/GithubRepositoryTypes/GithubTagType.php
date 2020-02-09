@@ -51,11 +51,13 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
             throw new InvalidArgumentException('No currently installed version specified.');
         }
 
-        if (version_compare($version, $this->getVersionAvailable(), '<')) {
+        $versionAvailable = $this->getVersionAvailable();
+
+        if (version_compare($version, $versionAvailable, '<')) {
             if (! $this->versionFileExists()) {
-                $this->setVersionFile($this->getVersionAvailable());
-                event(new UpdateAvailable($this->getVersionAvailable()));
+                $this->setVersionFile($versionAvailable);
             }
+            event(new UpdateAvailable($versionAvailable));
 
             return true;
         }
@@ -79,7 +81,8 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
             $version = $prepend.$this->getVersionFile().$append;
         } else {
             $response = $this->getRepositoryReleases();
-            $releaseCollection = collect(json_decode($response->getBody()));
+
+            $releaseCollection = collect(json_decode($response->getBody()->getContents()));
             $version = $prepend.$releaseCollection->first()->name.$append;
         }
 
@@ -98,7 +101,9 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
     public function fetch($version = ''): void
     {
         $response = $this->getRepositoryReleases();
-        $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()));
+        $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()->getContents()));
+
+
 
         if ($releaseCollection->isEmpty()) {
             throw new Exception( 'Cannot find a release to update. Please check the repository you\'re pulling from');
