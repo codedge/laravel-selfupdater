@@ -104,8 +104,6 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
         $response = $this->getRepositoryReleases();
         $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()->getContents()));
 
-
-
         if ($releaseCollection->isEmpty()) {
             throw new Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
         }
