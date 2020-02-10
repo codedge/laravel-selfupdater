@@ -51,7 +51,7 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
 
         $release = $this->selectRelease($releaseCollection, $version);
 
-        $storageFolder = $this->storagePath.$release->commit->author->date . '-' . now()->timestamp;
+        $storageFolder = $this->storagePath.$release->commit->author->date.'-'.now()->timestamp;
         $storageFilename = $storageFolder.'.zip';
 
         if (! $this->isSourceAlreadyFetched($release->commit->author->date)) {
@@ -66,7 +66,7 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
         $release = $collection->first();
 
         if (! empty($version)) {
-            if($collection->contains('commit.author.date', $version)) {
+            if ($collection->contains('commit.author.date', $version)) {
                 $release = $collection->where('commit.author.date', $version)->first();
             } else {
                 Log::info('No release for version "'.$version.'" found. Selecting latest.');
