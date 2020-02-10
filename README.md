@@ -145,34 +145,31 @@ a `private_access_token` field, where you can set the token.
 ## Usage
 To start an update process, i. e. in a controller, just use:
 ```php
-public function update()
-{
-    // This downloads and install the latest version of your repo
-    Updater::update();
-    
-    // Just download the source and do the actual update elsewhere
-    Updater::fetch();
-    
-    // Check if a new version is available and pass current version
-    Updater::isNewVersionAvailable('1.2');
-}
+Route::get('/', function (\Codedge\Updater\UpdaterManager $updater) {
+
+    // Check if new version is available
+    if($updater->source()->isNewVersionAvailable()) {
+
+        // Get the current installed version
+        $updater->source()->getVersionInstalled();
+
+        // Get the new version available
+        $updater->source()->getVersionAvailable();
+
+        // Run the update process
+        $updater->source()->update();
+        
+    } else {
+        echo "No new version available.";
+    }
+
+});
 ```
 
-Of course you can inject the _updater_ via method injection:
-```php
-public function update(UpdaterManager $updater)
-{
+**IMPORTANT**:  
+You're responsible to set the current version installed, either in the config file or better via the env variable `SELF_UPDATER_VERSION_INSTALLED`.
 
-    $updater->update(); // Same as above
-    
-    // .. and shorthand for this:
-    $updater->source()->update;
-    
-    $updater->fetch(); // Same as above...
-}
-```
-
-**Note:** Currently the fetching of the source is a _synchronous_ process.
+Currently the fetching of the source is a _synchronous_ process.
 It is not run in background.
 
 ### Using Github
