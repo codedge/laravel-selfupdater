@@ -8,7 +8,9 @@ use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use GuzzleHttp\Client;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
@@ -47,20 +49,31 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
             File::makeDirectory($this->storagePath, 493, true, true);
         }
 
-        $release = $releaseCollection->first();
+        $release = $this->selectRelease($releaseCollection, $version);
 
-        if (! empty($version)) {
-            $release = $releaseCollection->where('sha', $version)->first();
-        }
-
-        $storageFolder = $this->storagePath.$release->sha.'-'.now()->timestamp;
+        $storageFolder = $this->storagePath.$release->commit->author->date . '-' . now()->timestamp;
         $storageFilename = $storageFolder.'.zip';
 
-        if (! $this->isSourceAlreadyFetched($release->sha)) {
+        if (! $this->isSourceAlreadyFetched($release->commit->author->date)) {
             $this->downloadRelease($this->client, $this->generateZipUrl($release->sha), $storageFilename);
             $this->unzipArchive($storageFilename, $storageFolder);
-            $this->createReleaseFolder($storageFolder, $release->sha);
+            $this->createReleaseFolder($storageFolder, $release->commit->author->date);
         }
+    }
+
+    public function selectRelease(Collection $collection, string $version)
+    {
+        $release = $collection->first();
+
+        if (! empty($version)) {
+            if($collection->contains('commit.author.date', $version)) {
+                $release = $collection->where('commit.author.date', $version)->first();
+            } else {
+                Log::info('No release for version "'.$version.'" found. Selecting latest.');
+            }
+        }
+
+        return $release;
     }
 
     /**
@@ -84,8 +97,6 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
         }
 
         $versionAvailable = $this->getVersionAvailable();
-
-        //dd($version, $versionAvailable, version_compare($version, $versionAvailable, '<'));
 
         if (version_compare($version, $versionAvailable, '<')) {
             if (! $this->versionFileExists()) {
