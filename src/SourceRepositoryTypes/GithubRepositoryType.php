@@ -35,15 +35,11 @@ class GithubRepositoryType extends AbstractRepositoryType
     /**
      * Github constructor.
      *
-     * @param Client $client
      * @param array  $config
      */
-    public function __construct(Client $client, array $config)
+    public function __construct(array $config)
     {
-        $this->client = $client;
         $this->config = $config;
-        $this->config['version_installed'] = config('self-update.version_installed');
-        $this->config['exclude_folders'] = config('self-update.exclude_folders');
     }
 
     public function create(): GithubRepositoryTypeContract
@@ -51,15 +47,15 @@ class GithubRepositoryType extends AbstractRepositoryType
         $this->checkValidRepository();
 
         if ($this->useBranchForVersions()) {
-            return new GithubBranchType($this->config, $this->client);
+            return resolve(GithubBranchType::class);
         }
 
-        return new GithubTagType($this->config, $this->client);
+        return resolve(GithubTagType::class);
     }
 
     public function update(string $version = ''): bool
     {
-        $this->setPathToUpdate(base_path(), $this->config['exclude_folders']);
+        $this->setPathToUpdate(base_path(), config('self-update.exclude_folders'));
 
         if ($this->hasCorrectPermissionForUpdate()) {
             if (! empty($version)) {
@@ -70,13 +66,13 @@ class GithubRepositoryType extends AbstractRepositoryType
 
             // Move all directories first
             collect((new Finder())->in($sourcePath)
-                                  ->exclude($this->config['exclude_folders'])
+                                  ->exclude(config('self-update.exclude_folders'))
                                   ->directories()
                                   ->sort(function ($a, $b) {
                                       return strlen($b->getRealpath()) - strlen($a->getRealpath());
                                   }))->each(function (/** @var \SplFileInfo $directory */ $directory) {
                                       if (! $this->isDirectoryExcluded(
-                    File::directories($directory->getRealPath()), $this->config['exclude_folders'])
+                    File::directories($directory->getRealPath()), config('self-update.exclude_folders'))
                 ) {
                                           File::copyDirectory(
                         $directory->getRealPath(),
@@ -129,6 +125,6 @@ class GithubRepositoryType extends AbstractRepositoryType
      */
     public function getVersionInstalled(string $prepend = '', string $append = ''): string
     {
-        return $prepend.$this->config['version_installed'].$append;
+        return $prepend.config('self-update.version_installed').$append;
     }
 }

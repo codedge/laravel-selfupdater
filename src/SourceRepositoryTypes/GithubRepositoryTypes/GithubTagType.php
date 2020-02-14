@@ -8,7 +8,7 @@ use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Exception;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -17,18 +17,13 @@ use Psr\Http\Message\ResponseInterface;
 final class GithubTagType extends GithubRepositoryType implements GithubRepositoryTypeContract
 {
     /**
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * @var Client
+     * @var ClientInterface
      */
     protected $client;
 
-    public function __construct(array $config, Client $client)
+    public function __construct(array $config, ClientInterface $client)
     {
-        $this->config = $config;
+        parent::__construct($config);
         $this->setAccessToken($config['private_access_token']);
 
         $this->client = $client;
@@ -130,8 +125,7 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
 
     protected function getRepositoryReleases(): ResponseInterface
     {
-        $url = self::GITHUB_API_URL
-               .'/repos/'.$this->config['repository_vendor']
+        $url = '/repos/'.$this->config['repository_vendor']
                .'/'.$this->config['repository_name']
                .'/tags';
 

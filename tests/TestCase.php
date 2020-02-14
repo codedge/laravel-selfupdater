@@ -2,6 +2,11 @@
 
 namespace Codedge\Updater\Tests;
 
+use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
+use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
+use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
+use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
+use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\UpdaterFacade;
 use Codedge\Updater\UpdaterServiceProvider;
 use GuzzleHttp\Client;
@@ -57,6 +62,24 @@ abstract class TestCase extends Orchestra
                 'name' => '',
             ],
         ]);
+
+        $app->bind(GithubBranchType::class, function (): GithubRepositoryTypeContract {
+            return new GithubBranchType(
+                config('self-update.repository_types.github'), $this->getMockedClient('branch')
+            );
+        });
+
+        $app->bind(GithubTagType::class, function (): GithubRepositoryTypeContract {
+            return new GithubTagType(config('self-update.repository_types.github'), $this->getMockedClient('tag'));
+        });
+
+        $app->bind(GithubRepositoryType::class, function(): GithubRepositoryType {
+            return new GithubRepositoryType(config('self-update.repository_types.github'));
+        });
+
+        $app->bind(HttpRepositoryType::class, function() {
+            return new HttpRepositoryType(new Client(), config('self-update.repository_types.http'));
+        });
     }
 
     protected function getMockedClient(string $type): Client
@@ -76,7 +99,7 @@ abstract class TestCase extends Orchestra
      * @param Application $app
      * @return array
      */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             UpdaterServiceProvider::class,
@@ -87,7 +110,7 @@ abstract class TestCase extends Orchestra
      * @param Application $app
      * @return array
      */
-    protected function getPackageAliases($app)
+    protected function getPackageAliases($app): array
     {
         return [
             'Updater' => UpdaterFacade::class,

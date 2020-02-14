@@ -2,7 +2,6 @@
 
 namespace Codedge\Updater\Tests\SourceRepositoryTypes\GithubRepositoryTypes;
 
-use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
@@ -13,47 +12,34 @@ use InvalidArgumentException;
 
 final class GithubTagTypeTest extends TestCase
 {
-    /**
-     * @var Client;
-     */
-    protected $client;
-
-    /**
-     * @var array
-     */
-    protected $config;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->config = $this->app['config']['self-update']['repository_types']['github'];
-        $this->client = $this->getMockedClient('tag');
-    }
-
     public function testIsNewVersionAvailableFailsWithInvalidArgumentException()
     {
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType($this->client, $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
+
         $this->expectException(InvalidArgumentException::class);
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $github->isNewVersionAvailable();
     }
 
     public function testIsNewVersionAvailableTriggerUpdateAvailableEvent()
     {
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType($this->client, $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
 
         $this->expectsEvents(UpdateAvailable::class);
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $this->assertTrue($github->isNewVersionAvailable('v1.1.0'));
     }
 
     public function testIsNewVersionAvailableVersionFileExists()
     {
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType($this->client, $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
 
         $github->deleteVersionFile();
 
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $this->assertTrue($github->isNewVersionAvailable('v1.1.0'));
         $this->assertFalse($github->isNewVersionAvailable('v100.1'));
 
@@ -62,10 +48,11 @@ final class GithubTagTypeTest extends TestCase
     public function testIsNewVersionAvailableVersionFileDoesNotExist()
     {
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType($this->client, $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
 
         $github->deleteVersionFile();
 
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $this->assertTrue($github->isNewVersionAvailable('v1.1.0'));
         $this->assertFalse($github->isNewVersionAvailable('v100.1'));
 
@@ -74,8 +61,9 @@ final class GithubTagTypeTest extends TestCase
     public function testGetVersionAvailable()
     {
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType($this->client, $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
 
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $this->assertNotEmpty($github->getVersionAvailable());
         $this->assertStringStartsWith('v', $github->getVersionAvailable('v'));
         $this->assertStringEndsWith('version', $github->getVersionAvailable('', 'version'));
@@ -83,20 +71,21 @@ final class GithubTagTypeTest extends TestCase
 
     public function testFetchingFailsWithException()
     {
-
-
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType(new Client(), $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
+
         $this->expectException(Exception::class);
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $github->fetch();
     }
 
     public function testHasAccessTokenSet()
     {
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType($this->client, $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
         $github->setAccessToken('abc123');
 
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $this->assertTrue($github->hasAccessToken());
         $this->assertEquals($github->getAccessToken(), 'Bearer abc123');
     }
@@ -104,7 +93,9 @@ final class GithubTagTypeTest extends TestCase
     public function testHasAccessTokenNotSet()
     {
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType($this->client, $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
+
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $this->assertFalse($github->hasAccessToken());
         $this->assertEquals($github->getAccessToken(), 'Bearer ');
     }
@@ -112,7 +103,8 @@ final class GithubTagTypeTest extends TestCase
     public function testSetDifferentAccessTokenPrefix()
     {
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType($this->client, $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $this->assertEquals($github->getAccessTokenPrefix(), 'Bearer ');
 
         $github->setAccessTokenPrefix('AnotherOne');
@@ -122,7 +114,8 @@ final class GithubTagTypeTest extends TestCase
     public function testGetAccessTokenWithDifferentPrefix()
     {
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType($this->client, $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $github->setAccessTokenPrefix('');
 
         $this->assertEquals($github->getAccessTokenPrefix(), '');
@@ -131,7 +124,8 @@ final class GithubTagTypeTest extends TestCase
     public function testGetAccessTokenWithoutPrefix()
     {
         /** @var GithubTagType $github */
-        $github = (new GithubRepositoryType($this->client, $this->config))->create();
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $this->assertInstanceOf(GithubTagType::class, $github);
         $github->setAccessToken('abc123');
 
         $this->assertEquals($github->getAccessToken(false),'abc123');

@@ -6,7 +6,7 @@ namespace Codedge\Updater;
 
 use Codedge\Updater\Events\HasWrongPermissions;
 use Exception;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\Finder;
 
@@ -44,7 +44,7 @@ abstract class AbstractRepositoryType
      *
      * @return bool
      */
-    protected function unzipArchive($file = '', $targetDir = '', $deleteZipArchive = true): bool
+    protected function unzipArchive($file, $targetDir, $deleteZipArchive = true): bool
     {
         if (empty($file) || ! File::exists($file)) {
             throw new \InvalidArgumentException("Archive [{$file}] cannot be found or is empty.");
@@ -99,13 +99,14 @@ abstract class AbstractRepositoryType
     /**
      * Download a file to a given location.
      *
-     * @param Client $client
+     * @param ClientInterface $client
      * @param string $source Url for the source (.zip)
      * @param string $storagePath
      *
      * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function downloadRelease(Client $client, string $source, $storagePath)
+    protected function downloadRelease(ClientInterface $client, string $source, $storagePath)
     {
         $headers = [];
 

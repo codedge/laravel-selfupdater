@@ -15,6 +15,14 @@ class UpdaterManagerTest extends Testcase
         $this->assertInstanceOf(UpdaterManager::class, $manager);
     }
 
+    public function test_get_source_repository_with_default_name()
+    {
+        $manager = new UpdaterManager(app());
+        $result = $manager->source();
+
+        $this->assertInstanceOf(SourceRepository::class, $result);
+    }
+
     public function test_get_source_repository_with_name_github()
     {
         $manager = new UpdaterManager(app());
@@ -27,14 +35,6 @@ class UpdaterManagerTest extends Testcase
     {
         $manager = new UpdaterManager(app());
         $result = $manager->source('http');
-
-        $this->assertInstanceOf(SourceRepository::class, $result);
-    }
-
-    public function test_get_source_repository_with_default_name()
-    {
-        $manager = new UpdaterManager(app());
-        $result = $manager->source();
 
         $this->assertInstanceOf(SourceRepository::class, $result);
     }

@@ -53,9 +53,9 @@ final class UpdaterManager implements UpdaterContract
      *
      * @param string $name
      *
-     * @return SourceRepository
+     * @return SourceRepositoryTypeContract
      */
-    public function source(string $name = ''): SourceRepository
+    public function source(string $name = ''): SourceRepositoryTypeContract
     {
         $name = $name ?: $this->getDefaultSourceRepository();
 
@@ -161,7 +161,7 @@ final class UpdaterManager implements UpdaterContract
         $repositoryMethod = 'create'.ucfirst($name).'Repository';
 
         if (method_exists($this, $repositoryMethod)) {
-            return $this->{$repositoryMethod}($config);
+            return $this->{$repositoryMethod}();
         }
         throw new InvalidArgumentException("Repository [{$name}] is not supported.");
     }
@@ -169,14 +169,12 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Create an instance for the Github source repository.
      *
-     * @param array $config
-     *
      * @return SourceRepository
      */
-    protected function createGithubRepository(array $config): SourceRepository
+    protected function createGithubRepository(): SourceRepository
     {
-        $client = new Client();
-        $factory = new GithubRepositoryType($client, $config);
+        /** @var GithubRepositoryType $factory */
+        $factory = $this->app->make(GithubRepositoryType::class);
 
         return $this->sourceRepository($factory->create());
     }
@@ -184,15 +182,11 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Create an instance for the Http source repository.
      *
-     * @param array $config
-     *
      * @return SourceRepository
      */
-    protected function createHttpRepository(array $config): SourceRepository
+    protected function createHttpRepository(): SourceRepository
     {
-        $client = new Client();
-
-        return $this->sourceRepository(new HttpRepositoryType($client, $config));
+        return $this->sourceRepository($this->app->make(HttpRepositoryType::class));
     }
 
     /**

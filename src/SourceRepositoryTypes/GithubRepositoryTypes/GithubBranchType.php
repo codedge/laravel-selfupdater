@@ -7,7 +7,7 @@ namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -18,18 +18,13 @@ use Psr\Http\Message\ResponseInterface;
 final class GithubBranchType extends GithubRepositoryType implements GithubRepositoryTypeContract
 {
     /**
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * @var Client
+     * @var ClientInterface
      */
     protected $client;
 
-    public function __construct(array $config, Client $client)
+    public function __construct(array $config, ClientInterface $client)
     {
-        $this->config = $config;
+        parent::__construct($config);
         $this->setAccessToken($config['private_access_token']);
 
         $this->client = $client;
@@ -125,8 +120,7 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
 
     protected function getRepositoryReleases(): ResponseInterface
     {
-        $url = self::GITHUB_API_URL
-               .DIRECTORY_SEPARATOR.'repos'
+        $url = DIRECTORY_SEPARATOR.'repos'
                .DIRECTORY_SEPARATOR.$this->config['repository_vendor']
                .DIRECTORY_SEPARATOR.$this->config['repository_name']
                .DIRECTORY_SEPARATOR.'commits'
