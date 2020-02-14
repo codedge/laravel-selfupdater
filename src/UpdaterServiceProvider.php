@@ -9,7 +9,6 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use GuzzleHttp\Client;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -88,23 +87,23 @@ class UpdaterServiceProvider extends ServiceProvider
             return new UpdaterManager(app());
         });
 
-        $this->app->bind(GithubRepositoryType::class, function(): GithubRepositoryType {
+        $this->app->bind(GithubRepositoryType::class, function (): GithubRepositoryType {
             return new GithubRepositoryType(config('self-update.repository_types.github'));
         });
 
-        $this->app->bind(GithubBranchType::class, function(): GithubRepositoryTypeContract {
+        $this->app->bind(GithubBranchType::class, function (): GithubRepositoryTypeContract {
             $client = new Client(['base_url' => GithubRepositoryTypeContract::GITHUB_URL]);
 
             return new GithubBranchType(config('self-update.repository_types.github'), $client);
         });
 
-        $this->app->bind(GithubTagType::class, function(): GithubRepositoryTypeContract {
+        $this->app->bind(GithubTagType::class, function (): GithubRepositoryTypeContract {
             $client = new Client(['base_url' => GithubRepositoryTypeContract::GITHUB_API_URL]);
 
             return new GithubTagType(config('self-update.repository_types.github'), $client);
         });
 
-        $this->app->bind(HttpRepositoryType::class, function() {
+        $this->app->bind(HttpRepositoryType::class, function () {
             return new HttpRepositoryType(new Client(), config('self-update.repository_types.http'));
         });
 
