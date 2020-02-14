@@ -8,6 +8,7 @@ use Codedge\Updater\Events\HasWrongPermissions;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Facades\File;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -85,7 +86,7 @@ abstract class AbstractRepositoryType
             throw new Exception('No directory set for update. Please set the update with: setPathToUpdate(path).');
         }
 
-        $collection = collect($this->pathToUpdate->files())->each(function ($file) { /* @var \SplFileInfo $file */
+        collect($this->pathToUpdate->files())->each(function ($file) { /* @var SplFileInfo $file */
             if (! File::isWritable($file->getRealPath())) {
                 event(new HasWrongPermissions($this));
 

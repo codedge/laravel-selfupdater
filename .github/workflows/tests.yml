@@ -17,7 +17,6 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, intl, zip
           coverage: xdebug
-          pecl: false
 
       - name: Get Composer Cache Directory
         id: composer-cache
