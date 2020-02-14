@@ -9,7 +9,6 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
-use GuzzleHttp\Client;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
 
