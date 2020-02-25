@@ -207,9 +207,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      * @param string $prepend Prepend a string to the latest version
      * @param string $append  Append a string to the latest version
      *
-     * @throws \Exception
-     *
-     * @return string
+     * @return mixed
      */
     public function getVersionAvailable($prepend = '', $append = ''): string
     {
@@ -218,9 +216,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
             $version = $this->getVersionFile();
         } else {
             $releaseCollection = $this->getPackageReleases();
-            if ($releaseCollection->isEmpty()) {
-                throw new \Exception('Retrieved version list is empty.');
-            }
+            if ($releaseCollection->isEmpty()) return false;
             $version = $releaseCollection->first()->name;
         }
 
