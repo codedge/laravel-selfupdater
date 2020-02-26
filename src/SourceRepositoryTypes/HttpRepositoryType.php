@@ -143,14 +143,12 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @return bool
      */
-    public function update($version = ''): bool
+    public function update($version): bool
     {
         $this->setPathToUpdate(base_path(), $this->config['exclude_folders']);
 
         if ($this->hasCorrectPermissionForUpdate()) {
-            if (empty($version)) {
-                $version = $this->getVersionAvailable();
-            }
+
             $sourcePath = $this->config['download_path'].DIRECTORY_SEPARATOR.$this->prepend.$version.$this->append;
 
             // Move all directories first
