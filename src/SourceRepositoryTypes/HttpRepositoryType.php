@@ -216,7 +216,9 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
             $version = $this->getVersionFile();
         } else {
             $releaseCollection = $this->getPackageReleases();
-            if ($releaseCollection->isEmpty()) return false;
+            if ($releaseCollection->isEmpty()) {
+                return false;
+            }
             $version = $releaseCollection->first()->name;
         }
 
