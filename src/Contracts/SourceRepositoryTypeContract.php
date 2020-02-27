@@ -22,7 +22,7 @@ interface SourceRepositoryTypeContract
      *
      * @return bool
      */
-    public function update(string $version = ''): bool;
+    public function update(string $version): bool;
 
     /**
      * Check repository if a newer version than the installed one is available.
