@@ -11,6 +11,7 @@ use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\File;
@@ -70,7 +71,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      * @param string $currentVersion
      *
      * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool
      */
@@ -102,14 +103,14 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @param string $version
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return mixed
      */
     public function fetch($version = '')
     {
         if (($releaseCollection = $this->getPackageReleases())->isEmpty()) {
-            throw new \Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
+            throw new Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
         }
 
         $release = $releaseCollection->first();
@@ -122,7 +123,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
         if (! $version) {
             $release = $releaseCollection->where('name', $version)->first();
             if (! $release) {
-                throw new \Exception('Given version was not found in release list.');
+                throw new Exception('Given version was not found in release list.');
             }
         }
 
@@ -205,21 +206,19 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      * Example: 2.6.5 or v2.6.5.
      *
      * @param string $prepend Prepend a string to the latest version
-     * @param string $append  Append a string to the latest version
+     * @param string $append Append a string to the latest version
      *
-     * @throws \Exception
-     *
-     * @return string
+     * @return string|false
+     * @throws Exception
      */
     public function getVersionAvailable($prepend = '', $append = ''): string
     {
-        $version = '';
         if ($this->versionFileExists()) {
             $version = $this->getVersionFile();
         } else {
             $releaseCollection = $this->getPackageReleases();
             if ($releaseCollection->isEmpty()) {
-                throw new \Exception('Retrieved version list is empty.');
+                return '';
             }
             $version = $releaseCollection->first()->name;
         }
@@ -230,14 +229,14 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
     /**
      * Retrieve html body with list of all releases from archive URL.
      *
-     *@throws \Exception
+     *@throws Exception
      *
      * @return mixed|ResponseInterface
      */
     protected function getPackageReleases()
     {
         if (empty($url = $this->config['repository_url'])) {
-            throw new \Exception('No repository specified. Please enter a valid URL in your config.');
+            throw new Exception('No repository specified. Please enter a valid URL in your config.');
         }
 
         $format = str_replace('_VERSION_', '\d+\.\d+\.\d+',
