@@ -18,13 +18,8 @@ lovely users with Git and/or Composer commands ;-)
 
 ## Compatibility
 
-* PHP:
-  * 7.2
-  * 7.3
-  * 7.4
-* Laravel:
-  * 5.8
-  * 6.x
+* PHP: 7.3 & 7.4
+* Laravel: 6.x & 7.x
   
 ## Install with Composer
 
@@ -37,36 +32,12 @@ This adds the _codedge/laravel-selfupdater_ package to your `composer.json` and 
 
 ## Register the package
 
-Since Laravel 5.5 auto-discovery can be used to register packages - this is supported by this package.
-So if you run Laravel >=5.5 the steps `[1]` and `[2]` are not needed.
-
-You need to include the service provider in your `config/app.php` `[1]` and optionally the _facade_ `[2]`:
-```php
-// config/app.php
-
-return [
-
-    //...
-    
-    'providers' => [
-        // ...
-        
-        Codedge\Updater\UpdaterServiceProvider::class, // [1]
-    ],
-    
-    // ...
-    
-    'aliases' => [
-        // ...
-        
-        'Updater' => Codedge\Updater\UpdaterFacade::class, // [2]
-
-]
-```
+The package is auto-registered.
 
 Additionally add the listener to your `app/Providers/EventServiceProvider.php` `[3]`:
 
 ```php
+<?php
 // app/Providers/EventServiceProvider.php
 
 /**
@@ -90,9 +61,9 @@ protected $listen = [
 
 ## Configuration
 After installing the package you need to publish the configuration file via
- ```sh
- $ php artisan vendor:publish --provider="Codedge\Updater\UpdaterServiceProvider"
- ```
+```sh
+$ php artisan vendor:publish --provider="Codedge\Updater\UpdaterServiceProvider"
+```
  
 **Note:** Please enter correct value for vendor and repository name in your `config/self-updater.php` if you want to
 use Github as source for your updates.
@@ -169,7 +140,7 @@ Route::get('/', function (\Codedge\Updater\UpdaterManager $updater) {
 **IMPORTANT**:  
 You're responsible to set the current version installed, either in the config file or better via the env variable `SELF_UPDATER_VERSION_INSTALLED`.
 
-Currently the fetching of the source is a _synchronous_ process.
+Currently, the fetching of the source is a _synchronous_ process.
 It is not run in background.
 
 ### Using Github
