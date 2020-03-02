@@ -208,7 +208,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      * @param string $prepend Prepend a string to the latest version
      * @param string $append Append a string to the latest version
      *
-     * @return string|false
+     * @return string
      * @throws Exception
      */
     public function getVersionAvailable($prepend = '', $append = ''): string
