@@ -49,7 +49,7 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
 
         $json = $this->selectRelease($releaseCollection, $version);
 
-        $storageFilename = $this->storagePath.$json->commit->author->date.'-'.now()->timestamp .'.zip';
+        $storageFilename = $this->storagePath.$json->commit->author->date.'-'.now()->timestamp.'.zip';
 
         $this->release->setRelease(pathinfo($storageFilename, PATHINFO_FILENAME))
                       ->setDownloadUrl($this->generateArchiveUrl($json->sha));
