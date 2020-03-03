@@ -6,10 +6,10 @@ namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
+use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -22,13 +22,20 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
      */
     protected $client;
 
+    /**
+     * @var Release
+     */
+    protected $release;
+
     public function __construct(array $config, ClientInterface $client)
     {
         parent::__construct($config);
-        $this->setAccessToken($config['private_access_token']);
+
+        $this->release = resolve(Release::class);
+        $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
+                      ->setAccessToken($config['private_access_token']);
 
         $this->client = $client;
-        $this->storagePath = Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR);
     }
 
     public function fetch(string $version = '')
@@ -40,19 +47,16 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
             throw new \Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
         }
 
-        if (! File::exists($this->storagePath)) {
-            File::makeDirectory($this->storagePath, 493, true, true);
-        }
+        $json = $this->selectRelease($releaseCollection, $version);
 
-        $release = $this->selectRelease($releaseCollection, $version);
+        $storageFilename = $this->storagePath.$json->commit->author->date.'-'.now()->timestamp .'.zip';
 
-        $storageFolder = $this->storagePath.$release->commit->author->date.'-'.now()->timestamp;
-        $storageFilename = $storageFolder.'.zip';
+        $this->release->setRelease(pathinfo($storageFilename, PATHINFO_FILENAME))
+                      ->setDownloadUrl($this->generateArchiveUrl($json->sha));
 
-        if (! $this->isSourceAlreadyFetched($release->commit->author->date)) {
-            $this->downloadRelease($this->client, $this->generateZipUrl($release->sha), $storageFilename);
-            $this->unzipArchive($storageFilename, $storageFolder);
-            $this->createReleaseFolder($storageFolder, $release->commit->author->date);
+        if (! $this->release->isSourceAlreadyFetched()) {
+            $this->release->download($this->client);
+            $this->release->extract($storageFilename);
         }
     }
 
@@ -137,10 +141,9 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
         return $this->client->request('GET', $url, ['headers' => $headers]);
     }
 
-    private function generateZipUrl(string $name): string
+    private function generateArchiveUrl(string $name): string
     {
-        return self::GITHUB_URL
-               .DIRECTORY_SEPARATOR.$this->config['repository_vendor']
+        return DIRECTORY_SEPARATOR.$this->config['repository_vendor']
                .DIRECTORY_SEPARATOR.$this->config['repository_name']
                .DIRECTORY_SEPARATOR.'archive'
                .DIRECTORY_SEPARATOR.$name.'.zip';
