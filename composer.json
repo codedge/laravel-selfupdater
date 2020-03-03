@@ -48,10 +48,10 @@
     }
   },
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.3",
     "ext-json": "*",
     "ext-zip": "*",
-    "laravel/framework": "^5.8|6.*",
+    "laravel/framework": "^6.0|^7.0",
     "guzzlehttp/guzzle": "6.*"
   },
   "require-dev": {
