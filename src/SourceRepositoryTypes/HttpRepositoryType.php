@@ -9,6 +9,7 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
+use Codedge\Updater\Models\Release;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
@@ -138,53 +139,14 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
     }
 
     /**
-     * Perform the actual update process.
-     *
-     * @param string $version
+     * @param Release $release
      *
      * @return bool
+     * @throws \Exception
      */
-    public function update($version = ''): bool
+    public function update(Release $release)
     {
-        $this->setPathToUpdate(base_path(), $this->config['exclude_folders']);
-
-        if ($this->hasCorrectPermissionForUpdate()) {
-            if (empty($version)) {
-                $version = $this->getVersionAvailable();
-            }
-            $sourcePath = $this->config['download_path'].DIRECTORY_SEPARATOR.$this->prepend.$version.$this->append;
-
-            // Move all directories first
-            collect((new Finder())->in($sourcePath)->exclude($this->config['exclude_folders'])->directories()->sort(function ($a, $b) {
-                return strlen($b->getRealpath()) - strlen($a->getRealpath());
-            }))->each(function ($directory) { /** @var \SplFileInfo $directory */
-                if (! $this->isDirectoryExcluded(
-                    File::directories($directory->getRealPath()), $this->config['exclude_folders'])
-                ) {
-                    File::copyDirectory(
-                        $directory->getRealPath(),
-                        base_path($directory->getRelativePath()).'/'.$directory->getBasename()
-                    );
-                }
-
-                File::deleteDirectory($directory->getRealPath());
-            });
-
-            // Now move all the files left in the main directory
-            collect(File::allFiles($sourcePath, true))->each(function ($file) { /* @var \SplFileInfo $file */
-                File::copy($file->getRealPath(), base_path($file->getFilename()));
-            });
-
-            File::deleteDirectory($sourcePath);
-            $this->deleteVersionFile();
-            event(new UpdateSucceeded($version));
-
-            return true;
-        }
-
-        event(new UpdateFailed($this));
-
-        return false;
+        return $this->updateExecutor->run($release);
     }
 
     /**

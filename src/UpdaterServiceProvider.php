@@ -4,11 +4,15 @@ namespace Codedge\Updater;
 
 use Codedge\Updater\Commands\CheckForUpdate;
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
+use Codedge\Updater\Models\Release;
+use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use GuzzleHttp\Client;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -87,18 +91,29 @@ class UpdaterServiceProvider extends ServiceProvider
             return new UpdaterManager(app());
         });
 
+        $this->app->bind(Release::class, function (): Release {
+            return new Release(new Filesystem());
+        });
+
+        $this->app->bind(UpdateExecutor::class, function (): bool {
+            return new UpdateExecutor();
+        });
+
         $this->app->bind(GithubRepositoryType::class, function (): GithubRepositoryType {
-            return new GithubRepositoryType(config('self-update.repository_types.github'));
+            return new GithubRepositoryType(
+                config('self-update.repository_types.github'),
+                $this->app->make(UpdateExecutor::class)
+            );
         });
 
         $this->app->bind(GithubBranchType::class, function (): GithubRepositoryTypeContract {
-            $client = new Client(['base_url' => GithubRepositoryTypeContract::GITHUB_URL]);
+            $client = new Client(['base_uri' => GithubRepositoryTypeContract::GITHUB_API_URL]);
 
             return new GithubBranchType(config('self-update.repository_types.github'), $client);
         });
 
         $this->app->bind(GithubTagType::class, function (): GithubRepositoryTypeContract {
-            $client = new Client(['base_url' => GithubRepositoryTypeContract::GITHUB_API_URL]);
+            $client = new Client(['base_uri' => GithubRepositoryTypeContract::GITHUB_URL]);
 
             return new GithubTagType(config('self-update.repository_types.github'), $client);
         });

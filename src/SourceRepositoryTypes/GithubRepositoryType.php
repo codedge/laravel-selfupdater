@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Codedge\Updater\SourceRepositoryTypes;
 
-use Codedge\Updater\AbstractRepositoryType;
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
 use Codedge\Updater\Exceptions\InvalidRepositoryException;
+use Codedge\Updater\Models\Release;
+use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
@@ -23,9 +24,9 @@ use Symfony\Component\Finder\Finder;
  * @author Holger Lösken <holger.loesken@codedge.de>
  * @copyright See LICENSE file that was distributed with this source code.
  */
-class GithubRepositoryType extends AbstractRepositoryType
+class GithubRepositoryType
 {
-    use UseVersionFile, SupportPrivateAccessToken;
+    use SupportPrivateAccessToken;
 
     /**
      * @var Client
@@ -33,13 +34,21 @@ class GithubRepositoryType extends AbstractRepositoryType
     protected $client;
 
     /**
+     * @var array
+     */
+    protected $config;
+
+    protected UpdateExecutor $updateExecutor;
+
+    /**
      * Github constructor.
      *
      * @param array  $config
      */
-    public function __construct(array $config)
+    public function __construct(array $config, UpdateExecutor $updateExecutor)
     {
         $this->config = $config;
+        $this->updateExecutor = $updateExecutor;
     }
 
     public function create(): GithubRepositoryTypeContract
@@ -53,53 +62,15 @@ class GithubRepositoryType extends AbstractRepositoryType
         return resolve(GithubTagType::class);
     }
 
-    public function update(string $version = ''): bool
+    /**
+     * @param Release $release
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function update(Release $release)
     {
-        $this->setPathToUpdate(base_path(), config('self-update.exclude_folders'));
-
-        if ($this->hasCorrectPermissionForUpdate()) {
-            if (! empty($version)) {
-                $sourcePath = $this->storagePath.$version;
-            } else {
-                $sourcePath = File::directories($this->storagePath)[0];
-            }
-
-            // Move all directories first
-            collect((new Finder())->in($sourcePath)
-                                  ->exclude(config('self-update.exclude_folders'))
-                                  ->directories()
-                                  ->sort(function ($a, $b) {
-                                      return strlen($b->getRealpath()) - strlen($a->getRealpath());
-                                  }))->each(function (/** @var \SplFileInfo $directory */ $directory) {
-                                      if (! $this->isDirectoryExcluded(
-                    File::directories($directory->getRealPath()), config('self-update.exclude_folders'))
-                ) {
-                                          File::copyDirectory(
-                        $directory->getRealPath(),
-                        base_path($directory->getRelativePath()).DIRECTORY_SEPARATOR.$directory->getBasename()
-                    );
-                                      }
-
-                                      File::deleteDirectory($directory->getRealPath());
-                                  });
-
-            // Now move all the files left in the main directory
-            collect(File::allFiles($sourcePath, true))->each(function ($file) { /* @var \SplFileInfo $file */
-                if ($file->getRealPath()) {
-                    File::copy($file->getRealPath(), base_path($file->getFilename()));
-                }
-            });
-
-            File::deleteDirectory($sourcePath);
-            $this->deleteVersionFile();
-            event(new UpdateSucceeded($version));
-
-            return true;
-        }
-
-        event(new UpdateFailed($this));
-
-        return false;
+        return $this->updateExecutor->run($release);
     }
 
     protected function useBranchForVersions(): bool

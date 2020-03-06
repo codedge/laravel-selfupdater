@@ -22,7 +22,7 @@ jobs:
         uses: shivammathur/setup-php@v1
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, intl, zip
+          extensions: mbstring, intl, json, zip
           coverage: xdebug
 
       - name: Get Composer Cache Directory

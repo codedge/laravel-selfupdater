@@ -38,7 +38,7 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
         $this->client = $client;
     }
 
-    public function fetch(string $version = '')
+    public function fetch(string $version = ''): Release
     {
         $response = $this->getRepositoryReleases();
         $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()->getContents()));
@@ -47,17 +47,19 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
             throw new \Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
         }
 
-        $json = $this->selectRelease($releaseCollection, $version);
+        $release = $this->selectRelease($releaseCollection, $version);
+        $storageFilename = $release->sha.'.zip';
 
-        $storageFilename = $this->storagePath.$json->commit->author->date.'-'.now()->timestamp.'.zip';
-
-        $this->release->setRelease(pathinfo($storageFilename, PATHINFO_FILENAME))
-                      ->setDownloadUrl($this->generateArchiveUrl($json->sha));
+        $this->release->setRelease($storageFilename)
+                      ->updateStoragePath()
+                      ->setDownloadUrl($this->generateArchiveUrl($release->sha));
 
         if (! $this->release->isSourceAlreadyFetched()) {
             $this->release->download($this->client);
-            $this->release->extract($storageFilename);
+            $this->release->extract();
         }
+
+        return $this->release;
     }
 
     public function selectRelease(Collection $collection, string $version)
@@ -143,9 +145,10 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
 
     private function generateArchiveUrl(string $name): string
     {
-        return DIRECTORY_SEPARATOR.$this->config['repository_vendor']
+        return DIRECTORY_SEPARATOR.'repos'
+               .DIRECTORY_SEPARATOR.$this->config['repository_vendor']
                .DIRECTORY_SEPARATOR.$this->config['repository_name']
-               .DIRECTORY_SEPARATOR.'archive'
-               .DIRECTORY_SEPARATOR.$name.'.zip';
+               .DIRECTORY_SEPARATOR.'zipball'
+               .DIRECTORY_SEPARATOR.$name;
     }
 }

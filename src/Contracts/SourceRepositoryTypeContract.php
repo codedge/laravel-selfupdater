@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Codedge\Updater\Contracts;
 
+use Codedge\Updater\Models\Release;
+
 interface SourceRepositoryTypeContract
 {
     /**
@@ -11,18 +13,18 @@ interface SourceRepositoryTypeContract
      *
      * @param string $version
      *
-     * @return mixed
+     * @return Release
      */
-    public function fetch(string $version = '');
+    public function fetch(string $version = ''): Release;
 
     /**
      * Perform the actual update process.
      *
-     * @param string $version
+     * @param Release $release
      *
      * @return bool
      */
-    public function update(string $version = ''): bool;
+    public function update(Release $release): bool;
 
     /**
      * Check repository if a newer version than the installed one is available.

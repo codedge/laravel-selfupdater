@@ -3,6 +3,7 @@
 namespace Codedge\Updater;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use Codedge\Updater\Models\Release;
 use Illuminate\Support\Facades\Artisan;
 
 /**
@@ -33,9 +34,9 @@ class SourceRepository implements SourceRepositoryTypeContract
      *
      * @param string $version
      *
-     * @return mixed
+     * @return Release
      */
-    public function fetch($version = '')
+    public function fetch($version = ''): Release
     {
         $version = $version ?: $this->getVersionAvailable();
 
@@ -46,20 +47,15 @@ class SourceRepository implements SourceRepositoryTypeContract
      * Perform the actual update process.
      *
      * @param string $version       Define the version you want to update to
-     * @param bool   $forceFetching Forces a fresh download of the latest update version
-     *
      * @return bool
      */
-    public function update($version = '', $forceFetching = true): bool
+    public function update($version = ''): bool
     {
         $version = $version ?: $this->getVersionAvailable();
-
-        if ($forceFetching) {
-            $this->fetch($version);
-        }
+        $release = $this->fetch($version);
 
         $this->preUpdateArtisanCommands();
-        $updateStatus = $this->sourceRepository->update($version);
+        $updateStatus = $this->sourceRepository->update($release);
         $this->postUpdateArtisanCommands();
 
         return $updateStatus;
