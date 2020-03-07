@@ -140,7 +140,7 @@ class ReleaseTest extends TestCase
         $res = $zip->open($this->release->getStoragePath(), \ZipArchive::CREATE);
 
         if($res === true) {
-            $zip->addFile(__DIR__ . '/../Data/release-test-1.2.txt');
+            $zip->addFile(__DIR__ . '/../Data/releases-branch.json');
             $zip->close();
 
             $this->assertTrue($this->release->extract());

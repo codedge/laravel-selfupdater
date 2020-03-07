@@ -14,7 +14,10 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Stream;
 use Illuminate\Foundation\Application;
+use Mockery\Mock;
+use Monolog\Handler\Handler;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -99,6 +102,24 @@ abstract class TestCase extends Orchestra
 
         $handler = HandlerStack::create(new MockHandler([
             $response, $response, $response, $response
+        ]));
+
+        return new Client(['handler' => $handler]);
+    }
+
+    protected function getMockedDownloadZipFileClient(): Client
+    {
+        $response = new Response(
+            200,
+            [
+                'Content-Type' => 'application/zip',
+                'Content-Disposition' => 'attachment; filename="zip_file.zip"',
+            ],
+            fopen(__DIR__ . '/Data/release-1.2.zip', 'r')
+        );
+
+        $handler = HandlerStack::create(new MockHandler([
+            $response
         ]));
 
         return new Client(['handler' => $handler]);

@@ -5,6 +5,7 @@ namespace Codedge\Updater\Tests\Models;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Tests\TestCase;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\visitor\vfsStreamPrintVisitor;
@@ -33,16 +34,16 @@ class UpdateExecutorTest extends TestCase
     public function it_can_run_successfully(): void
     {
         File::makeDirectory('/tmp/update-dir', 0775, false, true);
-        File::makeDirectory('/tmp/update-dir/folder1', 0755, true, true);
-        File::makeDirectory('/tmp/update-dir/folder2', 0755, true, true);
 
-        touch('/tmp/update-dir/folder1/file-a.php');
-        touch('/tmp/update-dir/folder1/file-b.php');
-
-        $this->release->setUpdatePath('/tmp/update-dir');
+        $this->release->setStoragePath('/tmp')
+                      ->setRelease('release-1.0.zip')
+                      ->updateStoragePath()
+                      ->setDownloadUrl('some-local-file')
+                      ->download($this->getMockedDownloadZipFileClient());
+        $this->release->extract();
 
         $updateExecutor = new UpdateExecutor();
-        $this->assertTrue($updateExecutor->setUseBasePath(false)->run($this->release));
+        $this->assertTrue($updateExecutor->setBasePath('/tmp/update-dir')->run($this->release));
 
     }
 
@@ -54,6 +55,6 @@ class UpdateExecutorTest extends TestCase
 
         $this->release->setUpdatePath($this->vfs->url() . '/updateDirectory');
 
-        $this->assertFalse((new UpdateExecutor())->run($this->release));
+        $this->assertFalse((new UpdateExecutor())->setBasePath($this->vfs->url() . '/updateDirectory')->run($this->release));
     }
 }
