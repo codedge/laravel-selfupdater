@@ -92,14 +92,14 @@ final class UpdateExecutor
         $directories = (new Finder())->in($folder)->exclude(config('self-update.exclude_folders'))->directories();
 
         collect($directories->sort(function (SplFileInfo $a, SplFileInfo $b) {
-                return strlen($b->getRealpath()) - strlen($a->getRealpath());
-            }))->each(function (SplFileInfo $directory) {
-                if (! dirsIntersect(File::directories($directory->getRealPath()), config('self-update.exclude_folders'))) {
-                    File::copyDirectory($directory->getRealPath(), $this->targetFolder($directory));
-                }
+            return strlen($b->getRealpath()) - strlen($a->getRealpath());
+        }))->each(function (SplFileInfo $directory) {
+            if (! dirsIntersect(File::directories($directory->getRealPath()), config('self-update.exclude_folders'))) {
+                File::copyDirectory($directory->getRealPath(), $this->targetFolder($directory));
+            }
 
-                File::deleteDirectory($directory->getRealPath());
-            });
+            File::deleteDirectory($directory->getRealPath());
+        });
     }
 
     /**
@@ -116,7 +116,7 @@ final class UpdateExecutor
             return base_path($file->getFilename());
         }
 
-        return $this->basePath . $file->getFilename();
+        return $this->basePath.$file->getFilename();
     }
 
     /**
@@ -130,11 +130,11 @@ final class UpdateExecutor
     private function targetFolder(SplFileInfo $directory): string
     {
         if (empty($this->basePath)) {
-            return Str::finish(base_path($directory->getRealPath()), DIRECTORY_SEPARATOR) . $directory->getBasename();
+            return Str::finish(base_path($directory->getRealPath()), DIRECTORY_SEPARATOR).$directory->getBasename();
         }
 
         return $this->basePath
-               . Str::finish($directory->getRealPath(), DIRECTORY_SEPARATOR)
-               . $directory->getBasename();
+               .Str::finish($directory->getRealPath(), DIRECTORY_SEPARATOR)
+               .$directory->getBasename();
     }
 }
