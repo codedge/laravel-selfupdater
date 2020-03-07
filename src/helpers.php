@@ -28,19 +28,19 @@ if (! \function_exists('checkPermissions')) {
      * @param Finder $directory
      *
      * @return bool
-     * @throws Exception
      */
     function checkPermissions(Finder $directory): bool
     {
-        collect($directory->files())->each(function ($file) { /* @var SplFileInfo $file */
-            if (! File::isWritable($file->getRealPath())) {
-                event(new HasWrongPermissions($this));
+        $checkPermission = true;
 
-                return false;
+        collect($directory->getIterator())->each(function (SplFileInfo $file) use (&$checkPermission) {
+            if ($file->isWritable() === false) {
+                event(new HasWrongPermissions($file));
+                $checkPermission = false;
             }
         });
 
-        return true;
+        return $checkPermission;
     }
 }
 
@@ -48,7 +48,7 @@ if (! \function_exists('createFolderFromFile')) {
     /**
      * Create a folder name including path from a given file.
      * Input: /tmp/my_zip_file.zip
-     * Ouput: /tmp/my_zip_file/
+     * Output: /tmp/my_zip_file/
      *
      * @param string $file
      *

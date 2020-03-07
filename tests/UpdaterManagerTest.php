@@ -8,14 +8,16 @@ use InvalidArgumentException;
 
 class UpdaterManagerTest extends Testcase
 {
-    public function test_can_be_instantiated()
+    /** @test */
+    public function it_can_be_instantiated()
     {
         $manager = new UpdaterManager(app());
 
         $this->assertInstanceOf(UpdaterManager::class, $manager);
     }
 
-    public function test_get_source_repository_with_default_name()
+    /** @test */
+    public function it_can_get_source_repository_with_default_name()
     {
         $manager = new UpdaterManager(app());
         $result = $manager->source();
@@ -23,7 +25,8 @@ class UpdaterManagerTest extends Testcase
         $this->assertInstanceOf(SourceRepository::class, $result);
     }
 
-    public function test_get_source_repository_with_name_github()
+    /** @test */
+    public function it_can_get_source_repository_with_name_github()
     {
         $manager = new UpdaterManager(app());
         $result = $manager->source('github');
@@ -31,7 +34,8 @@ class UpdaterManagerTest extends Testcase
         $this->assertInstanceOf(SourceRepository::class, $result);
     }
 
-    public function test_get_source_repository_with_name_http()
+    /** @test */
+    public function it_can_get_source_repository_with_name_http()
     {
         $manager = new UpdaterManager(app());
         $result = $manager->source('http');
@@ -39,7 +43,8 @@ class UpdaterManagerTest extends Testcase
         $this->assertInstanceOf(SourceRepository::class, $result);
     }
 
-    public function test_get_source_repository_with_not_existing_name()
+    /** @test */
+    public function it_can_get_source_repository_with_not_existing_name()
     {
         $manager = new UpdaterManager(app());
 

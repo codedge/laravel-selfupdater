@@ -6,6 +6,8 @@ namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
+use Codedge\Updater\Models\Release;
+use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Exception;
 use GuzzleHttp\ClientInterface;
@@ -21,13 +23,21 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
      */
     protected $client;
 
-    public function __construct(array $config, ClientInterface $client)
+    /**
+     * @var Release
+     */
+    protected $release;
+
+    public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
     {
-        parent::__construct($config);
-        $this->setAccessToken($config['private_access_token']);
+        parent::__construct($config, $updateExecutor);
+
+        $this->release = resolve(Release::class);
+        $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
+                      ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
+                      ->setAccessToken($config['private_access_token']);
 
         $this->client = $client;
-        $this->storagePath = Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR);
     }
 
     /**
@@ -91,16 +101,16 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
      *
      * @param string $version
      *
-     * @return void
+     * @return Release
      * @throws Exception
      */
-    public function fetch($version = ''): void
+    public function fetch($version = ''): Release
     {
         $response = $this->getRepositoryReleases();
         $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()->getContents()));
 
         if ($releaseCollection->isEmpty()) {
-            throw new Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
+            throw new \Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
         }
 
         $release = $releaseCollection->first();

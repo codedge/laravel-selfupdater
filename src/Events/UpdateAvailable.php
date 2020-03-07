@@ -2,6 +2,8 @@
 
 namespace Codedge\Updater\Events;
 
+use Codedge\Updater\Models\Release;
+
 /**
  * UpdateFailed.php.
  *
@@ -10,46 +12,20 @@ namespace Codedge\Updater\Events;
  */
 class UpdateAvailable
 {
-    /**
-     * @var string
-     */
-    protected $eventName = 'Update available';
+    protected $release;
 
-    /**
-     * @var string
-     */
-    protected $versionAvailable;
-
-    /**
-     * UpdateFailed constructor.
-     *
-     * @param string $versionAvailable
-     */
-    public function __construct($versionAvailable)
+    public function __construct(Release $release)
     {
-        $this->versionAvailable = $versionAvailable;
-    }
-
-    /**
-     * Get the event name.
-     *
-     * @return string
-     */
-    public function getEventName()
-    {
-        return $this->eventName;
+        $this->release = $release;
     }
 
     /**
      * Get the new version.
      *
-     * @param string $prepend
-     * @param string $append
-     *
      * @return string
      */
-    public function getVersionAvailable($prepend = '', $append = '')
+    public function getVersionAvailable(): string
     {
-        return $prepend.$this->versionAvailable.$append;
+        return $this->release->getVersion();
     }
 }

@@ -66,7 +66,7 @@ final class Release
     /**
      * @return string
      */
-    public function getRelease(): string
+    public function getRelease(): ?string
     {
         return $this->release;
     }
@@ -86,7 +86,7 @@ final class Release
     /**
      * @return string
      */
-    public function getStoragePath(): string
+    public function getStoragePath(): ?string
     {
         return $this->storagePath;
     }
@@ -126,7 +126,7 @@ final class Release
     /**
      * @return Finder
      */
-    public function getUpdatePath(): Finder
+    public function getUpdatePath(): ?Finder
     {
         return $this->updatePath;
     }
@@ -137,7 +137,7 @@ final class Release
      *
      * @return Release
      */
-    public function setUpdatePath(string $updatePath, array $excluded): Release
+    public function setUpdatePath(string $updatePath, array $excluded = []): Release
     {
         $this->updatePath = (new Finder())->in($updatePath)->exclude($excluded);
 
@@ -147,7 +147,7 @@ final class Release
     /**
      * @return string
      */
-    public function getVersion(): string
+    public function getVersion(): ?string
     {
         return $this->version;
     }
@@ -167,7 +167,7 @@ final class Release
     /**
      * @return string
      */
-    public function getDownloadUrl(): string
+    public function getDownloadUrl(): ?string
     {
         return $this->downloadUrl;
     }
@@ -185,13 +185,9 @@ final class Release
     }
 
 
-    public function extract(string $targetDir = '', bool $deleteSource = true): bool
+    public function extract(bool $deleteSource = true): bool
     {
-        if (empty($targetDir)) {
-            $extractTo = createFolderFromFile($this->getStoragePath());
-        } else {
-            $extractTo = $targetDir;
-        }
+        $extractTo = createFolderFromFile($this->getStoragePath());
 
         $extension = pathinfo($this->getStoragePath(), PATHINFO_EXTENSION);
         $extracted = false;
@@ -200,12 +196,12 @@ final class Release
             $extracted = $this->extractZip($extractTo);
         }
 
-        if ($extracted && $deleteSource) {
-            $this->filesystem->delete($this->storagePath);
+        if ($extracted) {
+            // Create the final release directory
+            if($this->createReleaseFolder() && $deleteSource) {
+                $this->filesystem->delete($this->storagePath);
+            }
         }
-
-        // Create the final release directory
-        $this->createReleaseFolder();
 
         return $extracted;
     }
@@ -215,8 +211,8 @@ final class Release
         $zip = new \ZipArchive();
         $res = $zip->open($this->getStoragePath());
 
-        if (! $res ) {
-            throw new Exception("Cannot open zip archive [{$this->storagePath()}].");
+        if ($res !== true ) {
+            throw new Exception("Cannot open zip archive [{$extractTo}].");
         }
 
         $extracted = $zip->extractTo($extractTo);
@@ -268,19 +264,17 @@ final class Release
             if(!$moved) {
                 return false;
             }
-            $this->filesystem->deleteDirectory(createFolderFromFile($this->getStoragePath()));
+
             $this->filesystem->moveDirectory(
                 createFolderFromFile($this->getStoragePath()) . now()->toDateString(),
                 createFolderFromFile($this->getStoragePath())
             );
 
-            return true;
-        } else {
-            // Release (with all files and folders) is already inside, so we need to only rename the folder
-            return $this->filesystem->moveDirectory($releaseFolder, $this->storagePath.$releaseName);
         }
 
+        $this->filesystem->delete($this->getStoragePath());
 
+        return true;
     }
 
     /**

@@ -2,28 +2,22 @@
 
 namespace Codedge\Updater\Events;
 
-use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use SplFileInfo;
 
-/**
- * HasWrongPermissions.php.
- *
- * @author Holger Lösken <holger.loesken@codedge.de>
- * @copyright See LICENSE file that was distributed with this source code.
- */
 class HasWrongPermissions
 {
     /**
-     * @var SourceRepositoryTypeContract
+     * @var string
      */
-    protected $sourceRepository;
+    protected $eventName = 'Update failed';
 
     /**
-     * UpdateFailed constructor.
-     *
-     * @param SourceRepositoryTypeContract $sourceRepository
+     * @var SplFileInfo
      */
-    public function __construct(SourceRepositoryTypeContract $sourceRepository)
+    protected $file;
+
+    public function __construct(SplFileInfo $file)
     {
-        $this->sourceRepository = $sourceRepository;
+        $this->file = $file;
     }
 }

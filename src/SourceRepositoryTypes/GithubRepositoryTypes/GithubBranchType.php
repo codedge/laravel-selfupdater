@@ -7,6 +7,7 @@ namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Models\Release;
+use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Collection;
@@ -27,12 +28,13 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
      */
     protected $release;
 
-    public function __construct(array $config, ClientInterface $client)
+    public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
     {
-        parent::__construct($config);
+        parent::__construct($config, $updateExecutor);
 
         $this->release = resolve(Release::class);
         $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
+                      ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
                       ->setAccessToken($config['private_access_token']);
 
         $this->client = $client;

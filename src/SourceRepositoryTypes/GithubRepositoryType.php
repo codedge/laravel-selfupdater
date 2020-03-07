@@ -38,12 +38,16 @@ class GithubRepositoryType
      */
     protected $config;
 
-    protected UpdateExecutor $updateExecutor;
+    /**
+     * @var UpdateExecutor
+     */
+    protected $updateExecutor;
 
     /**
      * Github constructor.
      *
-     * @param array  $config
+     * @param array $config
+     * @param UpdateExecutor $updateExecutor
      */
     public function __construct(array $config, UpdateExecutor $updateExecutor)
     {
@@ -68,14 +72,14 @@ class GithubRepositoryType
      * @return bool
      * @throws \Exception
      */
-    public function update(Release $release)
+    public function update(Release $release): bool
     {
         return $this->updateExecutor->run($release);
     }
 
     protected function useBranchForVersions(): bool
     {
-        return $this->config['use_branch'] !== '' ? true : false;
+        return $this->config['use_branch'] !== '';
     }
 
     protected function checkValidRepository(): void

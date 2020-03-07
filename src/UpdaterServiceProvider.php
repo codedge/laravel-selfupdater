@@ -95,7 +95,7 @@ class UpdaterServiceProvider extends ServiceProvider
             return new Release(new Filesystem());
         });
 
-        $this->app->bind(UpdateExecutor::class, function (): bool {
+        $this->app->bind(UpdateExecutor::class, function () {
             return new UpdateExecutor();
         });
 
@@ -107,19 +107,27 @@ class UpdaterServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(GithubBranchType::class, function (): GithubRepositoryTypeContract {
-            $client = new Client(['base_uri' => GithubRepositoryTypeContract::GITHUB_API_URL]);
-
-            return new GithubBranchType(config('self-update.repository_types.github'), $client);
+            return new GithubBranchType(
+                config('self-update.repository_types.github'),
+                new Client(['base_uri' => GithubRepositoryTypeContract::GITHUB_API_URL]),
+                $this->app->make(UpdateExecutor::class)
+            );
         });
 
         $this->app->bind(GithubTagType::class, function (): GithubRepositoryTypeContract {
-            $client = new Client(['base_uri' => GithubRepositoryTypeContract::GITHUB_URL]);
-
-            return new GithubTagType(config('self-update.repository_types.github'), $client);
+            return new GithubTagType(
+                config('self-update.repository_types.github'),
+                new Client(['base_uri' => GithubRepositoryTypeContract::GITHUB_URL]),
+                $this->app->make(UpdateExecutor::class)
+            );
         });
 
         $this->app->bind(HttpRepositoryType::class, function () {
-            return new HttpRepositoryType(new Client(), config('self-update.repository_types.http'));
+            return new HttpRepositoryType(
+                config('self-update.repository_types.http'),
+                new Client(),
+                $this->app->make(UpdateExecutor::class)
+            );
         });
 
         $this->app->alias('updater', UpdaterManager::class);

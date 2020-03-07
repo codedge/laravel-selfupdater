@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Codedge\Updater\SourceRepositoryTypes;
 
-use Codedge\Updater\AbstractRepositoryType;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Events\UpdateSucceeded;
 use Codedge\Updater\Models\Release;
+use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
@@ -26,11 +26,9 @@ use Symfony\Component\Finder\Finder;
  * @author Steve Hegenbart <steve.hegenbart@kingstarter.de>
  * @copyright See LICENSE file that was distributed with this source code.
  */
-class HttpRepositoryType extends AbstractRepositoryType implements SourceRepositoryTypeContract
+class HttpRepositoryType implements SourceRepositoryTypeContract
 {
     use UseVersionFile, SupportPrivateAccessToken;
-
-    const NEW_VERSION_FILE = 'self-updater-new-version';
 
     /**
      * @var Client
@@ -38,32 +36,52 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
     protected $client;
 
     /**
-     * @var Version prepend string
+     * @var array
+     */
+    protected $config;
+
+    /**
+     * @var Release
+     */
+    protected $release;
+
+    /**
+     * @var string prepend string
      */
     protected $prepend;
 
     /**
-     * @var Version append string
+     * @var string append string
      */
     protected $append;
 
     /**
+     * @var UpdateExecutor
+     */
+    protected $updateExecutor;
+
+    /**
      * Github constructor.
      *
+     * @param array $config
      * @param Client $client
-     * @param array  $config
+     * @param UpdateExecutor $updateExecutor
      */
-    public function __construct(Client $client, array $config)
+    public function __construct(array $config, Client $client, UpdateExecutor $updateExecutor)
     {
         $this->client = $client;
         $this->config = $config;
         $this->config['version_installed'] = config('self-update.version_installed');
         $this->config['exclude_folders'] = config('self-update.exclude_folders');
+
         // Get prepend and append strings
         $this->prepend = preg_replace('/_VERSION_.*$/', '', $this->config['pkg_filename_format']);
         $this->append = preg_replace('/^.*_VERSION_/', '', $this->config['pkg_filename_format']);
 
-        $this->setAccessToken($config['private_access_token']);
+        $this->release = resolve(Release::class);
+        $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
+                      ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
+                      ->setAccessToken($config['private_access_token']);
     }
 
     /**
@@ -106,9 +124,9 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      *
      * @throws Exception
      *
-     * @return mixed
+     * @return Release
      */
-    public function fetch($version = '')
+    public function fetch($version = ''): Release
     {
         if (($releaseCollection = $this->getPackageReleases())->isEmpty()) {
             throw new Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
@@ -144,7 +162,7 @@ class HttpRepositoryType extends AbstractRepositoryType implements SourceReposit
      * @return bool
      * @throws \Exception
      */
-    public function update(Release $release)
+    public function update(Release $release): bool
     {
         return $this->updateExecutor->run($release);
     }

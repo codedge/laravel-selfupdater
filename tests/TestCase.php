@@ -3,6 +3,7 @@
 namespace Codedge\Updater\Tests;
 
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
+use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
@@ -24,6 +25,7 @@ abstract class TestCase extends Orchestra
     protected $mockedResponses = [
         'tag' => 'releases-tag.json',
         'branch' => 'releases-branch.json',
+        'http' => 'releases-http.json',
     ];
 
     protected $client;
@@ -56,6 +58,7 @@ abstract class TestCase extends Orchestra
                     'private_access_token' => '',
                 ],
             ],
+            'exclude_folders' => [],
             'log_events' => false,
             'mail_to' => [
                 'address' => '',
@@ -65,20 +68,26 @@ abstract class TestCase extends Orchestra
 
         $app->bind(GithubBranchType::class, function (): GithubRepositoryTypeContract {
             return new GithubBranchType(
-                config('self-update.repository_types.github'), $this->getMockedClient('branch')
+                config('self-update.repository_types.github'),
+                $this->getMockedClient('branch'),
+                resolve(UpdateExecutor::class)
             );
         });
 
         $app->bind(GithubTagType::class, function (): GithubRepositoryTypeContract {
-            return new GithubTagType(config('self-update.repository_types.github'), $this->getMockedClient('tag'));
-        });
-
-        $app->bind(GithubRepositoryType::class, function(): GithubRepositoryType {
-            return new GithubRepositoryType(config('self-update.repository_types.github'));
+            return new GithubTagType(
+                config('self-update.repository_types.github'),
+                $this->getMockedClient('tag'),
+                resolve(UpdateExecutor::class)
+            );
         });
 
         $app->bind(HttpRepositoryType::class, function() {
-            return new HttpRepositoryType(new Client(), config('self-update.repository_types.http'));
+            return new HttpRepositoryType(
+                config('self-update.repository_types.http'),
+                $this->getMockedClient('http'),
+                resolve(UpdateExecutor::class)
+            );
         });
     }
 

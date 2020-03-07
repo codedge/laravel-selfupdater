@@ -6,17 +6,12 @@ use Codedge\Updater\Models\Release;
 
 class UpdateSucceeded
 {
-    /**
-     * @var string
-     */
-    protected $eventName = 'Update succeeded';
-
     protected $release;
 
     /**
      * UpdateFailed constructor.
      *
-     * @param $versionUpdatedTo
+     * @param Release $release
      */
     public function __construct(Release $release)
     {
@@ -24,21 +19,11 @@ class UpdateSucceeded
     }
 
     /**
-     * Get the event name.
-     *
-     * @return string
-     */
-    public function getEventName()
-    {
-        return $this->eventName;
-    }
-
-    /**
      * Get the new version.
      *
      * @return string
      */
-    public function getVersionUpdatedTo()
+    public function getVersionUpdatedTo(): string
     {
         return $this->release->getVersion();
     }
