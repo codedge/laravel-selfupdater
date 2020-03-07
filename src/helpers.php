@@ -1,6 +1,7 @@
-<?php declare(strict_types=1);
+<?php
 
-use Codedge\Updater;
+declare(strict_types=1);
+
 use Codedge\Updater\Events\HasWrongPermissions;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -48,7 +49,7 @@ if (! \function_exists('createFolderFromFile')) {
     /**
      * Create a folder name including path from a given file.
      * Input: /tmp/my_zip_file.zip
-     * Output: /tmp/my_zip_file/
+     * Output: /tmp/my_zip_file/.
      *
      * @param string $file
      *
@@ -58,6 +59,6 @@ if (! \function_exists('createFolderFromFile')) {
     {
         $pathinfo = pathinfo($file);
 
-        return Str::finish($pathinfo['dirname'], DIRECTORY_SEPARATOR) . $pathinfo['filename'];
+        return Str::finish($pathinfo['dirname'], DIRECTORY_SEPARATOR).$pathinfo['filename'];
     }
 }

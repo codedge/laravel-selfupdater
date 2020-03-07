@@ -5,18 +5,14 @@ declare(strict_types=1);
 namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
-use Codedge\Updater\Events\UpdateFailed;
-use Codedge\Updater\Events\UpdateSucceeded;
 use Codedge\Updater\Exceptions\InvalidRepositoryException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
-use Codedge\Updater\Traits\UseVersionFile;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
-use Symfony\Component\Finder\Finder;
 
 /**
  * GithubRepositoryType.

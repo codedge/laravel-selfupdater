@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\Models;
 
@@ -7,7 +9,6 @@ use Codedge\Updater\Events\UpdateSucceeded;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use Symfony\Component\Finder\SplFileInfo;
 
 final class UpdateExecutor
@@ -48,17 +49,17 @@ final class UpdateExecutor
                            ->sort(function (SplFileInfo $a, SplFileInfo $b) {
                                return strlen($b->getRealpath()) - strlen($a->getRealpath());
                            }))->each(function (SplFileInfo $directory) {
-                if (! dirsIntersect(
+                               if (! dirsIntersect(
                     File::directories($directory->getRealPath()), config('self-update.exclude_folders'))
                 ) {
-                    File::copyDirectory(
+                                   File::copyDirectory(
                         $directory->getRealPath(),
                         $this->targetFolder($directory->getRelativePath()).DIRECTORY_SEPARATOR.$directory->getBasename()
                     );
-                }
+                               }
 
-                File::deleteDirectory($directory->getRealPath());
-            });
+                               File::deleteDirectory($directory->getRealPath());
+                           });
 
             // Now move all the files left in the main directory
             collect($finder->files())->each(function (SplFileInfo $file) {
@@ -84,7 +85,7 @@ final class UpdateExecutor
 
     private function targetFolder(string $folder): string
     {
-        if($this->useBasePath) {
+        if ($this->useBasePath) {
             return base_path($folder);
         }
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\Models;
 
@@ -16,7 +18,7 @@ final class Release
 
     /**
      * Name of release file.
-     * Example: release-1.1.zip
+     * Example: release-1.1.zip.
      *
      * @var string
      */
@@ -24,7 +26,7 @@ final class Release
 
     /**
      * Path to download the release to.
-     * Example: /tmp/release-1.1.zip
+     * Example: /tmp/release-1.1.zip.
      *
      * @var string
      */
@@ -40,7 +42,7 @@ final class Release
 
     /**
      * The version name.
-     * Example: 1.1 or v1.1
+     * Example: 1.1 or v1.1.
      *
      * @var string
      */
@@ -114,8 +116,8 @@ final class Release
      */
     public function updateStoragePath(): Release
     {
-        if (!empty($this->getRelease())) {
-            $this->storagePath = Str::finish($this->storagePath, DIRECTORY_SEPARATOR) . $this->getRelease();
+        if (! empty($this->getRelease())) {
+            $this->storagePath = Str::finish($this->storagePath, DIRECTORY_SEPARATOR).$this->getRelease();
 
             return $this;
         }
@@ -177,13 +179,12 @@ final class Release
      *
      * @return Release
      */
-    public function setDownloadUrl( string $downloadUrl ): Release
+    public function setDownloadUrl(string $downloadUrl): Release
     {
         $this->downloadUrl = $downloadUrl;
 
         return $this;
     }
-
 
     public function extract(bool $deleteSource = true): bool
     {
@@ -192,13 +193,13 @@ final class Release
         $extension = pathinfo($this->getStoragePath(), PATHINFO_EXTENSION);
         $extracted = false;
 
-        if(preg_match('/[zZ]ip/', $extension)) {
+        if (preg_match('/[zZ]ip/', $extension)) {
             $extracted = $this->extractZip($extractTo);
         }
 
         if ($extracted) {
             // Create the final release directory
-            if($this->createReleaseFolder() && $deleteSource) {
+            if ($this->createReleaseFolder() && $deleteSource) {
                 $this->filesystem->delete($this->storagePath);
             }
         }
@@ -211,7 +212,7 @@ final class Release
         $zip = new \ZipArchive();
         $res = $zip->open($this->getStoragePath());
 
-        if ($res !== true ) {
+        if ($res !== true) {
             throw new Exception("Cannot open zip archive [{$extractTo}].");
         }
 
@@ -223,7 +224,7 @@ final class Release
 
     public function download(ClientInterface $client): ResponseInterface
     {
-        if(empty($this->getStoragePath())) {
+        if (empty($this->getStoragePath())) {
             throw new Exception('No storage path set.');
         }
 
@@ -247,7 +248,7 @@ final class Release
 
     /**
      * Create a release sub-folder inside the storage dir.
-     * Example: /tmp/release-1.2/
+     * Example: /tmp/release-1.2/.
      *
      * @return bool
      */
@@ -258,18 +259,17 @@ final class Release
         if (count($folders) === 1) {
             // Only one sub-folder inside extracted directory
             $moved = $this->filesystem->moveDirectory(
-                $folders[0], createFolderFromFile($this->getStoragePath()) . now()->toDateString()
+                $folders[0], createFolderFromFile($this->getStoragePath()).now()->toDateString()
             );
 
-            if(!$moved) {
+            if (! $moved) {
                 return false;
             }
 
             $this->filesystem->moveDirectory(
-                createFolderFromFile($this->getStoragePath()) . now()->toDateString(),
+                createFolderFromFile($this->getStoragePath()).now()->toDateString(),
                 createFolderFromFile($this->getStoragePath())
             );
-
         }
 
         $this->filesystem->delete($this->getStoragePath());
@@ -306,5 +306,4 @@ final class Release
 
         return false;
     }
-
 }
