@@ -5,10 +5,8 @@ namespace Codedge\Updater\Tests\Models;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Tests\TestCase;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\visitor\vfsStreamPrintVisitor;
 
 class UpdateExecutorTest extends TestCase
 {

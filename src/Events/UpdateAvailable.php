@@ -2,21 +2,16 @@
 
 namespace Codedge\Updater\Events;
 
-use Codedge\Updater\Models\Release;
-
-/**
- * UpdateFailed.php.
- *
- * @author Holger Lösken <holger.loesken@codedge.de>
- * @copyright See LICENSE file that was distributed with this source code.
- */
 class UpdateAvailable
 {
-    protected $release;
+    /**
+     * @var string
+     */
+    protected $newVersion;
 
-    public function __construct(Release $release)
+    public function __construct(string $newVersion)
     {
-        $this->release = $release;
+        $this->newVersion = $newVersion;
     }
 
     /**
@@ -26,6 +21,6 @@ class UpdateAvailable
      */
     public function getVersionAvailable(): string
     {
-        return $this->release->getVersion();
+        return $this->newVersion;
     }
 }

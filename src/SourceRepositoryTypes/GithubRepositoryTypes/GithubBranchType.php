@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
-use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
@@ -13,7 +12,6 @@ use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 
 final class GithubBranchType extends GithubRepositoryType implements GithubRepositoryTypeContract
@@ -64,6 +62,12 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
         return $this->release;
     }
 
+    /**
+     * @param Collection $collection
+     * @param string $version
+     *
+     * @return mixed
+     */
     public function selectRelease(Collection $collection, string $version)
     {
         $release = $collection->first();
@@ -77,40 +81,6 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
         }
 
         return $release;
-    }
-
-    /**
-     * Check repository if a newer version than the installed one is available.
-     * For updates that are pulled from a commit just checking the SHA won't be enough. So we need to check/compare
-     * the commits and dates.
-     *
-     * @param string $currentVersion
-     *
-     * @throws InvalidArgumentException
-     * @throws Exception
-     *
-     * @return bool
-     */
-    public function isNewVersionAvailable($currentVersion = ''): bool
-    {
-        $version = $currentVersion ?: $this->getVersionInstalled();
-
-        if (! $version) {
-            throw new InvalidArgumentException('No currently installed version specified.');
-        }
-
-        $versionAvailable = $this->getVersionAvailable();
-
-        if (version_compare($version, $versionAvailable, '<')) {
-            if (! $this->versionFileExists()) {
-                $this->setVersionFile($versionAvailable);
-            }
-            event(new UpdateAvailable($versionAvailable));
-
-            return true;
-        }
-
-        return false;
     }
 
     public function getVersionAvailable(string $prepend = '', string $append = ''): string

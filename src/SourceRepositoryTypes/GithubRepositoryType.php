@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
-use Codedge\Updater\Exceptions\InvalidRepositoryException;
+use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
+use Codedge\Updater\Traits\UseVersionFile;
+use Exception;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\File;
+use InvalidArgumentException;
 
 /**
  * GithubRepositoryType.
@@ -22,7 +24,7 @@ use Illuminate\Support\Facades\File;
  */
 class GithubRepositoryType
 {
-    use SupportPrivateAccessToken;
+    use UseVersionFile, SupportPrivateAccessToken;
 
     /**
      * @var Client
@@ -39,6 +41,8 @@ class GithubRepositoryType
      */
     protected $updateExecutor;
 
+    private $repositoryTypeInstance;
+
     /**
      * Github constructor.
      *
@@ -53,13 +57,17 @@ class GithubRepositoryType
 
     public function create(): GithubRepositoryTypeContract
     {
-        $this->checkValidRepository();
-
-        if ($this->useBranchForVersions()) {
-            return resolve(GithubBranchType::class);
+        if(empty($this->config['repository_vendor']) || empty($this->config['repository_name'])) {
+            throw new \Exception('"repository_vendor" or "repository_name" are missing in config file.');
         }
 
-        return resolve(GithubTagType::class);
+        if ($this->useBranchForVersions()) {
+            $this->repositoryTypeInstance = resolve(GithubBranchType::class);
+        } else {
+            $this->repositoryTypeInstance = resolve(GithubTagType::class);
+        }
+
+        return $this->repositoryTypeInstance;
     }
 
     /**
@@ -78,24 +86,47 @@ class GithubRepositoryType
         return $this->config['use_branch'] !== '';
     }
 
-    protected function checkValidRepository(): void
-    {
-        if (empty($this->config['repository_vendor']) || empty($this->config['repository_name'])) {
-            report(new InvalidRepositoryException());
-        }
-    }
-
     /**
-     * Get the version that is currently installed.
-     * Example: 1.1.0 or v1.1.0 or "1.1.0 version".
-     *
-     * @param string $prepend
-     * @param string $append
+     * {@inheritDoc}
      *
      * @return string
      */
-    public function getVersionInstalled(string $prepend = '', string $append = ''): string
+    public function getVersionInstalled(): string
     {
-        return $prepend.config('self-update.version_installed').$append;
+        return config('self-update.version_installed');
+    }
+
+    /**
+     * Check repository if a newer version than the installed one is available.
+     * For updates that are pulled from a commit just checking the SHA won't be enough. So we need to check/compare
+     * the commits and dates.
+     *
+     * @param string $currentVersion
+     *
+     * @throws InvalidArgumentException
+     * @throws Exception
+     *
+     * @return bool
+     */
+    public function isNewVersionAvailable($currentVersion = ''): bool
+    {
+        $version = $currentVersion ?: $this->getVersionInstalled();
+
+        if (! $version) {
+            throw new InvalidArgumentException('No currently installed version specified.');
+        }
+
+        $versionAvailable = $this->repositoryTypeInstance->getVersionAvailable();
+
+        if (version_compare($version, $versionAvailable, '<')) {
+            if (! $this->versionFileExists()) {
+                $this->setVersionFile($versionAvailable);
+            }
+            event(new UpdateAvailable($versionAvailable));
+
+            return true;
+        }
+
+        return false;
     }
 }

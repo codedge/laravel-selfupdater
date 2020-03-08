@@ -38,15 +38,11 @@ interface SourceRepositoryTypeContract
     public function isNewVersionAvailable(string $currentVersion = ''): bool;
 
     /**
-     * Get the version that is currenly installed.
-     * Example: 1.1.0 or v1.1.0 or "1.1.0 version".
-     *
-     * @param string $prepend
-     * @param string $append
+     * Get the version that is currently installed.
      *
      * @return string
      */
-    public function getVersionInstalled(string $prepend = '', string $append = ''): string;
+    public function getVersionInstalled(): string;
 
     /**
      * Get the latest version that has been published in a certain repository.

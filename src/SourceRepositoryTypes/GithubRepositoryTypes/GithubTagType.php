@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
-use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
@@ -13,7 +12,6 @@ use Exception;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 
 final class GithubTagType extends GithubRepositoryType implements GithubRepositoryTypeContract
@@ -38,38 +36,6 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
                       ->setAccessToken($config['private_access_token']);
 
         $this->client = $client;
-    }
-
-    /**
-     * Check repository if a newer version than the installed one is available.
-     *
-     * @param string $currentVersion
-     *
-     * @throws InvalidArgumentException
-     * @throws Exception
-     *
-     * @return bool
-     */
-    public function isNewVersionAvailable(string $currentVersion = ''): bool
-    {
-        $version = $currentVersion ?: $this->getVersionInstalled();
-
-        if (! $version) {
-            throw new InvalidArgumentException('No currently installed version specified.');
-        }
-
-        $versionAvailable = $this->getVersionAvailable();
-
-        if (version_compare($version, $versionAvailable, '<')) {
-            if (! $this->versionFileExists()) {
-                $this->setVersionFile($versionAvailable);
-            }
-            event(new UpdateAvailable($versionAvailable));
-
-            return true;
-        }
-
-        return false;
     }
 
     /**
