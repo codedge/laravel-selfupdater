@@ -41,8 +41,6 @@ class GithubRepositoryType
      */
     protected $updateExecutor;
 
-    private $repositoryTypeInstance;
-
     /**
      * Github constructor.
      *
@@ -62,12 +60,10 @@ class GithubRepositoryType
         }
 
         if ($this->useBranchForVersions()) {
-            $this->repositoryTypeInstance = resolve(GithubBranchType::class);
-        } else {
-            $this->repositoryTypeInstance = resolve(GithubTagType::class);
+            return resolve(GithubBranchType::class);
         }
 
-        return $this->repositoryTypeInstance;
+        return resolve(GithubTagType::class);
     }
 
     /**
@@ -116,7 +112,7 @@ class GithubRepositoryType
             throw new InvalidArgumentException('No currently installed version specified.');
         }
 
-        $versionAvailable = $this->repositoryTypeInstance->getVersionAvailable();
+        $versionAvailable = $this->getVersionAvailable();
 
         if (version_compare($version, $versionAvailable, '<')) {
             if (! $this->versionFileExists()) {

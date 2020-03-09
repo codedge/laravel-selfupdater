@@ -8,6 +8,7 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Tests\TestCase;
 use Illuminate\Support\Facades\File;
+use InvalidArgumentException;
 
 class GithubRepositoryTypeTest extends TestCase
 {
@@ -68,5 +69,54 @@ class GithubRepositoryTypeTest extends TestCase
 
         config(['self-update.version_installed' => '1.0']);
         $this->assertEquals('1.0', $github->getVersionInstalled());
+    }
+
+    /** @test */
+    public function it_cannot_get_new_version_available_and_fails_with_exception(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        /** @var GithubTagType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $github->isNewVersionAvailable('');
+    }
+
+    /** @test */
+    public function it_can_get_new_version_available_from_type_tag_without_version_file(): void
+    {
+        /** @var GithubTagType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $github->deleteVersionFile();
+
+        $this->assertFalse($github->isNewVersionAvailable('v2.7'));
+        $this->assertTrue($github->isNewVersionAvailable('v1.1'));
+    }
+
+    /** @test */
+    public function it_can_get_new_version_available_from_type_tag_with_version_file(): void
+    {
+        /** @var GithubTagType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $github->setVersionFile('v2.7');
+
+        $this->assertFalse($github->isNewVersionAvailable('v2.7'));
+
+        $github->setVersionFile('v2.7');
+        $this->assertTrue($github->isNewVersionAvailable('v1.1'));
+
+        $this->assertEquals('v2.7', $github->getVersionFile());
+    }
+
+    /** @test */
+    public function it_can_get_new_version_available_from_type_branch_without_version_file(): void
+    {
+        config(['self-update.repository_types.github.use_branch' => 'v2']);
+
+        /** @var GithubBranchType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $github->deleteVersionFile();
+
+        $this->assertFalse($github->isNewVersionAvailable('2020-02-08T21:09:15Z'));
+        $this->assertTrue($github->isNewVersionAvailable('2020-02-04T21:09:15Z'));
     }
 }

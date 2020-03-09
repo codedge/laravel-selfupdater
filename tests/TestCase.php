@@ -4,7 +4,6 @@ namespace Codedge\Updater\Tests;
 
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
 use Codedge\Updater\Models\UpdateExecutor;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
@@ -14,10 +13,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Stream;
 use Illuminate\Foundation\Application;
-use Mockery\Mock;
-use Monolog\Handler\Handler;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -96,20 +92,44 @@ abstract class TestCase extends Orchestra
 
     protected function getMockedClient(string $type): Client
     {
-        $response = new Response(
-            200, [ 'Content-Type' => 'application/json' ],
-            \GuzzleHttp\Psr7\stream_for(fopen('tests/Data/'.$this->mockedResponses[$type], 'r')));
+        $responses = [
+            $this->getResponse200Type($type),
+            $this->getResponse200Type($type),
+            $this->getResponse200Type($type),
+            $this->getResponse200Type($type)
+        ];
 
-        $handler = HandlerStack::create(new MockHandler([
-            $response, $response, $response, $response
-        ]));
+        if($type === 'http') {
+            $responses = [
+                $this->getResponse200Type('http'),
+                $this->getResponse200ZipFile(),
+                $this->getResponse200Type('http'),
+                $this->getResponse200ZipFile(),
+            ];
+        }
+
+        $handler = HandlerStack::create(new MockHandler($responses));
 
         return new Client(['handler' => $handler]);
     }
 
     protected function getMockedDownloadZipFileClient(): Client
     {
-        $response = new Response(
+        $handler = HandlerStack::create(new MockHandler([ $this->getResponse200ZipFile() ]));
+
+        return new Client(['handler' => $handler]);
+    }
+
+    protected function getResponse200Type(string $type): Response
+    {
+        return new Response(
+            200, [ 'Content-Type' => 'application/json' ],
+            \GuzzleHttp\Psr7\stream_for(fopen('tests/Data/'.$this->mockedResponses[$type], 'r')));
+    }
+
+    protected function getResponse200ZipFile(): Response
+    {
+        return $response = new Response(
             200,
             [
                 'Content-Type' => 'application/zip',
@@ -117,12 +137,6 @@ abstract class TestCase extends Orchestra
             ],
             fopen(__DIR__ . '/Data/release-1.2.zip', 'r')
         );
-
-        $handler = HandlerStack::create(new MockHandler([
-            $response
-        ]));
-
-        return new Client(['handler' => $handler]);
     }
 
     /**

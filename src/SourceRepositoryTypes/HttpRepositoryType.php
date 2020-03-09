@@ -94,10 +94,9 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
             throw new InvalidArgumentException('No currently installed version specified.');
         }
 
-        // Remove the version file to forcefully update current version
-        $this->deleteVersionFile();
+        $versionAvailable = $this->getVersionAvailable();
 
-        if (version_compare($version, $this->getVersionAvailable(), '<')) {
+        if (version_compare($version, $versionAvailable, '<')) {
             if (! $this->versionFileExists()) {
                 $this->setVersionFile($this->getVersionAvailable());
                 event(new UpdateAvailable($this->getVersionAvailable()));
