@@ -127,7 +127,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         }
 
         $release = $this->selectRelease($releaseCollection, $version);
-        $storageFilename = $this->prepend . $release->name . $this->append . '.zip';
+        $storageFilename = $this->prepend.$release->name.$this->append.'.zip';
 
         $this->release->setRelease($storageFilename)
                       ->updateStoragePath()
@@ -174,7 +174,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @return string
      */
@@ -216,7 +216,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      */
     protected function getRepositoryReleases(): ResponseInterface
     {
-        if(empty($this->config['repository_url'])) {
+        if (empty($this->config['repository_url'])) {
             throw new Exception('No repository specified. Please enter a valid URL in your config.');
         }
 
@@ -246,10 +246,10 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         preg_match('/(?:\w+:)?\/\/[^\/]+([^?#]+)/', $this->config['repository_url'], $matches);
         $baseUrl = preg_replace('#'.$matches[1].'#', '', $this->config['repository_url']);
 
-        $releases = collect($files[1])->map(function ($item, $key) use($baseUrl, $releaseVersions) {
+        $releases = collect($files[1])->map(function ($item, $key) use ($baseUrl, $releaseVersions) {
             return (object) [
                 'name' => $releaseVersions[$key],
-                'zipball_url' => $baseUrl . $item,
+                'zipball_url' => $baseUrl.$item,
             ];
         });
 

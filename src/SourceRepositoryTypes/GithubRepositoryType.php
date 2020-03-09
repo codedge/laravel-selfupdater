@@ -55,7 +55,7 @@ class GithubRepositoryType
 
     public function create(): GithubRepositoryTypeContract
     {
-        if(empty($this->config['repository_vendor']) || empty($this->config['repository_name'])) {
+        if (empty($this->config['repository_vendor']) || empty($this->config['repository_name'])) {
             throw new \Exception('"repository_vendor" or "repository_name" are missing in config file.');
         }
 
@@ -83,7 +83,7 @@ class GithubRepositoryType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @return string
      */
