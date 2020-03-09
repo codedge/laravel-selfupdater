@@ -88,6 +88,8 @@ class GithubRepositoryTypeTest extends TestCase
         $github = (resolve(GithubRepositoryType::class))->create();
         $github->deleteVersionFile();
 
+        $github->setAccessToken('123');
+
         $this->assertFalse($github->isNewVersionAvailable('v2.7'));
         $this->assertTrue($github->isNewVersionAvailable('v1.1'));
     }
