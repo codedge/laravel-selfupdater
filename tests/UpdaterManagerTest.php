@@ -109,16 +109,23 @@ class UpdaterManagerTest extends Testcase
 
         $this->assertEquals(0, $repository->preUpdateArtisanCommands());
     }
-
-    /** @test */
-    public function it_can_run_pre_update_commands(): void
-    {
-        config(['self-update.artisan_commands.pre_update.updater:prepare' => [
-            'class' => \App\Console\Commands\PreUpdateTasks::class,
-            'params' => []
-            ],
-        ]);
-    }
+    
+//    public function it_can_run_pre_update_commands(): void
+//    {
+//        config(['self-update.artisan_commands.pre_update.updater:prepare' => [
+//            'class' => \App\Console\Commands\PreUpdateTasks::class,
+//            'params' => []
+//            ],
+//        ]);
+//
+//        /** @var UpdaterManager $manager */
+//        $manager = resolve(UpdaterManager::class);
+//
+//        /** @var SourceRepository $repository */
+//        $repository = $manager->source('');
+//
+//        $this->assertEquals(1, $repository->preUpdateArtisanCommands());
+//    }
 
     /** @test */
     public function it_can_collect_post_update_commands(): void
