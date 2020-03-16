@@ -3,6 +3,8 @@
 namespace Codedge\Updater\Tests\Commands;
 
 use Codedge\Updater\Commands\CheckForUpdate;
+use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
+use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Tests\TestCase;
 
 final class CheckUpdateTest extends TestCase
@@ -20,6 +22,10 @@ final class CheckUpdateTest extends TestCase
     /** @test */
     public function it_can_run_check_update_command_with_new_version_available(): void
     {
+        /** @var GithubTagType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $github->setVersionFile('v3.5');
+
         config(['self-update.version_installed' => 'v1.0']);
 
         $this->artisan(CheckForUpdate::class)
