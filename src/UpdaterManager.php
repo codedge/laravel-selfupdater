@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Codedge\Updater;
 
-use Closure;
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
