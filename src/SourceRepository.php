@@ -4,6 +4,9 @@ namespace Codedge\Updater;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Models\Release;
+use Codedge\Updater\Traits\SupportPrivateAccessToken;
+use Codedge\Updater\Traits\UseVersionFile;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 
 /**
@@ -12,8 +15,10 @@ use Illuminate\Support\Facades\Artisan;
  * @author Holger Lösken <holger.loesken@codedge.de>
  * @copyright See LICENSE file that was distributed with this source code.
  */
-class SourceRepository implements SourceRepositoryTypeContract
+final class SourceRepository implements SourceRepositoryTypeContract
 {
+    use UseVersionFile, SupportPrivateAccessToken;
+
     /**
      * @var SourceRepositoryTypeContract
      */
@@ -104,20 +109,28 @@ class SourceRepository implements SourceRepositoryTypeContract
     /**
      * Run pre update artisan commands from config.
      */
-    protected function preUpdateArtisanCommands()
+    public function preUpdateArtisanCommands(): int
     {
-        collect(config('self-update.artisan_commands.pre_update'))->each(function ($commandParams, $commandKey) {
+        $commands = collect(config('self-update.artisan_commands.pre_update'));
+
+        $commands->each(function ($commandParams, $commandKey) {
             Artisan::call($commandKey, $commandParams['params']);
         });
+
+        return $commands->count();
     }
 
     /**
      * Run post update artisan commands from config.
      */
-    protected function postUpdateArtisanCommands()
+    public function postUpdateArtisanCommands(): int
     {
-        collect(config('self-update.artisan_commands.post_update'))->each(function ($commandParams, $commandKey) {
+        $commands = collect(config('self-update.artisan_commands.post_update'));
+
+        $commands->each(function ($commandParams, $commandKey) {
             Artisan::call($commandKey, $commandParams['params']);
         });
+
+        return $commands->count();
     }
 }

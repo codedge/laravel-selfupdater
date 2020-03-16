@@ -82,11 +82,16 @@ class ReleaseTest extends TestCase
     /** @test */
     public function it_can_set_update_path_without_exclude_dirs(): void
     {
-        vfsStream::newDirectory('tmp')->at($this->vfs);
-        $this->release->setUpdatePath($this->vfs->url() . '/tmp');
+        $mainDirectory = '/tmp';
+        $subDirectory = 'new-directory-inside';
 
-        foreach ($this->release->getUpdatePath() as $path) {
-            $this->assertEquals($this->vfs->url() . '/tmp', $path->getPath());
+        vfsStream::newDirectory($mainDirectory . '/' . $subDirectory)->at($this->vfs);
+        $this->release->setUpdatePath($this->vfs->url() . '/' . $mainDirectory);
+        
+        foreach ($this->release->getUpdatePath()->directories() as $dir) {
+            $this->assertEquals($dir->getPath(), $this->vfs->url() . '/' . $mainDirectory);
+            $this->assertEquals($subDirectory, $dir->getFilename());
+            $this->assertEquals($subDirectory, $dir->getBasename());
         }
     }
 

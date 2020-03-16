@@ -63,6 +63,17 @@ abstract class TestCase extends Orchestra
                 'address' => '',
                 'name' => '',
             ],
+            'artisan_commands' => [
+                'pre_update' => [
+                    //'command:signature' => [
+                    //    'class' => Command class
+                    //    'params' => []
+                    //]
+                ],
+                'post_update' => [
+
+                ],
+            ],
         ]);
 
         $app->bind(GithubBranchType::class, function (): GithubRepositoryTypeContract {
@@ -88,6 +99,7 @@ abstract class TestCase extends Orchestra
                 resolve(UpdateExecutor::class)
             );
         });
+
     }
 
     protected function getMockedClient(string $type): Client

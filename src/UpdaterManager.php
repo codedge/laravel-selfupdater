@@ -9,6 +9,7 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
+use Exception;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
 
@@ -74,9 +75,9 @@ final class UpdaterManager implements UpdaterContract
     /**
      * @param SourceRepositoryTypeContract $sourceRepository
      *
-     * @return SourceRepository
+     * @return SourceRepositoryTypeContract
      */
-    public function sourceRepository(SourceRepositoryTypeContract $sourceRepository)
+    public function sourceRepository(SourceRepositoryTypeContract $sourceRepository): SourceRepositoryTypeContract
     {
         return new SourceRepository($sourceRepository);
     }
@@ -166,11 +167,10 @@ final class UpdaterManager implements UpdaterContract
     }
 
     /**
-     * Create an instance for the Github source repository.
-     *
-     * @return SourceRepository
+     * @return SourceRepositoryTypeContract
+     * @throws Exception
      */
-    protected function createGithubRepository(): SourceRepository
+    protected function createGithubRepository(): SourceRepositoryTypeContract
     {
         /** @var GithubRepositoryType $factory */
         $factory = $this->app->make(GithubRepositoryType::class);
@@ -181,9 +181,9 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Create an instance for the Http source repository.
      *
-     * @return SourceRepository
+     * @return SourceRepositoryTypeContract
      */
-    protected function createHttpRepository(): SourceRepository
+    protected function createHttpRepository(): SourceRepositoryTypeContract
     {
         return $this->sourceRepository($this->app->make(HttpRepositoryType::class));
     }
