@@ -6,6 +6,7 @@ use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
+use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 use Illuminate\Support\Facades\File;
 use InvalidArgumentException;
@@ -120,5 +121,20 @@ class GithubRepositoryTypeTest extends TestCase
 
         $this->assertFalse($github->isNewVersionAvailable('2020-02-08T21:09:15Z'));
         $this->assertTrue($github->isNewVersionAvailable('2020-02-04T21:09:15Z'));
+    }
+
+    /** @test */
+    public function it_can_handle_access_tokens_in_github_branch_type_repo(): void
+    {
+        /** @var GithubBranchType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+
+        $github->setAccessTokenPrefix('MyPrefix ');
+        $github->setAccessToken('001');
+
+        $this->assertEquals('MyPrefix 001', $github->getAccessToken());
+        $this->assertTrue($github->hasAccessToken());
+        $this->assertEquals('MyPrefix ', $github->getAccessTokenPrefix());
+        $this->assertEquals('001', $github->getAccessToken(false));
     }
 }

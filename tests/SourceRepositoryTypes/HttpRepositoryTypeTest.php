@@ -155,4 +155,19 @@ class HttpRepositoryTypeTest extends TestCase
         $this->assertTrue($http->isNewVersionAvailable('4.5'));
         $this->assertFalse($http->isNewVersionAvailable('5.0'));
     }
+
+    /** @test */
+    public function it_can_handle_access_tokens(): void
+    {
+        /** @var HttpRepositoryType $http */
+        $http = resolve(HttpRepositoryType::class);
+
+        $http->setAccessTokenPrefix('Tester ');
+        $http->setAccessToken('123');
+
+        $this->assertEquals('Tester 123', $http->getAccessToken());
+        $this->assertTrue($http->hasAccessToken());
+        $this->assertEquals('Tester ', $http->getAccessTokenPrefix());
+        $this->assertEquals('123', $http->getAccessToken(false));
+    }
 }

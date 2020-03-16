@@ -83,34 +83,6 @@ final class UpdaterManager implements UpdaterContract
     }
 
     /**
-     * Register a custom driver creator Closure.
-     *
-     * @param string  $source
-     * @param Closure $callback
-     *
-     * @return $this
-     */
-    public function extend(string $source, Closure $callback): UpdaterManager
-    {
-        $this->customSourceCreators[$source] = $callback;
-
-        return $this;
-    }
-
-    /**
-     * Dynamically call the default source repository instance.
-     *
-     * @param string $method
-     * @param array  $parameters
-     *
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        return call_user_func_array([$this->source(), $method], $parameters);
-    }
-
-    /**
      * Get the source repository connection configuration.
      *
      * @param string $name
@@ -145,9 +117,9 @@ final class UpdaterManager implements UpdaterContract
      *
      * @throws InvalidArgumentException
      *
-     * @return mixed
+     * @return SourceRepositoryTypeContract
      */
-    protected function resolve(string $name)
+    protected function resolve(string $name): SourceRepositoryTypeContract
     {
         $config = $this->getConfig($name);
 
@@ -155,15 +127,9 @@ final class UpdaterManager implements UpdaterContract
             throw new InvalidArgumentException("Source repository [{$name}] is not defined.");
         }
 
-        if (isset($this->customSourceCreators[$config['type']])) {
-            return $this->callCustomSourceCreators($config);
-        }
         $repositoryMethod = 'create'.ucfirst($name).'Repository';
 
-        if (method_exists($this, $repositoryMethod)) {
-            return $this->{$repositoryMethod}();
-        }
-        throw new InvalidArgumentException("Repository [{$name}] is not supported.");
+        return $this->{$repositoryMethod}();
     }
 
     /**
@@ -186,17 +152,5 @@ final class UpdaterManager implements UpdaterContract
     protected function createHttpRepository(): SourceRepositoryTypeContract
     {
         return $this->sourceRepository($this->app->make(HttpRepositoryType::class));
-    }
-
-    /**
-     * Call a custom source repository type.
-     *
-     * @param array $config
-     *
-     * @return mixed
-     */
-    protected function callCustomSourceCreators(array $config)
-    {
-        return $this->customSourceCreators[$config['type']]($this->app, $config);
     }
 }
