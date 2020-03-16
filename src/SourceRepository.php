@@ -6,7 +6,6 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 
 /**
