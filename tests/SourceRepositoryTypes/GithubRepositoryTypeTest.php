@@ -2,12 +2,15 @@
 
 namespace Codedge\Updater\Tests\SourceRepositoryTypes;
 
+use Codedge\Updater\Events\UpdateAvailable;
+use Codedge\Updater\Events\UpdateSucceeded;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use InvalidArgumentException;
 
@@ -50,15 +53,25 @@ class GithubRepositoryTypeTest extends TestCase
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
 
+        /** @var Release $release */
         $release = resolve(Release::class);
         $release->setStoragePath('/tmp')
+                ->setVersion('1.0')
                 ->setRelease('release-1.0.zip')
                 ->updateStoragePath()
                 ->setDownloadUrl('some-local-file')
                 ->download($this->getMockedDownloadZipFileClient());
         $release->extract();
 
+        Event::fake();
+
         $this->assertTrue($github->update($release));
+
+        Event::assertDispatched(UpdateSucceeded::class, 1);
+        Event::assertDispatched(UpdateSucceeded::class, function (UpdateSucceeded $e) use ($release) {
+            return $e->getVersionUpdatedTo() === $release->getVersion();
+        });
+
     }
 
     /** @test */
@@ -91,8 +104,15 @@ class GithubRepositoryTypeTest extends TestCase
 
         $github->setAccessToken('123');
 
+        Event::fake();
+
         $this->assertFalse($github->isNewVersionAvailable('v2.7'));
         $this->assertTrue($github->isNewVersionAvailable('v1.1'));
+
+        Event::assertDispatched(UpdateAvailable::class, 1);
+        Event::assertDispatched(UpdateAvailable::class, function (UpdateAvailable $e) use ($github) {
+            return $e->getVersionAvailable() === $github->getVersionAvailable();
+        });
     }
 
     /** @test */
@@ -118,6 +138,19 @@ class GithubRepositoryTypeTest extends TestCase
         /** @var GithubBranchType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
         $github->deleteVersionFile();
+
+        $this->assertFalse($github->isNewVersionAvailable('2020-02-08T21:09:15Z'));
+        $this->assertTrue($github->isNewVersionAvailable('2020-02-04T21:09:15Z'));
+    }
+
+    /** @test */
+    public function it_can_get_new_version_available_from_type_branch_with_version_file(): void
+    {
+        config(['self-update.repository_types.github.use_branch' => 'v2']);
+
+        /** @var GithubBranchType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $github->setVersionFile('2020-02-07T21:09:15Z');
 
         $this->assertFalse($github->isNewVersionAvailable('2020-02-08T21:09:15Z'));
         $this->assertTrue($github->isNewVersionAvailable('2020-02-04T21:09:15Z'));

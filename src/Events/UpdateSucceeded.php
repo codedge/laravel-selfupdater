@@ -23,7 +23,7 @@ class UpdateSucceeded
      *
      * @return string
      */
-    public function getVersionUpdatedTo(): string
+    public function getVersionUpdatedTo(): ?string
     {
         return $this->release->getVersion();
     }

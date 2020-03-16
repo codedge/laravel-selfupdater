@@ -12,6 +12,10 @@ final class CheckUpdateTest extends TestCase
     /** @test */
     public function it_can_run_check_update_command_without_new_version_available(): void
     {
+        /** @var GithubTagType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $github->deleteVersionFile();
+
         config(['self-update.version_installed' => 'v3.5']);
 
         $this->artisan(CheckForUpdate::class)
