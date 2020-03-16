@@ -7,6 +7,8 @@ use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
+use Codedge\Updater\Tests\Commands\SamplePostUpdate;
+use Codedge\Updater\Tests\Commands\SamplePreUpdate;
 use Codedge\Updater\UpdaterFacade;
 use Codedge\Updater\UpdaterServiceProvider;
 use GuzzleHttp\Client;
@@ -65,13 +67,16 @@ abstract class TestCase extends Orchestra
             ],
             'artisan_commands' => [
                 'pre_update' => [
-                    //'command:signature' => [
-                    //    'class' => Command class
-                    //    'params' => []
-                    //]
+//                    'updater:pre-update' => [
+//                        'class' => SamplePreUpdate::class,
+//                        'params' => []
+//                    ]
                 ],
                 'post_update' => [
-
+//                    'updater:post-update' => [
+//                        'class' => SamplePostUpdate::class,
+//                        'params' => []
+//                    ]
                 ],
             ],
         ]);
