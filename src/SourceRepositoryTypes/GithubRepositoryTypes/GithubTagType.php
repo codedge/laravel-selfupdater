@@ -11,7 +11,6 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
@@ -85,7 +84,7 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
         $release = $this->selectRelease($releases, $version);
 
         $this->release->setVersion($release->name)
-                      ->setRelease($release->name . '.zip')
+                      ->setRelease($release->name.'.zip')
                       ->updateStoragePath()
                       ->setDownloadUrl($release->zipball_url);
 
