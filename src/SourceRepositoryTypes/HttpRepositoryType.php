@@ -127,9 +127,9 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         }
 
         $release = $this->selectRelease($releaseCollection, $version);
-        $storageFilename = $this->prepend.$release->name.$this->append.'.zip';
 
-        $this->release->setRelease($storageFilename)
+        $this->release->setVersion($this->prepend.$release->name.$this->append)
+                      ->setRelease($this->prepend.$release->name.$this->append . '.zip')
                       ->updateStoragePath()
                       ->setDownloadUrl($release->zipball_url);
 
@@ -175,12 +175,10 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
     public function getVersionInstalled(): string
     {
-        return config('self-update.version_installed');
+        return (string) config('self-update.version_installed');
     }
 
     /**

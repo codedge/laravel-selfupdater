@@ -3,7 +3,6 @@
 namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\Models\Release;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
 use InvalidArgumentException;
@@ -76,7 +75,9 @@ class HttpRepositoryTypeTest extends TestCase
         /** @var HttpRepositoryType $http */
         $http = resolve(HttpRepositoryType::class);
 
-        $this->assertInstanceOf(Release::class, $http->fetch());
+        $release = $http->fetch();
+
+        $this->assertInstanceOf(Release::class, $release);
 
         // Fetch again when source is already fetched
         $this->assertInstanceOf(Release::class, $http->fetch());

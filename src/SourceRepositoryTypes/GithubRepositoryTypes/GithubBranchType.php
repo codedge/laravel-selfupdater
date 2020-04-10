@@ -48,9 +48,9 @@ final class GithubBranchType extends GithubRepositoryType implements GithubRepos
         }
 
         $release = $this->selectRelease($releaseCollection, $version);
-        $storageFilename = $release->sha.'.zip';
 
-        $this->release->setRelease($storageFilename)
+        $this->release->setVersion($release->commit->author->date)
+                      ->setRelease($release->sha . '.zip')
                       ->updateStoragePath()
                       ->setDownloadUrl($this->generateArchiveUrl($release->sha));
 

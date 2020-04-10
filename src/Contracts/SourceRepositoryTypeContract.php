@@ -39,8 +39,6 @@ interface SourceRepositoryTypeContract
 
     /**
      * Get the version that is currently installed.
-     *
-     * @return string
      */
     public function getVersionInstalled(): string;
 

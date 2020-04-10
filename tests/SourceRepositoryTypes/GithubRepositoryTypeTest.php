@@ -8,10 +8,9 @@ use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
-use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
+use Exception;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\File;
 use InvalidArgumentException;
 
 class GithubRepositoryTypeTest extends TestCase
@@ -169,5 +168,90 @@ class GithubRepositoryTypeTest extends TestCase
         $this->assertTrue($github->hasAccessToken());
         $this->assertEquals('MyPrefix ', $github->getAccessTokenPrefix());
         $this->assertEquals('001', $github->getAccessToken(false));
+    }
+
+    /** @test */
+    public function it_can_fetch_github_tag_releases_latest(): void
+    {
+        /** @var GithubTagType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+
+        $release = $github->fetch();
+
+        $this->assertInstanceOf(Release::class, $release);
+        $this->assertEquals('v2.6.10', $release->getVersion());
+        $this->assertEquals('v2.6.10.zip',  $release->getRelease());
+    }
+
+    /** @test */
+    public function it_can_fetch_github_tag_releases_specific_version(): void
+    {
+        /** @var GithubTagType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+
+        $release = $github->fetch('v2.6.7');
+
+        $this->assertInstanceOf(Release::class, $release);
+        $this->assertEquals('v2.6.7', $release->getVersion());
+        $this->assertEquals('v2.6.7.zip',  $release->getRelease());
+    }
+
+    /** @test */
+    public function it_can_fetch_github_tag_releases_and_takes_latest_if_version_not_available(): void
+    {
+        /** @var GithubTagType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+
+        $release = $github->fetch('v3.22.1');
+
+        $this->assertInstanceOf(Release::class, $release);
+        $this->assertEquals('v2.6.10', $release->getVersion());
+        $this->assertEquals('v2.6.10.zip',  $release->getRelease());
+    }
+
+    /** @test */
+    public function it_can_fetch_github_branch_releases_latest(): void
+    {
+        config(['self-update.repository_types.github.use_branch' => 'v2']);
+
+        /** @var GithubBranchType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+        $github->setAccessToken('123');
+
+        $release = $github->fetch();
+
+        $this->assertInstanceOf(Release::class, $release);
+        $this->assertEquals('2020-02-06T21:09:15Z', $release->getVersion());
+        $this->assertEquals('e8f19f9b63b5b92f31ddc4a3463dcc231301adea.zip',  $release->getRelease());
+    }
+
+    /** @test */
+    public function it_can_fetch_github_branch_releases_specific_version(): void
+    {
+        config(['self-update.repository_types.github.use_branch' => 'v2']);
+
+        /** @var GithubBranchType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+
+        $release = $github->fetch('2020-02-06T09:35:51Z');
+
+        $this->assertInstanceOf(Release::class, $release);
+        $this->assertEquals('2020-02-06T09:35:51Z', $release->getVersion());
+        $this->assertEquals('4f82f1b9037530baa8775e41e16d82e8db97110f.zip',  $release->getRelease());
+    }
+
+    /** @test */
+    public function it_can_fetch_github_branch_releases_and_takes_latest_if_version_not_available(): void
+    {
+        config(['self-update.repository_types.github.use_branch' => 'v2']);
+
+        /** @var GithubBranchType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+
+        $release = $github->fetch('2020-01-01T11:11:11Z');
+
+        $this->assertInstanceOf(Release::class, $release);
+        $this->assertEquals('2020-02-06T21:09:15Z', $release->getVersion());
+        $this->assertEquals('e8f19f9b63b5b92f31ddc4a3463dcc231301adea.zip',  $release->getRelease());
     }
 }

@@ -10,7 +10,9 @@ use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Exception;
 use GuzzleHttp\ClientInterface;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 
@@ -69,34 +71,45 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
      *
      * @return Release
      * @throws Exception
+     * @throws Exception
      */
     public function fetch($version = ''): Release
     {
         $response = $this->getRepositoryReleases();
-        $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()->getContents()));
+        $releases = collect(\GuzzleHttp\json_decode($response->getBody()->getContents()));
 
-        if ($releaseCollection->isEmpty()) {
+        if ($releases->isEmpty()) {
             throw new \Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
         }
 
-        $release = $releaseCollection->first();
+        $release = $this->selectRelease($releases, $version);
 
-        if (! File::exists($this->storagePath)) {
-            File::makeDirectory($this->storagePath, 493, true, true);
+        $this->release->setVersion($release->name)
+                      ->setRelease($release->name . '.zip')
+                      ->updateStoragePath()
+                      ->setDownloadUrl($release->zipball_url);
+
+        if (! $this->release->isSourceAlreadyFetched()) {
+            $this->release->download($this->client);
+            $this->release->extract();
         }
+
+        return $this->release;
+    }
+
+    public function selectRelease(Collection $collection, string $version)
+    {
+        $release = $collection->first();
 
         if (! empty($version)) {
-            $release = $releaseCollection->where('name', $version)->first();
+            if ($collection->contains('name', $version)) {
+                $release = $collection->where('name', $version)->first();
+            } else {
+                Log::info('No release for version "'.$version.'" found. Selecting latest.');
+            }
         }
 
-        $storageFolder = $this->storagePath.$release->name.'-'.now()->timestamp;
-        $storageFilename = $storageFolder.'.zip';
-
-        if (! $this->isSourceAlreadyFetched($release->name)) {
-            $this->downloadRelease($this->client, $release->zipball_url, $storageFilename);
-            $this->unzipArchive($storageFilename, $storageFolder);
-            $this->createReleaseFolder($storageFolder, $release->name);
-        }
+        return $release;
     }
 
     protected function getRepositoryReleases(): ResponseInterface
