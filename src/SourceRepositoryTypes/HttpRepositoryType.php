@@ -129,7 +129,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         $release = $this->selectRelease($releaseCollection, $version);
 
         $this->release->setVersion($this->prepend.$release->name.$this->append)
-                      ->setRelease($this->prepend.$release->name.$this->append . '.zip')
+                      ->setRelease($this->prepend.$release->name.$this->append.'.zip')
                       ->updateStoragePath()
                       ->setDownloadUrl($release->zipball_url);
 
