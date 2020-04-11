@@ -197,9 +197,6 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
             $version = $this->getVersionFile();
         } else {
             $releaseCollection = $this->extractFromHtml($this->getRepositoryReleases()->getBody()->getContents());
-            if ($releaseCollection->isEmpty()) {
-                return '';
-            }
             $version = $releaseCollection->first()->name;
         }
 

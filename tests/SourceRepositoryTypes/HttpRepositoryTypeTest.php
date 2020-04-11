@@ -66,8 +66,16 @@ class HttpRepositoryTypeTest extends TestCase
     /** @test */
     public function it_cannot_fetch_releases_because_there_is_no_release_with_access_token(): void
     {
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('http'),
+            $this->getResponse200ZipFile(),
+            $this->getResponse200Type('http'),
+            $this->getResponse200Type('http'),
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var HttpRepositoryType $http */
-        $http = resolve(HttpRepositoryType::class);
+        $http = $this->app->make(HttpRepositoryType::class);
         $http->setAccessToken('123');
 
         $this->assertInstanceOf(Release::class, $http->fetch());
@@ -76,18 +84,23 @@ class HttpRepositoryTypeTest extends TestCase
         $this->assertInstanceOf(Release::class, $http->fetch());
     }
 
-
+    /** @test */
     public function it_can_fetch_http_releases(): void
     {
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('http'),
+            $this->getResponse200ZipFile(),
+            $this->getResponse200Type('http'),
+            $this->getResponse200Type('http'),
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var HttpRepositoryType $http */
-        $http = resolve(HttpRepositoryType::class);
+        $http = $this->app->make(HttpRepositoryType::class);
 
         $release = $http->fetch();
 
         $this->assertInstanceOf(Release::class, $release);
-
-        // Fetch again when source is already fetched
-        $this->assertInstanceOf(Release::class, $http->fetch());
     }
 
     /** @test */
@@ -154,7 +167,7 @@ class HttpRepositoryTypeTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_new_version_available_from_type_tag_without_version_file(): void
+    public function it_can_get_new_version_available_without_version_file(): void
     {
         $client = $this->getMockedClient([
             $this->getResponse200Type('http'),
@@ -163,7 +176,7 @@ class HttpRepositoryTypeTest extends TestCase
         $this->app->instance(Client::class, $client);
 
         /** @var HttpRepositoryType $http */
-        $http = resolve(HttpRepositoryType::class);
+        $http = $this->app->make(HttpRepositoryType::class);
         $http->deleteVersionFile();
 
         $this->assertTrue($http->isNewVersionAvailable('4.5'));

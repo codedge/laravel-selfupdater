@@ -143,7 +143,7 @@ abstract class TestCase extends Orchestra
     protected function getResponseEmpty(): Response
     {
         return new Response (
-            200, [ 'Content-Type' => 'application/json' ], ''
+            200, [ 'Content-Type' => 'text/html' ], ''
         );
     }
 
