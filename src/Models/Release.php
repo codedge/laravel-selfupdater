@@ -201,7 +201,7 @@ final class Release
 
             return true;
         } else {
-            throw new Exception('File is not a zip archive. File is ' . $this->filesystem->mimeType($this->getStoragePath()) . '.');
+            throw new Exception('File is not a zip archive. File is '.$this->filesystem->mimeType($this->getStoragePath()).'.');
         }
     }
 
