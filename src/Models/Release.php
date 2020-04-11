@@ -189,22 +189,20 @@ final class Release
     public function extract(bool $deleteSource = true): bool
     {
         $extractTo = createFolderFromFile($this->getStoragePath());
-
         $extension = pathinfo($this->getStoragePath(), PATHINFO_EXTENSION);
-        $extracted = false;
 
         if (preg_match('/[zZ]ip/', $extension)) {
             $extracted = $this->extractZip($extractTo);
-        }
 
-        if ($extracted) {
             // Create the final release directory
-            if ($this->createReleaseFolder() && $deleteSource) {
+            if ($extracted && $this->createReleaseFolder() && $deleteSource) {
                 $this->filesystem->delete($this->storagePath);
             }
-        }
 
-        return $extracted;
+            return true;
+        } else {
+            throw new Exception('File is not a zip archive. File is ' . $this->filesystem->mimeType($this->getStoragePath()) . '.');
+        }
     }
 
     protected function extractZip(string $extractTo): bool
@@ -213,7 +211,7 @@ final class Release
         $res = $zip->open($this->getStoragePath());
 
         if ($res !== true) {
-            throw new Exception("Cannot open zip archive [{$extractTo}].");
+            throw new Exception("Cannot open zip archive [{$this->getStoragePath()}]. Error: $res");
         }
 
         $extracted = $zip->extractTo($extractTo);

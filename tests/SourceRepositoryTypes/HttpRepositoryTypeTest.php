@@ -5,6 +5,7 @@ namespace Codedge\Updater\SourceRepositoryTypes;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
+use GuzzleHttp\Client;
 use InvalidArgumentException;
 
 class HttpRepositoryTypeTest extends TestCase
@@ -47,6 +48,12 @@ class HttpRepositoryTypeTest extends TestCase
     /** @test */
     public function it_cannot_fetch_releases_because_there_is_no_release(): void
     {
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('http'),
+            $this->getResponse200ZipFile(),
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var HttpRepositoryType $http */
         $http = resolve(HttpRepositoryType::class);
 
@@ -149,6 +156,12 @@ class HttpRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_get_new_version_available_from_type_tag_without_version_file(): void
     {
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('http'),
+            $this->getResponse200Type('http'),
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var HttpRepositoryType $http */
         $http = resolve(HttpRepositoryType::class);
         $http->deleteVersionFile();

@@ -81,50 +81,34 @@ abstract class TestCase extends Orchestra
             ],
         ]);
 
-        $app->bind(GithubBranchType::class, function (): GithubRepositoryTypeContract {
+        $app->bind(GithubBranchType::class, function (Application $app): GithubRepositoryTypeContract {
             return new GithubBranchType(
                 config('self-update.repository_types.github'),
-                $this->getMockedClient('branch'),
-                resolve(UpdateExecutor::class)
+                $app->make(Client::class),
+                $app->make(UpdateExecutor::class)
             );
         });
 
-        $app->bind(GithubTagType::class, function (): GithubRepositoryTypeContract {
+        $app->bind(GithubTagType::class, function (Application $app): GithubRepositoryTypeContract {
             return new GithubTagType(
                 config('self-update.repository_types.github'),
-                $this->getMockedClient('tag'),
-                resolve(UpdateExecutor::class)
+                $app->make(Client::class),
+                $app->make(UpdateExecutor::class)
             );
         });
 
-        $app->bind(HttpRepositoryType::class, function() {
+        $app->bind(HttpRepositoryType::class, function(Application $app) {
             return new HttpRepositoryType(
                 config('self-update.repository_types.http'),
-                $this->getMockedClient('http'),
-                resolve(UpdateExecutor::class)
+                $app->make(Client::class),
+                $app->make(UpdateExecutor::class)
             );
         });
 
     }
 
-    protected function getMockedClient(string $type): Client
+    protected function getMockedClient($responses): Client
     {
-        $responses = [
-            $this->getResponse200Type($type),
-            $this->getResponse200Type($type),
-            $this->getResponse200Type($type),
-            $this->getResponse200Type($type)
-        ];
-
-        if($type === 'http') {
-            $responses = [
-                $this->getResponse200Type('http'),
-                $this->getResponse200ZipFile(),
-                $this->getResponse200Type('http'),
-                $this->getResponse200ZipFile(),
-            ];
-        }
-
         $handler = HandlerStack::create(new MockHandler($responses));
 
         return new Client(['handler' => $handler]);
@@ -146,13 +130,20 @@ abstract class TestCase extends Orchestra
 
     protected function getResponse200ZipFile(): Response
     {
-        return $response = new Response(
+        return new Response(
             200,
             [
                 'Content-Type' => 'application/zip',
                 'Content-Disposition' => 'attachment; filename="zip_file.zip"',
             ],
             fopen(__DIR__ . '/Data/release-1.2.zip', 'r')
+        );
+    }
+
+    protected function getResponseEmpty(): Response
+    {
+        return new Response (
+            200, [ 'Content-Type' => 'application/json' ], ''
         );
     }
 

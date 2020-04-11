@@ -10,6 +10,7 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Event;
 use InvalidArgumentException;
 
@@ -97,6 +98,12 @@ class GithubRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_get_new_version_available_from_type_tag_without_version_file(): void
     {
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('tag'),
+            $this->getResponse200Type('tag'),
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
         $github->deleteVersionFile();
@@ -133,6 +140,12 @@ class GithubRepositoryTypeTest extends TestCase
     public function it_can_get_new_version_available_from_type_branch_without_version_file(): void
     {
         config(['self-update.repository_types.github.use_branch' => 'v2']);
+
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('branch'),
+            $this->getResponse200Type('branch'),
+        ]);
+        $this->app->instance(Client::class, $client);
 
         /** @var GithubBranchType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
@@ -173,6 +186,12 @@ class GithubRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_fetch_github_tag_releases_latest(): void
     {
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('tag'),
+            $this->getResponse200ZipFile()
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
 
@@ -186,6 +205,12 @@ class GithubRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_fetch_github_tag_releases_specific_version(): void
     {
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('tag'),
+            $this->getResponse200ZipFile(),
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
 
@@ -199,6 +224,12 @@ class GithubRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_fetch_github_tag_releases_and_takes_latest_if_version_not_available(): void
     {
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('tag'),
+            $this->getResponse200ZipFile(),
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
 
@@ -213,6 +244,12 @@ class GithubRepositoryTypeTest extends TestCase
     public function it_can_fetch_github_branch_releases_latest(): void
     {
         config(['self-update.repository_types.github.use_branch' => 'v2']);
+
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('branch'),
+            $this->getResponse200ZipFile(),
+        ]);
+        $this->app->instance(Client::class, $client);
 
         /** @var GithubBranchType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
@@ -230,6 +267,12 @@ class GithubRepositoryTypeTest extends TestCase
     {
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('branch'),
+            $this->getResponse200ZipFile(),
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var GithubBranchType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
 
@@ -245,6 +288,12 @@ class GithubRepositoryTypeTest extends TestCase
     {
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('branch'),
+            $this->getResponse200ZipFile(),
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var GithubBranchType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
 
@@ -253,5 +302,22 @@ class GithubRepositoryTypeTest extends TestCase
         $this->assertInstanceOf(Release::class, $release);
         $this->assertEquals('2020-02-06T21:09:15Z', $release->getVersion());
         $this->assertEquals('e8f19f9b63b5b92f31ddc4a3463dcc231301adea.zip',  $release->getRelease());
+    }
+
+    /** @test */
+    public function it_cannot_fetch_github_branch_releases_if_response_empty(): void
+    {
+        config(['self-update.repository_types.github.use_branch' => 'v2']);
+
+        $client = $this->getMockedClient([
+            $this->getResponseEmpty()
+        ]);
+        $this->app->instance(Client::class, $client);
+
+        /** @var GithubBranchType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+
+        $this->expectException(Exception::class);
+        $github->fetch();
     }
 }

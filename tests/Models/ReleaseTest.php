@@ -39,7 +39,7 @@ class ReleaseTest extends TestCase
     {
         $this->assertNull($this->release->getStoragePath());
 
-        $storagePath = $this->vfs->url() . '/tmp/releaseName.zip';
+        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . 'tmp/releaseName.zip';
         $this->release->setStoragePath( $storagePath );
 
         $this->assertEquals( $storagePath, $this->release->getStoragePath() );
@@ -49,7 +49,7 @@ class ReleaseTest extends TestCase
     public function it_can_update_storage_path_when_having_release_name(): void
     {
         $releaseName = 'releaseName';
-        $storagePathWithoutFilename = $this->vfs->url() . '/tmp';
+        $storagePathWithoutFilename = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . 'tmp';
 
         $this->release->setStoragePath($storagePathWithoutFilename);
         $this->assertEquals($storagePathWithoutFilename, $this->release->getStoragePath());
@@ -64,7 +64,7 @@ class ReleaseTest extends TestCase
     /** @test */
     public function it_should_not_update_storage_path_when_not_having_release_name(): void
     {
-        $storagePath = $this->vfs->url() . '/tmp';
+        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . 'tmp';
 
         $this->release->setStoragePath($storagePath);
         $this->assertEquals($storagePath, $this->release->getStoragePath());
@@ -86,8 +86,8 @@ class ReleaseTest extends TestCase
         $subDirectory = 'new-directory-inside';
 
         vfsStream::newDirectory($mainDirectory . '/' . $subDirectory)->at($this->vfs);
-        $this->release->setUpdatePath($this->vfs->url() . '/' . $mainDirectory);
-        
+        $this->release->setUpdatePath(Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . $mainDirectory);
+
         foreach ($this->release->getUpdatePath()->directories() as $dir) {
             $this->assertEquals($dir->getPath(), $this->vfs->url() . '/' . $mainDirectory);
             $this->assertEquals($subDirectory, $dir->getFilename());
@@ -122,13 +122,6 @@ class ReleaseTest extends TestCase
     }
 
     /** @test */
-    public function it_cannot_extract_non_zip(): void
-    {
-        $this->release->setStoragePath($this->vfs->url() . 'release-1.2.rar');
-        $this->assertFalse($this->release->extract());
-    }
-
-    /** @test */
     public function it_cannot_extract_zip_and_fails_with_exception(): void
     {
         $this->release->setStoragePath('/tmp')->setRelease('release-test-99.zip')->updateStoragePath();
@@ -158,14 +151,21 @@ class ReleaseTest extends TestCase
     /** @test */
     public function it_cannot_download_and_fails_with_exception(): void
     {
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('tag'),
+        ]);
+
         $this->expectException(\Exception::class);
-        $this->release->download($this->getMockedClient('tag'));
+        $this->release->download($client);
     }
 
     /** @test */
     public function it_can_download(): void
     {
-        $client = $this->getMockedClient('tag');
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('tag'),
+        ]);
+
         $this->release->setDownloadUrl('url-to-download')
                       ->setStoragePath('/tmp')
                       ->setRelease('release-1.0.zip')

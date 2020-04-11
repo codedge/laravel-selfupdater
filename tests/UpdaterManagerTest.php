@@ -7,6 +7,7 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\UpdaterManager;
+use GuzzleHttp\Client;
 use InvalidArgumentException;
 
 class UpdaterManagerTest extends Testcase
@@ -58,6 +59,12 @@ class UpdaterManagerTest extends Testcase
     /** @test */
     public function it_can_get_new_version_through_updater_manager_available_from_type_tag_without_version_file(): void
     {
+        $client = $this->getMockedClient([
+            $this->getResponse200Type('tag'),
+            $this->getResponse200Type('tag'),
+        ]);
+        $this->app->instance(Client::class, $client);
+
         /** @var UpdaterManager $manager */
         $manager = resolve(UpdaterManager::class);
 
@@ -109,7 +116,7 @@ class UpdaterManagerTest extends Testcase
 
         $this->assertEquals(0, $repository->preUpdateArtisanCommands());
     }
-    
+
 //    public function it_can_run_pre_update_commands(): void
 //    {
 //        config(['self-update.artisan_commands.pre_update.updater:prepare' => [
