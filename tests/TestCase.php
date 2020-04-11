@@ -7,19 +7,20 @@ use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
-use Codedge\Updater\Tests\Commands\SamplePostUpdate;
-use Codedge\Updater\Tests\Commands\SamplePreUpdate;
 use Codedge\Updater\UpdaterFacade;
 use Codedge\Updater\UpdaterServiceProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
+    const DOWNLOAD_PATH = '/tmp/self-updater';
+
     /**
      * @var array
      */
@@ -47,7 +48,7 @@ abstract class TestCase extends Orchestra
                     'repository_vendor' => 'laravel',
                     'repository_name' => 'laravel',
                     'repository_url' => '',
-                    'download_path' => '/tmp',
+                    'download_path' => self::DOWNLOAD_PATH,
                     'private_access_token' => '',
                     'use_branch' => '',
                 ],
@@ -104,7 +105,6 @@ abstract class TestCase extends Orchestra
                 $app->make(UpdateExecutor::class)
             );
         });
-
     }
 
     protected function getMockedClient($responses): Client
@@ -145,6 +145,19 @@ abstract class TestCase extends Orchestra
         return new Response (
             200, [ 'Content-Type' => 'text/html' ], ''
         );
+    }
+
+    protected function resetDownloadDir()
+    {
+        /** @var Filesystem $filesystem */
+        $filesystem = $this->app->make(Filesystem::class);
+
+        if($filesystem->exists(self::DOWNLOAD_PATH)) {
+            $filesystem->deleteDirectory(self::DOWNLOAD_PATH);
+            $filesystem->makeDirectory(self::DOWNLOAD_PATH);
+        } else {
+            $filesystem->makeDirectory(self::DOWNLOAD_PATH);
+        }
     }
 
     /**

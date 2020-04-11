@@ -10,6 +10,12 @@ use GuzzleHttp\Client;
 
 final class CheckUpdateTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->resetDownloadDir();
+    }
+
     /** @test */
     public function it_can_run_check_update_command_without_new_version_available(): void
     {

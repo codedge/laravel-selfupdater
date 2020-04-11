@@ -24,6 +24,8 @@ class ReleaseTest extends TestCase
         parent::setUp();
         $this->release = resolve( Release::class );
         $this->vfs = vfsStream::setup();
+
+        $this->resetDownloadDir();
     }
 
     /** @test */
@@ -132,7 +134,7 @@ class ReleaseTest extends TestCase
     /** @test */
     public function it_can_extract_zip_to_storage_path(): void
     {
-        $this->release->setStoragePath('/tmp')->setRelease('release-test-1.2.zip')->updateStoragePath();
+        $this->release->setStoragePath((string) config('self-update.repository_types.github.download_path'))->setRelease('release-test-1.2.zip')->updateStoragePath();
 
         $zip = new \ZipArchive();
         $res = $zip->open($this->release->getStoragePath(), \ZipArchive::CREATE);
@@ -167,7 +169,7 @@ class ReleaseTest extends TestCase
         ]);
 
         $this->release->setDownloadUrl('url-to-download')
-                      ->setStoragePath('/tmp')
+                      ->setStoragePath((string) config('self-update.repository_types.github.download_path'))
                       ->setRelease('release-1.0.zip')
                       ->updateStoragePath();
 

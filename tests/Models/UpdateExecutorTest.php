@@ -26,14 +26,17 @@ class UpdateExecutorTest extends TestCase
         $this->release = resolve(Release::class);
 
         $this->vfs = vfsStream::setup('root');
+
+        $this->resetDownloadDir();
     }
 
     /** @test */
     public function it_can_run_successfully(): void
     {
-        File::makeDirectory('/tmp/update-dir', 0775, false, true);
+        $dir = (string) config('self-update.repository_types.github.download_path') . '/update-dir';
+        File::makeDirectory($dir, 0775, false, true);
 
-        $this->release->setStoragePath('/tmp')
+        $this->release->setStoragePath((string) config('self-update.repository_types.github.download_path'))
                       ->setRelease('release-1.0.zip')
                       ->updateStoragePath()
                       ->setDownloadUrl('some-local-file')
@@ -41,7 +44,7 @@ class UpdateExecutorTest extends TestCase
         $this->release->extract();
 
         $updateExecutor = new UpdateExecutor();
-        $this->assertTrue($updateExecutor->setBasePath('/tmp/update-dir')->run($this->release));
+        $this->assertTrue($updateExecutor->setBasePath($dir)->run($this->release));
 
     }
 
