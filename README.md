@@ -191,45 +191,8 @@ The archive URL should contain nothing more than a simple directory listing with
 
 The target archive files must be zip archives and should contain all files on root level, not within an additional folder named like the archive itself.
 
-## Extending and adding new source repository types
-You want to pull your new versions from elsewhere? Feel free to create
-your own source repository type somewhere but keep in mind for the new
-source repository type:
-
-- It _needs to_ extend **AbstractRepositoryType**
-- It _needs to_ implement **SourceRepositoryTypeContract**
-
-So the perfect class head looks like
-```
-class BitbucketRepositoryType extends AbstractRepositoryType implements SourceRepositoryTypeContract
-```
-
-Afterwards you may create your own [service provider](https://laravel.com/docs/5.2/providers),
-i. e. BitbucketUpdaterServiceProvider, with your boot method like so:
-
-```php
-public function boot()
-{
-    Updater::extend('bitbucket', function($app) {
-        return Updater::sourceRepository(new BitbucketRepositoryType);
-    });
-}
-
-```
-
-Now you call your own update source with:
-```php
-public function update(UpdaterManager $updater)
-{
-    $updater->source('bitbucket')->update();
-}
-```
-
 ## Contributing
 Please see the [contributing guide](CONTRIBUTING.md).
-
-## Roadmap
-Just a quickly sketched [roadmap](https://github.com/codedge/laravel-selfupdater/wiki/Roadmap) what still needs to be implemented.
 
 ## Licence
 The MIT License (MIT). Please see [Licence file](LICENSE) for more information.
