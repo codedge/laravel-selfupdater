@@ -2,11 +2,12 @@
 
 namespace Codedge\Updater\Tests\Models;
 
+use Codedge\Updater\Events\UpdateFailed;
+use Codedge\Updater\Events\UpdateSucceeded;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Tests\TestCase;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use org\bovigo\vfs\vfsStream;
 
@@ -52,6 +53,8 @@ class UpdateExecutorTest extends TestCase
 
         $updateExecutor = (new UpdateExecutor())->setBasePath($dir);
 
+        Event::fake();
+
         $this->assertTrue($updateExecutor->run($this->release));
         $this->assertTrue(File::exists($dir . '/.some-hidden-file'));
         $this->assertTrue(File::exists($dir . '/outer-file.txt'));
@@ -64,6 +67,9 @@ class UpdateExecutorTest extends TestCase
         $this->assertFalse(File::exists($dir . '/__MACOSX'));
         $this->assertFalse(File::exists($dir . '/release-1.2'));
         $this->assertFalse(File::exists($dir . '/release-1.2.zip'));
+
+        Event::assertDispatched(UpdateSucceeded::class, 1);
+        Event::assertNotDispatched(UpdateFailed::class);
     }
 
     /** @test */
@@ -74,6 +80,11 @@ class UpdateExecutorTest extends TestCase
 
         $this->release->setUpdatePath($this->vfs->url() . '/updateDirectory');
 
+        Event::fake();
+
         $this->assertFalse((new UpdateExecutor())->setBasePath($this->vfs->url() . '/updateDirectory')->run($this->release));
+
+        Event::assertDispatched(UpdateFailed::class, 1);
+        Event::assertNotDispatched(UpdateSucceeded::class);
     }
 }
