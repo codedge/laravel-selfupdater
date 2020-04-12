@@ -60,7 +60,7 @@ return [
     | Exclude folders from update
     |--------------------------------------------------------------------------
     |
-    | Specifiy folders which should not be updated and will be skipped during the
+    | Specific folders which should not be updated and will be skipped during the
     | update process.
     |
     | Here's already a list of good examples to skip. You may want to keep those.
@@ -114,13 +114,13 @@ return [
 
         'mail' => [
             'to' => [
-                'address' => env('SELF_UPDATER_MAILTO_ADDRESS', ''),
+                'address' => env('SELF_UPDATER_MAILTO_ADDRESS', 'notifications@example.com'),
                 'name' => env('SELF_UPDATER_MAILTO_NAME', ''),
             ],
 
             'from' => [
-                'address' => env('SELF_UPDATER_MAIL_FROM_ADDRESS', ''),
-                'name' => env('SELF_UPDATER_MAIL_FROM_NAME', ''),
+                'address' => env('SELF_UPDATER_MAIL_FROM_ADDRESS', 'updater@example.com'),
+                'name' => env('SELF_UPDATER_MAIL_FROM_NAME', 'Update'),
             ],
         ]
     ],

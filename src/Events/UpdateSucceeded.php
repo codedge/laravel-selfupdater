@@ -6,13 +6,11 @@ use Codedge\Updater\Models\Release;
 
 class UpdateSucceeded
 {
+    /**
+     * @var Release
+     */
     protected $release;
 
-    /**
-     * UpdateFailed constructor.
-     *
-     * @param Release $release
-     */
     public function __construct(Release $release)
     {
         $this->release = $release;

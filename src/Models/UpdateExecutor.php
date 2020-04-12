@@ -66,6 +66,7 @@ final class UpdateExecutor
 
             // Delete the version file
             $this->deleteVersionFile();
+
             event(new UpdateSucceeded($release));
 
             return true;
