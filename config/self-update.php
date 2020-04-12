@@ -68,6 +68,7 @@ return [
     */
 
     'exclude_folders' => [
+        '__MACOSX',
         'node_modules',
         'bootstrap/cache',
         'bower',

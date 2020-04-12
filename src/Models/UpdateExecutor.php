@@ -78,11 +78,16 @@ final class UpdateExecutor
 
     private function moveFiles(string $folder): void
     {
-        $files = File::allFiles($folder, true);
+        $files = (new Finder())->in($folder)
+                               ->exclude(config('self-update.exclude_folders'))
+                               ->ignoreDotFiles(false)
+                               ->files();
 
         collect($files)->each(function (SplFileInfo $file) {
             if ($file->getRealPath()) {
-                File::copy($file->getRealPath(), $this->targetFile($file));
+                File::copy(
+                    $file->getRealPath(), Str::finish($this->basePath, DIRECTORY_SEPARATOR) . $file->getFilename()
+                );
             }
         });
     }
@@ -91,50 +96,20 @@ final class UpdateExecutor
     {
         $directories = (new Finder())->in($folder)->exclude(config('self-update.exclude_folders'))->directories();
 
-        collect($directories->sort(function (SplFileInfo $a, SplFileInfo $b) {
+        $sorted = collect($directories->sort(function (SplFileInfo $a, SplFileInfo $b) {
             return strlen($b->getRealpath()) - strlen($a->getRealpath());
-        }))->each(function (SplFileInfo $directory) {
+        }));
+
+        $sorted->each(function (SplFileInfo $directory) {
+
             if (! dirsIntersect(File::directories($directory->getRealPath()), config('self-update.exclude_folders'))) {
-                File::copyDirectory($directory->getRealPath(), $this->targetFolder($directory));
+                File::copyDirectory(
+                    $directory->getRealPath(),
+                    Str::finish($this->basePath, DIRECTORY_SEPARATOR) . Str::finish($directory->getRelativePath(), DIRECTORY_SEPARATOR) . $directory->getBasename()
+                );
             }
 
             File::deleteDirectory($directory->getRealPath());
         });
-    }
-
-    /**
-     * Detect if target path should be project root. Probably not if only unit tests are run, because there is no
-     * project root then.
-     *
-     * @param SplFileInfo $file
-     *
-     * @return string
-     */
-    private function targetFile(SplFileInfo $file): string
-    {
-        if (empty($this->basePath)) {
-            return base_path($file->getFilename());
-        }
-
-        return $this->basePath.$file->getFilename();
-    }
-
-    /**
-     * Detect if target path should be project root. Probably not if only unit tests are run, because there is no
-     * project root then.
-     *
-     * @param SplFileInfo $directory
-     *
-     * @return string
-     */
-    private function targetFolder(SplFileInfo $directory): string
-    {
-        if (empty($this->basePath)) {
-            return Str::finish(base_path($directory->getRealPath()), DIRECTORY_SEPARATOR).$directory->getBasename();
-        }
-
-        return $this->basePath
-               .Str::finish($directory->getRealPath(), DIRECTORY_SEPARATOR)
-               .$directory->getBasename();
     }
 }

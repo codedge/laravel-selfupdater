@@ -4,7 +4,9 @@ namespace Codedge\Updater\Tests\Models;
 
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
+use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Tests\TestCase;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 use org\bovigo\vfs\vfsStream;
 
@@ -34,17 +36,22 @@ class UpdateExecutorTest extends TestCase
     public function it_can_run_successfully(): void
     {
         $dir = (string) config('self-update.repository_types.github.download_path') . '/update-dir';
-        File::makeDirectory($dir, 0775, false, true);
+        File::makeDirectory($dir, 0775, true, true);
 
-        $this->release->setStoragePath((string) config('self-update.repository_types.github.download_path'))
-                      ->setRelease('release-1.0.zip')
+        $client = $this->getMockedClient([
+            $this->getResponse200ZipFile(),
+        ]);
+
+        $this->release->setVersion('release-1.2')
+                      ->setStoragePath((string) config('self-update.repository_types.github.download_path'))
+                      ->setRelease('release-1.2.zip')
                       ->updateStoragePath()
-                      ->setDownloadUrl('some-local-file')
-                      ->download($this->getMockedDownloadZipFileClient());
+                      ->setDownloadUrl('some/url/')
+                      ->download($client);
         $this->release->extract();
 
-        $updateExecutor = new UpdateExecutor();
-        $this->assertTrue($updateExecutor->setBasePath($dir)->run($this->release));
+        $updateExecutor = (new UpdateExecutor())->setBasePath($dir);
+        $this->assertTrue($updateExecutor->run($this->release));
 
     }
 

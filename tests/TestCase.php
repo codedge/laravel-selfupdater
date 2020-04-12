@@ -60,7 +60,17 @@ abstract class TestCase extends Orchestra
                     'private_access_token' => '',
                 ],
             ],
-            'exclude_folders' => [],
+            'exclude_folders' => [
+                '__MACOSX',
+                'node_modules',
+                'bootstrap/cache',
+                'bower',
+                'storage/app',
+                'storage/framework',
+                'storage/logs',
+                'storage/self-update',
+                'vendor',
+            ],
             'log_events' => false,
             'mail_to' => [
                 'address' => '',
@@ -114,13 +124,6 @@ abstract class TestCase extends Orchestra
         return new Client(['handler' => $handler]);
     }
 
-    protected function getMockedDownloadZipFileClient(): Client
-    {
-        $handler = HandlerStack::create(new MockHandler([ $this->getResponse200ZipFile() ]));
-
-        return new Client(['handler' => $handler]);
-    }
-
     protected function getResponse200Type(string $type): Response
     {
         return new Response(
@@ -134,7 +137,7 @@ abstract class TestCase extends Orchestra
             200,
             [
                 'Content-Type' => 'application/zip',
-                'Content-Disposition' => 'attachment; filename="zip_file.zip"',
+                'Content-Disposition' => 'attachment; filename="release-1.2.zip"',
             ],
             fopen(__DIR__ . '/Data/release-1.2.zip', 'r')
         );

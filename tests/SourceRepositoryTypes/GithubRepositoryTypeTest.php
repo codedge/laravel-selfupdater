@@ -60,7 +60,7 @@ class GithubRepositoryTypeTest extends TestCase
                 ->setRelease('release-1.0.zip')
                 ->updateStoragePath()
                 ->setDownloadUrl('some-local-file')
-                ->download($this->getMockedDownloadZipFileClient());
+                ->download($this->getMockedClient([ $this->getResponse200ZipFile() ]));
         $release->extract();
 
         Event::fake();
