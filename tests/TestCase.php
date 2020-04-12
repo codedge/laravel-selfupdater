@@ -39,56 +39,22 @@ abstract class TestCase extends Orchestra
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('self-update', [
-            'default' => 'github',
-            'version_installed' => '',
-            'repository_types' => [
-                'github' => [
-                    'type' => 'github',
-                    'repository_vendor' => 'laravel',
-                    'repository_name' => 'laravel',
-                    'repository_url' => '',
-                    'download_path' => self::DOWNLOAD_PATH,
-                    'private_access_token' => '',
-                    'use_branch' => '',
-                ],
-                'http' => [
-                    'type' => 'http',
-                    'repository_url' => 'https://github.com/invoiceninja/invoiceninja/releases',
-                    'pkg_filename_format' => env('SELF_UPDATER_PKG_FILENAME_FORMAT', 'v_VERSION_'),
-                    'download_path' => self::DOWNLOAD_PATH,
-                    'private_access_token' => '',
-                ],
+        $app['config']->set('self-update.repository_types', [
+            'github' => [
+                'type' => 'github',
+                'repository_vendor' => 'laravel',
+                'repository_name' => 'laravel',
+                'repository_url' => '',
+                'download_path' => self::DOWNLOAD_PATH,
+                'private_access_token' => '',
+                'use_branch' => '',
             ],
-            'exclude_folders' => [
-                '__MACOSX',
-                'node_modules',
-                'bootstrap/cache',
-                'bower',
-                'storage/app',
-                'storage/framework',
-                'storage/logs',
-                'storage/self-update',
-                'vendor',
-            ],
-            'log_events' => false,
-            'mail_to' => [
-                'address' => '',
-                'name' => '',
-            ],
-            'artisan_commands' => [
-                'pre_update' => [
-//                    'updater:pre-update' => [
-//                        'class' => SamplePreUpdate::class,
-//                        'params' => []
-//                    ]
-                ],
-                'post_update' => [
-//                    'updater:post-update' => [
-//                        'class' => SamplePostUpdate::class,
-//                        'params' => []
-//                    ]
-                ],
+            'http' => [
+                'type' => 'http',
+                'repository_url' => 'https://github.com/invoiceninja/invoiceninja/releases',
+                'pkg_filename_format' => env('SELF_UPDATER_PKG_FILENAME_FORMAT', 'v_VERSION_'),
+                'download_path' => self::DOWNLOAD_PATH,
+                'private_access_token' => '',
             ],
         ]);
 

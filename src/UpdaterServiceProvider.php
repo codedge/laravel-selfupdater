@@ -6,6 +6,7 @@ use Codedge\Updater\Commands\CheckForUpdate;
 use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
+use Codedge\Updater\Notifications\EventHandler;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
@@ -59,6 +60,8 @@ class UpdaterServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/self-update.php', 'self-update');
+
+        $this->app['events']->subscribe(EventHandler::class);
 
         $this->registerCommands();
         $this->registerManager();
