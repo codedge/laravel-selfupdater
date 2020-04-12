@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\Notifications\Notifications;
 
-use Codedge\Updater\Notifications\BaseNotification;
 use Codedge\Updater\Events\UpdateAvailable as UpdateAvailableEvent;
+use Codedge\Updater\Notifications\BaseNotification;
 use Illuminate\Notifications\Messages\MailMessage;
 
 final class UpdateAvailable extends BaseNotification
@@ -17,7 +19,7 @@ final class UpdateAvailable extends BaseNotification
     {
         return (new MailMessage())
             ->from(config('self-update.notifications.mail.from.address', config('mail.from.address')), config('self-update.notifications.mail.from.name', config('mail.from.name')))
-            ->subject(config('app.name') . ': Update available');
+            ->subject(config('app.name').': Update available');
     }
 
     public function setEvent(UpdateAvailableEvent $event)
