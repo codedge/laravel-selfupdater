@@ -51,8 +51,19 @@ class UpdateExecutorTest extends TestCase
         $this->release->extract();
 
         $updateExecutor = (new UpdateExecutor())->setBasePath($dir);
-        $this->assertTrue($updateExecutor->run($this->release));
 
+        $this->assertTrue($updateExecutor->run($this->release));
+        $this->assertTrue(File::exists($dir . '/.some-hidden-file'));
+        $this->assertTrue(File::exists($dir . '/outer-file.txt'));
+        $this->assertTrue(File::exists($dir . '/folder1'));
+        $this->assertEmpty(File::allFiles($dir . '/folder1'));
+        $this->assertTrue(File::exists($dir . '/folder2'));
+        $this->assertTrue(File::exists($dir . '/folder2/samplefile-in-folder2.txt'));
+        $this->assertEquals(1, count(File::allFiles($dir . '/folder2')));
+        $this->assertFalse(File::exists($dir . '/node_modules'));
+        $this->assertFalse(File::exists($dir . '/__MACOSX'));
+        $this->assertFalse(File::exists($dir . '/release-1.2'));
+        $this->assertFalse(File::exists($dir . '/release-1.2.zip'));
     }
 
     /** @test */

@@ -10,6 +10,12 @@ use InvalidArgumentException;
 
 class HttpRepositoryTypeTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->resetDownloadDir();
+    }
+
     /** @test */
     public function it_can_instantiate(): void
     {
@@ -23,7 +29,7 @@ class HttpRepositoryTypeTest extends TestCase
         $http = resolve(HttpRepositoryType::class);
 
         $release = resolve(Release::class);
-        $release->setStoragePath('/tmp')
+        $release->setStoragePath((string) config('self-update.repository_types.http.download_path'))
                 ->setRelease('release-1.0.zip')
                 ->updateStoragePath()
                 ->setDownloadUrl('some-local-file')
@@ -161,7 +167,7 @@ class HttpRepositoryTypeTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        /** @var HttpRepositoryType $github */
+        /** @var HttpRepositoryType $http */
         $http = resolve(HttpRepositoryType::class);
         $http->isNewVersionAvailable('');
     }

@@ -56,7 +56,7 @@ abstract class TestCase extends Orchestra
                     'type' => 'http',
                     'repository_url' => 'https://github.com/invoiceninja/invoiceninja/releases',
                     'pkg_filename_format' => env('SELF_UPDATER_PKG_FILENAME_FORMAT', 'v_VERSION_'),
-                    'download_path' => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
+                    'download_path' => self::DOWNLOAD_PATH,
                     'private_access_token' => '',
                 ],
             ],

@@ -16,6 +16,12 @@ use InvalidArgumentException;
 
 class GithubRepositoryTypeTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->resetDownloadDir();
+    }
+
     /** @test */
     public function it_can_instantiate(): void
     {
@@ -55,7 +61,7 @@ class GithubRepositoryTypeTest extends TestCase
 
         /** @var Release $release */
         $release = resolve(Release::class);
-        $release->setStoragePath('/tmp')
+        $release->setStoragePath((string) config('self-update.repository_types.github.download_path'))
                 ->setVersion('1.0')
                 ->setRelease('release-1.0.zip')
                 ->updateStoragePath()
