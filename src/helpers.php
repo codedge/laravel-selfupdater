@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Codedge\Updater\Events\HasWrongPermissions;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
 
@@ -36,7 +34,6 @@ if (! \function_exists('checkPermissions')) {
 
         collect($directory->getIterator())->each(function (SplFileInfo $file) use (&$checkPermission) {
             if ($file->isWritable() === false) {
-                event(new HasWrongPermissions($file));
                 $checkPermission = false;
             }
         });
