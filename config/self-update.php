@@ -122,7 +122,7 @@ return [
                 'address' => env('SELF_UPDATER_MAIL_FROM_ADDRESS', ''),
                 'name' => env('SELF_UPDATER_MAIL_FROM_NAME', ''),
             ],
-        ]
+        ],
     ],
 
     /*
