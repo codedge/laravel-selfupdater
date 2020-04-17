@@ -4,6 +4,7 @@ namespace Codedge\Updater;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Models\Release;
+use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Illuminate\Support\Facades\Artisan;
@@ -24,13 +25,19 @@ final class SourceRepository implements SourceRepositoryTypeContract
     protected $sourceRepository;
 
     /**
+     * @var UpdateExecutor
+     */
+    protected $updateExecutor;
+
+    /**
      * SourceRepository constructor.
      *
      * @param SourceRepositoryTypeContract $sourceRepository
      */
-    public function __construct(SourceRepositoryTypeContract $sourceRepository)
+    public function __construct(SourceRepositoryTypeContract $sourceRepository, UpdateExecutor $updateExecutor)
     {
         $this->sourceRepository = $sourceRepository;
+        $this->updateExecutor = $updateExecutor;
     }
 
     /**
@@ -48,21 +55,14 @@ final class SourceRepository implements SourceRepositoryTypeContract
     }
 
     /**
-     * Perform the actual update process.
+     * @param Release $release
      *
-     * @param string $version       Define the version you want to update to
      * @return bool
+     * @throws \Exception
      */
-    public function update($version = ''): bool
+    public function update(Release $release): bool
     {
-        $version = $version ?: $this->getVersionAvailable();
-        $release = $this->fetch($version);
-
-        $this->preUpdateArtisanCommands();
-        $updateStatus = $this->sourceRepository->update($release);
-        $this->postUpdateArtisanCommands();
-
-        return $updateStatus;
+        return $this->updateExecutor->run($release);
     }
 
     /**

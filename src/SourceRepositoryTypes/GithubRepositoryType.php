@@ -79,7 +79,7 @@ class GithubRepositoryType
 
     protected function useBranchForVersions(): bool
     {
-        return $this->config['use_branch'] !== '';
+        return !empty($this->config['use_branch']);
     }
 
     /**

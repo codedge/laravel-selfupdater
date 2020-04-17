@@ -121,13 +121,16 @@ Route::get('/', function (\Codedge\Updater\UpdaterManager $updater) {
     if($updater->source()->isNewVersionAvailable()) {
 
         // Get the current installed version
-        $updater->source()->getVersionInstalled();
+        echo $updater->source()->getVersionInstalled();
 
         // Get the new version available
-        $updater->source()->getVersionAvailable();
+        $versionAvailable = $updater->source()->getVersionAvailable();
+
+        // Create a release
+        $release = $updater->source()->fetch($versionAvailable);
 
         // Run the update process
-        $updater->source()->update();
+        $updater->source()->update($release);
         
     } else {
         echo "No new version available.";

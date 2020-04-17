@@ -6,6 +6,7 @@ namespace Codedge\Updater;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Contracts\UpdaterContract;
+use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Exception;
@@ -78,7 +79,7 @@ final class UpdaterManager implements UpdaterContract
      */
     public function sourceRepository(SourceRepositoryTypeContract $sourceRepository): SourceRepositoryTypeContract
     {
-        return new SourceRepository($sourceRepository);
+        return new SourceRepository($sourceRepository, $this->app->make(UpdateExecutor::class));
     }
 
     /**
