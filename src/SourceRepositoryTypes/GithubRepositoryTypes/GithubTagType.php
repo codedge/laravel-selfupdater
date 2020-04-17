@@ -57,7 +57,7 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
             $response = $this->getRepositoryReleases();
 
             $releaseCollection = collect(json_decode($response->getBody()->getContents()));
-            $version = $prepend.$releaseCollection->first()->name.$append;
+            $version = $prepend.$releaseCollection->first()->tag_name.$append;
         }
 
         return $version;
@@ -83,8 +83,8 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
 
         $release = $this->selectRelease($releases, $version);
 
-        $this->release->setVersion($release->name)
-                      ->setRelease($release->name.'.zip')
+        $this->release->setVersion($release->tag_name)
+                      ->setRelease($release->tag_name.'.zip')
                       ->updateStoragePath()
                       ->setDownloadUrl($release->zipball_url);
 
@@ -101,8 +101,8 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
         $release = $collection->first();
 
         if (! empty($version)) {
-            if ($collection->contains('name', $version)) {
-                $release = $collection->where('name', $version)->first();
+            if ($collection->contains('tag_name', $version)) {
+                $release = $collection->where('tag_name', $version)->first();
             } else {
                 Log::info('No release for version "'.$version.'" found. Selecting latest.');
             }
@@ -115,7 +115,7 @@ final class GithubTagType extends GithubRepositoryType implements GithubReposito
     {
         $url = '/repos/'.$this->config['repository_vendor']
                .'/'.$this->config['repository_name']
-               .'/tags';
+               .'/releases';
 
         $headers = [];
 

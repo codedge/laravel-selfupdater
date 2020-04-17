@@ -72,8 +72,8 @@ class UpdaterManagerTest extends Testcase
         $repository = $manager->source('');
         $repository->deleteVersionFile();
 
-        $this->assertFalse($repository->isNewVersionAvailable('v2.7'));
-        $this->assertTrue($repository->isNewVersionAvailable('v1.1'));
+        $this->assertFalse($repository->isNewVersionAvailable('2.7'));
+        $this->assertTrue($repository->isNewVersionAvailable('1.1'));
     }
 
     /** @test */

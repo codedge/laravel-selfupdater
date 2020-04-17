@@ -30,7 +30,7 @@ final class CheckUpdateTest extends TestCase
 
         $github->deleteVersionFile();
 
-        config(['self-update.version_installed' => 'v3.5']);
+        config(['self-update.version_installed' => '3.5']);
 
         $this->artisan(CheckForUpdate::class)
              ->expectsOutput('There\'s no new version available.')

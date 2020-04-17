@@ -118,8 +118,8 @@ class GithubRepositoryTypeTest extends TestCase
 
         Event::fake();
 
-        $this->assertFalse($github->isNewVersionAvailable('v2.7'));
-        $this->assertTrue($github->isNewVersionAvailable('v1.1'));
+        $this->assertFalse($github->isNewVersionAvailable('2.7'));
+        $this->assertTrue($github->isNewVersionAvailable('1.1'));
 
         Event::assertDispatched(UpdateAvailable::class, 1);
         Event::assertDispatched(UpdateAvailable::class, function (UpdateAvailable $e) use ($github) {
@@ -204,8 +204,8 @@ class GithubRepositoryTypeTest extends TestCase
         $release = $github->fetch();
 
         $this->assertInstanceOf(Release::class, $release);
-        $this->assertEquals('v2.6.10', $release->getVersion());
-        $this->assertEquals('v2.6.10.zip',  $release->getRelease());
+        $this->assertEquals('2.6.1', $release->getVersion());
+        $this->assertEquals('2.6.1.zip',  $release->getRelease());
     }
 
     /** @test */
@@ -220,11 +220,11 @@ class GithubRepositoryTypeTest extends TestCase
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
 
-        $release = $github->fetch('v2.6.7');
+        $release = $github->fetch('2.6.0');
 
         $this->assertInstanceOf(Release::class, $release);
-        $this->assertEquals('v2.6.7', $release->getVersion());
-        $this->assertEquals('v2.6.7.zip',  $release->getRelease());
+        $this->assertEquals('2.6.0', $release->getVersion());
+        $this->assertEquals('2.6.0.zip',  $release->getRelease());
     }
 
     /** @test */
@@ -242,8 +242,8 @@ class GithubRepositoryTypeTest extends TestCase
         $release = $github->fetch('v3.22.1');
 
         $this->assertInstanceOf(Release::class, $release);
-        $this->assertEquals('v2.6.10', $release->getVersion());
-        $this->assertEquals('v2.6.10.zip',  $release->getRelease());
+        $this->assertEquals('2.6.1', $release->getVersion());
+        $this->assertEquals('2.6.1.zip',  $release->getRelease());
     }
 
     /** @test */

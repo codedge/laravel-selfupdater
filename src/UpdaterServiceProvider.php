@@ -120,7 +120,7 @@ class UpdaterServiceProvider extends ServiceProvider
         $this->app->bind(GithubTagType::class, function (): GithubRepositoryTypeContract {
             return new GithubTagType(
                 config('self-update.repository_types.github'),
-                new Client(['base_uri' => GithubRepositoryTypeContract::GITHUB_URL]),
+                new Client(['base_uri' => GithubRepositoryTypeContract::GITHUB_API_URL]),
                 $this->app->make(UpdateExecutor::class)
             );
         });
