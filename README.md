@@ -20,42 +20,11 @@ lovely users with Git and/or Composer commands ;-)
 * PHP: 7.3 & 7.4
 * Laravel: 6.x & 7.x
   
-## Install with Composer
+## Install
 
 To install the latest version from the master using [Composer](https://getcomposer.org/):
 ```sh
 $ composer require codedge/laravel-selfupdater
-```
-
-This adds the _codedge/laravel-selfupdater_ package to your `composer.json` and downloads the project.
-
-## Register the package
-
-The package is auto-registered.
-
-Additionally add the listener to your `app/Providers/EventServiceProvider.php` `[3]`:
-
-```php
-<?php
-// app/Providers/EventServiceProvider.php
-
-/**
- * The event handler mappings for the application.
- *
- * @var array
- */
-protected $listen = [
-    // ...
-    
-    \Codedge\Updater\Events\UpdateAvailable::class => [
-        \Codedge\Updater\Listeners\SendUpdateAvailableNotification::class
-    ], // [3]
-    \Codedge\Updater\Events\UpdateSucceeded::class => [
-        \Codedge\Updater\Listeners\SendUpdateSucceededNotification::class
-    ], // [3]
-
-];
-
 ```
 
 ## Configuration
@@ -64,8 +33,7 @@ After installing the package you need to publish the configuration file via
 $ php artisan vendor:publish --provider="Codedge\Updater\UpdaterServiceProvider"
 ```
  
-**Note:** Please enter correct value for vendor and repository name in your `config/self-updater.php` if you want to
-use Github as source for your updates.
+**Note:** Please enter correct value for vendor and repository name in your `config/self-updater.php` if you want to use Github as source for your updates.
 
 ### Running artisan commands
 Artisan commands can be run before or after the update process and can be configured in `config/self-updater.php`:
