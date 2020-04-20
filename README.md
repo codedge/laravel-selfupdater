@@ -12,8 +12,7 @@ functionality for your Laravel 5 application. Already bundled are some
 methods to provide a self-update mechanism via Github.
 
 Usually you need this when distributing a self-hosted Laravel application
-that needs some updating mechanism, as you do not want to bother your
-lovely users with Git and/or Composer commands ;-)
+that needs some updating mechanism without [Composer](https://getcomposer.org/).
 
 ## Compatibility
 
@@ -34,6 +33,20 @@ $ php artisan vendor:publish --provider="Codedge\Updater\UpdaterServiceProvider"
 ```
  
 **Note:** Please enter correct value for vendor and repository name in your `config/self-updater.php` if you want to use Github as source for your updates.
+
+### :information_source: Setting the currently installed version
+
+Before starting an update, make sure to set the version installed correctly.
+You're responsible to set the current version installed, either in the config file or better via the env variable `SELF_UPDATER_VERSION_INSTALLED`.
+
+#### `tag`-based updates
+
+Set the installed version to one of the tags set for a release.
+
+#### `branch`-based updates
+
+Set the installed version to to a datetime of one of the latest commits.  
+A valid version would be: `2020-04-19T22:35:48Z`
 
 ### Running artisan commands
 Artisan commands can be run before or after the update process and can be configured in `config/self-updater.php`:
@@ -106,9 +119,6 @@ Route::get('/', function (\Codedge\Updater\UpdaterManager $updater) {
 
 });
 ```
-
-**IMPORTANT**:  
-You're responsible to set the current version installed, either in the config file or better via the env variable `SELF_UPDATER_VERSION_INSTALLED`.
 
 Currently, the fetching of the source is a _synchronous_ process.
 It is not run in background.
