@@ -59,14 +59,6 @@ abstract class TestCase extends Orchestra
                 'private_access_token' => '',
             ],
         ]);
-
-        $app->bind(HttpRepositoryType::class, function(Application $app) {
-            return new HttpRepositoryType(
-                config('self-update.repository_types.http'),
-                $app->make(ClientInterface::class),
-                $app->make(UpdateExecutor::class)
-            );
-        });
     }
 
     protected function getMockedClient($responses): Client

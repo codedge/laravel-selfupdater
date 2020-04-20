@@ -134,7 +134,7 @@ class UpdaterServiceProvider extends ServiceProvider
         $this->app->bind(HttpRepositoryType::class, function () {
             return new HttpRepositoryType(
                 config('self-update.repository_types.http'),
-                new Client(),
+                $this->app->make(ClientInterface::class),
                 $this->app->make(UpdateExecutor::class)
             );
         });
