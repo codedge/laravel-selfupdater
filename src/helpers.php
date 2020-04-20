@@ -33,7 +33,7 @@ if (! \function_exists('checkPermissions')) {
         $checkPermission = true;
 
         collect($directory->getIterator())->each(function (SplFileInfo $file) use (&$checkPermission) {
-            if ($file->isWritable() === false) {
+            if (! $file->isWritable()) {
                 $checkPermission = false;
             }
         });

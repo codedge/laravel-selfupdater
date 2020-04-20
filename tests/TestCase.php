@@ -99,7 +99,7 @@ abstract class TestCase extends Orchestra
         /** @var Filesystem $filesystem */
         $filesystem = $this->app->make(Filesystem::class);
 
-        if($filesystem->exists(self::DOWNLOAD_PATH)) {
+        if ($filesystem->exists(self::DOWNLOAD_PATH)) {
             $filesystem->deleteDirectory(self::DOWNLOAD_PATH);
             $filesystem->makeDirectory(self::DOWNLOAD_PATH);
         } else {

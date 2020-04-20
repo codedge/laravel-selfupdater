@@ -99,7 +99,7 @@ To start an update process, i. e. in a controller, just use:
 Route::get('/', function (\Codedge\Updater\UpdaterManager $updater) {
 
     // Check if new version is available
-    if($updater->source()->isNewVersionAvailable()) {
+    if ($updater->source()->isNewVersionAvailable()) {
 
         // Get the current installed version
         echo $updater->source()->getVersionInstalled();

@@ -210,7 +210,7 @@ final class Release
         $zip = new \ZipArchive();
         $res = $zip->open($this->getStoragePath());
 
-        if ($res !== true) {
+        if (! $res) {
             throw new Exception("Cannot open zip archive [{$this->getStoragePath()}]. Error: $res");
         }
 
