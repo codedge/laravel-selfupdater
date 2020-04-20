@@ -12,6 +12,7 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
@@ -102,8 +103,9 @@ class UpdaterServiceProvider extends ServiceProvider
             return new UpdateExecutor();
         });
 
+        $this->app->bind(ClientInterface::class, Client::class);
         $this->app->bind(Client::class, function () {
-            new Client(['base_uri' => GithubRepositoryType::GITHUB_API_URL]);
+            return new Client(['base_uri' => GithubRepositoryType::GITHUB_API_URL]);
         });
 
         $this->app->bind(GithubRepositoryType::class, function (): GithubRepositoryType {
@@ -116,7 +118,7 @@ class UpdaterServiceProvider extends ServiceProvider
         $this->app->bind(GithubBranchType::class, function (): SourceRepositoryTypeContract {
             return new GithubBranchType(
                 config('self-update.repository_types.github'),
-                $this->app->make(Client::class),
+                $this->app->make(ClientInterface::class),
                 $this->app->make(UpdateExecutor::class)
             );
         });
@@ -124,7 +126,7 @@ class UpdaterServiceProvider extends ServiceProvider
         $this->app->bind(GithubTagType::class, function (): SourceRepositoryTypeContract {
             return new GithubTagType(
                 config('self-update.repository_types.github'),
-                $this->app->make(Client::class),
+                $this->app->make(ClientInterface::class),
                 $this->app->make(UpdateExecutor::class)
             );
         });
