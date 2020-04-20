@@ -13,7 +13,7 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 
 class GithubRepositoryType
@@ -23,7 +23,7 @@ class GithubRepositoryType
     const GITHUB_API_URL = 'https://api.github.com';
 
     /**
-     * @var Client
+     * @var ClientInterface
      */
     protected $client;
 

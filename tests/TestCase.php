@@ -59,27 +59,11 @@ abstract class TestCase extends Orchestra
                 'private_access_token' => '',
             ],
         ]);
-        
-        $app->bind(GithubBranchType::class, function (Application $app): SourceRepositoryTypeContract {
-            return new GithubBranchType(
-                config('self-update.repository_types.github'),
-                $app->make(ClientInterface::class),
-                $app->make(UpdateExecutor::class)
-            );
-        });
-
-        $app->bind(GithubTagType::class, function (Application $app): SourceRepositoryTypeContract {
-            return new GithubTagType(
-                config('self-update.repository_types.github'),
-                $app->make(ClientInterface::class),
-                $app->make(UpdateExecutor::class)
-            );
-        });
 
         $app->bind(HttpRepositoryType::class, function(Application $app) {
             return new HttpRepositoryType(
                 config('self-update.repository_types.http'),
-                $app->make(Client::class),
+                $app->make(ClientInterface::class),
                 $app->make(UpdateExecutor::class)
             );
         });
