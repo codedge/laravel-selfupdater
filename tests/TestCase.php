@@ -2,7 +2,7 @@
 
 namespace Codedge\Updater\Tests;
 
-use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
+use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
@@ -58,7 +58,7 @@ abstract class TestCase extends Orchestra
             ],
         ]);
 
-        $app->bind(GithubBranchType::class, function (Application $app): GithubRepositoryTypeContract {
+        $app->bind(GithubBranchType::class, function (Application $app): SourceRepositoryTypeContract {
             return new GithubBranchType(
                 config('self-update.repository_types.github'),
                 $app->make(Client::class),
@@ -66,7 +66,7 @@ abstract class TestCase extends Orchestra
             );
         });
 
-        $app->bind(GithubTagType::class, function (Application $app): GithubRepositoryTypeContract {
+        $app->bind(GithubTagType::class, function (Application $app): SourceRepositoryTypeContract {
             return new GithubTagType(
                 config('self-update.repository_types.github'),
                 $app->make(Client::class),
