@@ -3,7 +3,7 @@
 namespace Codedge\Updater;
 
 use Codedge\Updater\Commands\CheckForUpdate;
-use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
+use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Notifications\EventHandler;
@@ -12,6 +12,7 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
@@ -102,6 +103,11 @@ class UpdaterServiceProvider extends ServiceProvider
             return new UpdateExecutor();
         });
 
+        $this->app->bind(ClientInterface::class, Client::class);
+        $this->app->bind(Client::class, function () {
+            return new Client(['base_uri' => GithubRepositoryType::GITHUB_API_URL]);
+        });
+
         $this->app->bind(GithubRepositoryType::class, function (): GithubRepositoryType {
             return new GithubRepositoryType(
                 config('self-update.repository_types.github'),
@@ -109,18 +115,18 @@ class UpdaterServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind(GithubBranchType::class, function (): GithubRepositoryTypeContract {
+        $this->app->bind(GithubBranchType::class, function (): SourceRepositoryTypeContract {
             return new GithubBranchType(
                 config('self-update.repository_types.github'),
-                new Client(['base_uri' => GithubRepositoryTypeContract::GITHUB_API_URL]),
+                $this->app->make(ClientInterface::class),
                 $this->app->make(UpdateExecutor::class)
             );
         });
 
-        $this->app->bind(GithubTagType::class, function (): GithubRepositoryTypeContract {
+        $this->app->bind(GithubTagType::class, function (): SourceRepositoryTypeContract {
             return new GithubTagType(
                 config('self-update.repository_types.github'),
-                new Client(['base_uri' => GithubRepositoryTypeContract::GITHUB_API_URL]),
+                $this->app->make(ClientInterface::class),
                 $this->app->make(UpdateExecutor::class)
             );
         });
@@ -128,7 +134,7 @@ class UpdaterServiceProvider extends ServiceProvider
         $this->app->bind(HttpRepositoryType::class, function () {
             return new HttpRepositoryType(
                 config('self-update.repository_types.http'),
-                new Client(),
+                $this->app->make(ClientInterface::class),
                 $this->app->make(UpdateExecutor::class)
             );
         });

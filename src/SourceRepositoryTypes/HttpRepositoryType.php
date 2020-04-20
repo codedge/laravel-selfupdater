@@ -11,7 +11,7 @@ use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -23,7 +23,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     use UseVersionFile, SupportPrivateAccessToken;
 
     /**
-     * @var Client
+     * @var ClientInterface
      */
     protected $client;
 
@@ -56,10 +56,10 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      * Github constructor.
      *
      * @param array $config
-     * @param Client $client
+     * @param ClientInterface $client
      * @param UpdateExecutor $updateExecutor
      */
-    public function __construct(array $config, Client $client, UpdateExecutor $updateExecutor)
+    public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
     {
         $this->client = $client;
         $this->config = $config;

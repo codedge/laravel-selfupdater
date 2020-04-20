@@ -2,14 +2,16 @@
 
 namespace Codedge\Updater\Tests;
 
-use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
+use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Models\UpdateExecutor;
+use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\UpdaterFacade;
 use Codedge\Updater\UpdaterServiceProvider;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -57,30 +59,6 @@ abstract class TestCase extends Orchestra
                 'private_access_token' => '',
             ],
         ]);
-
-        $app->bind(GithubBranchType::class, function (Application $app): GithubRepositoryTypeContract {
-            return new GithubBranchType(
-                config('self-update.repository_types.github'),
-                $app->make(Client::class),
-                $app->make(UpdateExecutor::class)
-            );
-        });
-
-        $app->bind(GithubTagType::class, function (Application $app): GithubRepositoryTypeContract {
-            return new GithubTagType(
-                config('self-update.repository_types.github'),
-                $app->make(Client::class),
-                $app->make(UpdateExecutor::class)
-            );
-        });
-
-        $app->bind(HttpRepositoryType::class, function(Application $app) {
-            return new HttpRepositoryType(
-                config('self-update.repository_types.http'),
-                $app->make(Client::class),
-                $app->make(UpdateExecutor::class)
-            );
-        });
     }
 
     protected function getMockedClient($responses): Client

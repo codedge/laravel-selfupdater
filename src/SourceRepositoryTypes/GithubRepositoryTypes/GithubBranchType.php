@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 
-use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
+use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 
-final class GithubBranchType extends GithubRepositoryType implements GithubRepositoryTypeContract
+final class GithubBranchType extends GithubRepositoryType implements SourceRepositoryTypeContract
 {
     /**
      * @var ClientInterface

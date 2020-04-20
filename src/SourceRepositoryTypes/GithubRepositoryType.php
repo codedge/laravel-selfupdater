@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Codedge\Updater\SourceRepositoryTypes;
 
-use Codedge\Updater\Contracts\GithubRepositoryTypeContract;
+use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
@@ -13,21 +13,17 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
-use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 
-/**
- * GithubRepositoryType.
- *
- * @author Holger Lösken <holger.loesken@codedge.de>
- * @copyright See LICENSE file that was distributed with this source code.
- */
 class GithubRepositoryType
 {
     use UseVersionFile, SupportPrivateAccessToken;
 
+    const GITHUB_API_URL = 'https://api.github.com';
+
     /**
-     * @var Client
+     * @var ClientInterface
      */
     protected $client;
 
@@ -53,7 +49,7 @@ class GithubRepositoryType
         $this->updateExecutor = $updateExecutor;
     }
 
-    public function create(): GithubRepositoryTypeContract
+    public function create(): SourceRepositoryTypeContract
     {
         if (empty($this->config['repository_vendor']) || empty($this->config['repository_name'])) {
             throw new \Exception('"repository_vendor" or "repository_name" are missing in config file.');
@@ -83,8 +79,6 @@ class GithubRepositoryType
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string
      */
     public function getVersionInstalled(): string
