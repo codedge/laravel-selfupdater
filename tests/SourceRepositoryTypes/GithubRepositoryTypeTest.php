@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\Tests\SourceRepositoryTypes;
 
@@ -66,7 +68,7 @@ class GithubRepositoryTypeTest extends TestCase
                 ->setRelease('release-1.0.zip')
                 ->updateStoragePath()
                 ->setDownloadUrl('some-local-file')
-                ->download($this->getMockedClient([ $this->getResponse200ZipFile() ]));
+                ->download($this->getMockedClient([$this->getResponse200ZipFile()]));
         $release->extract();
 
         Event::fake();
@@ -77,7 +79,6 @@ class GithubRepositoryTypeTest extends TestCase
         Event::assertDispatched(UpdateSucceeded::class, function (UpdateSucceeded $e) use ($release) {
             return $e->getVersionUpdatedTo() === $release->getVersion();
         });
-
     }
 
     /** @test */
@@ -194,7 +195,7 @@ class GithubRepositoryTypeTest extends TestCase
     {
         $client = $this->getMockedClient([
             $this->getResponse200Type('tag'),
-            $this->getResponse200ZipFile()
+            $this->getResponse200ZipFile(),
         ]);
         $this->app->instance(Client::class, $client);
 
@@ -205,7 +206,7 @@ class GithubRepositoryTypeTest extends TestCase
 
         $this->assertInstanceOf(Release::class, $release);
         $this->assertEquals('2.6.1', $release->getVersion());
-        $this->assertEquals('2.6.1.zip',  $release->getRelease());
+        $this->assertEquals('2.6.1.zip', $release->getRelease());
     }
 
     /** @test */
@@ -224,7 +225,7 @@ class GithubRepositoryTypeTest extends TestCase
 
         $this->assertInstanceOf(Release::class, $release);
         $this->assertEquals('2.6.0', $release->getVersion());
-        $this->assertEquals('2.6.0.zip',  $release->getRelease());
+        $this->assertEquals('2.6.0.zip', $release->getRelease());
     }
 
     /** @test */
@@ -243,7 +244,7 @@ class GithubRepositoryTypeTest extends TestCase
 
         $this->assertInstanceOf(Release::class, $release);
         $this->assertEquals('2.6.1', $release->getVersion());
-        $this->assertEquals('2.6.1.zip',  $release->getRelease());
+        $this->assertEquals('2.6.1.zip', $release->getRelease());
     }
 
     /** @test */
@@ -265,7 +266,7 @@ class GithubRepositoryTypeTest extends TestCase
 
         $this->assertInstanceOf(Release::class, $release);
         $this->assertEquals('2020-02-06T21:09:15Z', $release->getVersion());
-        $this->assertEquals('e8f19f9b63b5b92f31ddc4a3463dcc231301adea.zip',  $release->getRelease());
+        $this->assertEquals('e8f19f9b63b5b92f31ddc4a3463dcc231301adea.zip', $release->getRelease());
     }
 
     /** @test */
@@ -286,7 +287,7 @@ class GithubRepositoryTypeTest extends TestCase
 
         $this->assertInstanceOf(Release::class, $release);
         $this->assertEquals('2020-02-06T09:35:51Z', $release->getVersion());
-        $this->assertEquals('4f82f1b9037530baa8775e41e16d82e8db97110f.zip',  $release->getRelease());
+        $this->assertEquals('4f82f1b9037530baa8775e41e16d82e8db97110f.zip', $release->getRelease());
     }
 
     /** @test */
@@ -307,7 +308,7 @@ class GithubRepositoryTypeTest extends TestCase
 
         $this->assertInstanceOf(Release::class, $release);
         $this->assertEquals('2020-02-06T21:09:15Z', $release->getVersion());
-        $this->assertEquals('e8f19f9b63b5b92f31ddc4a3463dcc231301adea.zip',  $release->getRelease());
+        $this->assertEquals('e8f19f9b63b5b92f31ddc4a3463dcc231301adea.zip', $release->getRelease());
     }
 
     /** @test */
@@ -316,7 +317,7 @@ class GithubRepositoryTypeTest extends TestCase
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
         $client = $this->getMockedClient([
-            $this->getResponseEmpty()
+            $this->getResponseEmpty(),
         ]);
         $this->app->instance(Client::class, $client);
 

@@ -37,7 +37,7 @@ final class UpdateExecutor
      *
      * @return $this
      */
-    public function setBasePath(string $path): UpdateExecutor
+    public function setBasePath(string $path): self
     {
         $this->basePath = Str::finish($path, DIRECTORY_SEPARATOR);
 
