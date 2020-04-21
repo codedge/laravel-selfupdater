@@ -1,9 +1,1 @@
 preset: laravel
-
-risky: false
-
-finder:
-  exclude:
-    - "resources"
-    - "storage"
-    - "tests"
