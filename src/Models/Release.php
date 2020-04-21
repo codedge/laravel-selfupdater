@@ -78,7 +78,7 @@ final class Release
      *
      * @return Release
      */
-    public function setRelease(string $release): Release
+    public function setRelease(string $release): self
     {
         $this->release = $release;
 
@@ -98,7 +98,7 @@ final class Release
      *
      * @return Release
      */
-    public function setStoragePath(string $storagePath): Release
+    public function setStoragePath(string $storagePath): self
     {
         $this->storagePath = $storagePath;
 
@@ -114,7 +114,7 @@ final class Release
      *
      * @return Release
      */
-    public function updateStoragePath(): Release
+    public function updateStoragePath(): self
     {
         if (! empty($this->getRelease())) {
             $this->storagePath = Str::finish($this->storagePath, DIRECTORY_SEPARATOR).$this->getRelease();
@@ -139,7 +139,7 @@ final class Release
      *
      * @return Release
      */
-    public function setUpdatePath(string $updatePath, array $excluded = []): Release
+    public function setUpdatePath(string $updatePath, array $excluded = []): self
     {
         $this->updatePath = (new Finder())->in($updatePath)->exclude($excluded);
 
@@ -159,7 +159,7 @@ final class Release
      *
      * @return Release
      */
-    public function setVersion(string $version): Release
+    public function setVersion(string $version): self
     {
         $this->version = $version;
 
@@ -179,7 +179,7 @@ final class Release
      *
      * @return Release
      */
-    public function setDownloadUrl(string $downloadUrl): Release
+    public function setDownloadUrl(string $downloadUrl): self
     {
         $this->downloadUrl = $downloadUrl;
 

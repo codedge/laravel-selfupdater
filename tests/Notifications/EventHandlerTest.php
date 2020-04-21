@@ -1,7 +1,8 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\Tests\Notifications;
-
 
 use Codedge\Updater\Events\UpdateFailed;
 use Codedge\Updater\Models\Release;
@@ -59,5 +60,4 @@ class EventHandlerTest extends TestCase
 
         event(new UpdateFailed($release));
     }
-
 }

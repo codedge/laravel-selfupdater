@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\Tests\Commands;
 
@@ -21,7 +23,7 @@ final class CheckUpdateTest extends TestCase
     {
         $client = $this->getMockedClient([
             $this->getResponse200Type('tag'),
-            $this->getResponse200ZipFile()
+            $this->getResponse200ZipFile(),
         ]);
         $this->app->instance(Client::class, $client);
 

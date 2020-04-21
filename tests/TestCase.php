@@ -1,17 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\Tests;
 
-use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
-use Codedge\Updater\Models\UpdateExecutor;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
-use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\UpdaterFacade;
 use Codedge\Updater\UpdaterServiceProvider;
 use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -71,7 +66,7 @@ abstract class TestCase extends Orchestra
     protected function getResponse200Type(string $type): Response
     {
         return new Response(
-            200, [ 'Content-Type' => 'application/json' ],
+            200, ['Content-Type' => 'application/json'],
             \GuzzleHttp\Psr7\stream_for(fopen('tests/Data/'.$this->mockedResponses[$type], 'r')));
     }
 
@@ -83,14 +78,14 @@ abstract class TestCase extends Orchestra
                 'Content-Type' => 'application/zip',
                 'Content-Disposition' => 'attachment; filename="release-1.2.zip"',
             ],
-            fopen(__DIR__ . '/Data/release-1.2.zip', 'r')
+            fopen(__DIR__.'/Data/release-1.2.zip', 'r')
         );
     }
 
     protected function getResponseEmpty(): Response
     {
-        return new Response (
-            200, [ 'Content-Type' => 'text/html' ], ''
+        return new Response(
+            200, ['Content-Type' => 'text/html'], ''
         );
     }
 
@@ -99,7 +94,7 @@ abstract class TestCase extends Orchestra
         /** @var Filesystem $filesystem */
         $filesystem = $this->app->make(Filesystem::class);
 
-        if($filesystem->exists(self::DOWNLOAD_PATH)) {
+        if ($filesystem->exists(self::DOWNLOAD_PATH)) {
             $filesystem->deleteDirectory(self::DOWNLOAD_PATH);
             $filesystem->makeDirectory(self::DOWNLOAD_PATH);
         } else {

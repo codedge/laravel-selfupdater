@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\Tests\Models;
 
-use Codedge\Updater\Tests\TestCase;
-use org\bovigo\vfs\vfsStream;
 use Codedge\Updater\Models\Release;
+use Codedge\Updater\Tests\TestCase;
 use Illuminate\Support\Str;
+use org\bovigo\vfs\vfsStream;
 
 class ReleaseTest extends TestCase
 {
@@ -22,18 +24,19 @@ class ReleaseTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->release = resolve( Release::class );
+        $this->release = resolve(Release::class);
         $this->vfs = vfsStream::setup();
 
         $this->resetDownloadDir();
     }
 
     /** @test */
-    public function it_can_get_release(): void {
+    public function it_can_get_release(): void
+    {
         $releaseName = 'releaseName';
-        $this->release->setRelease( $releaseName );
+        $this->release->setRelease($releaseName);
 
-        $this->assertEquals( $releaseName, $this->release->getRelease() );
+        $this->assertEquals($releaseName, $this->release->getRelease());
     }
 
     /** @test */
@@ -41,24 +44,24 @@ class ReleaseTest extends TestCase
     {
         $this->assertNull($this->release->getStoragePath());
 
-        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . 'tmp/releaseName.zip';
-        $this->release->setStoragePath( $storagePath );
+        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).'tmp/releaseName.zip';
+        $this->release->setStoragePath($storagePath);
 
-        $this->assertEquals( $storagePath, $this->release->getStoragePath() );
+        $this->assertEquals($storagePath, $this->release->getStoragePath());
     }
 
     /** @test */
     public function it_can_update_storage_path_when_having_release_name(): void
     {
         $releaseName = 'releaseName';
-        $storagePathWithoutFilename = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . 'tmp';
+        $storagePathWithoutFilename = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).'tmp';
 
         $this->release->setStoragePath($storagePathWithoutFilename);
         $this->assertEquals($storagePathWithoutFilename, $this->release->getStoragePath());
 
         $this->release->setRelease($releaseName)->updateStoragePath();
         $this->assertEquals(
-            Str::finish($storagePathWithoutFilename, DIRECTORY_SEPARATOR) . $releaseName,
+            Str::finish($storagePathWithoutFilename, DIRECTORY_SEPARATOR).$releaseName,
             $this->release->getStoragePath()
         );
     }
@@ -66,7 +69,7 @@ class ReleaseTest extends TestCase
     /** @test */
     public function it_should_not_update_storage_path_when_not_having_release_name(): void
     {
-        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . 'tmp';
+        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).'tmp';
 
         $this->release->setStoragePath($storagePath);
         $this->assertEquals($storagePath, $this->release->getStoragePath());
@@ -87,11 +90,11 @@ class ReleaseTest extends TestCase
         $mainDirectory = '/tmp';
         $subDirectory = 'new-directory-inside';
 
-        vfsStream::newDirectory($mainDirectory . '/' . $subDirectory)->at($this->vfs);
-        $this->release->setUpdatePath(Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . $mainDirectory);
+        vfsStream::newDirectory($mainDirectory.'/'.$subDirectory)->at($this->vfs);
+        $this->release->setUpdatePath(Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).$mainDirectory);
 
         foreach ($this->release->getUpdatePath()->directories() as $dir) {
-            $this->assertEquals($dir->getPath(), $this->vfs->url() . '/' . $mainDirectory);
+            $this->assertEquals($dir->getPath(), $this->vfs->url().'/'.$mainDirectory);
             $this->assertEquals($subDirectory, $dir->getFilename());
             $this->assertEquals($subDirectory, $dir->getBasename());
         }
@@ -139,8 +142,8 @@ class ReleaseTest extends TestCase
         $zip = new \ZipArchive();
         $res = $zip->open($this->release->getStoragePath(), \ZipArchive::CREATE);
 
-        if($res === true) {
-            $zip->addFile(__DIR__ . '/../Data/releases-branch.json');
+        if ($res === true) {
+            $zip->addFile(__DIR__.'/../Data/releases-branch.json');
             $zip->close();
 
             $this->assertTrue($this->release->extract());
@@ -183,7 +186,7 @@ class ReleaseTest extends TestCase
     /** @test */
     public function it_checks_source_is_not_fetched(): void
     {
-        $this->release->setStoragePath($this->vfs->url() . 'release-1.2.zip');
+        $this->release->setStoragePath($this->vfs->url().'release-1.2.zip');
 
         $this->assertFalse($this->release->isSourceAlreadyFetched());
     }
@@ -192,7 +195,7 @@ class ReleaseTest extends TestCase
     public function it_checks_source_is_already_fetched_but_not_extracted(): void
     {
         $file = 'release-1.2.zip';
-        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . $file;
+        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).$file;
         vfsStream::newFile($file)->at($this->vfs);
 
         $this->release->setStoragePath($storagePath);
@@ -204,7 +207,7 @@ class ReleaseTest extends TestCase
     public function it_checks_source_is_already_extracted_and_directory_still_present(): void
     {
         vfsStream::newDirectory('release-1.2')->at($this->vfs);
-        $this->release->setStoragePath(Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . 'release-1.2.zip');
+        $this->release->setStoragePath(Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).'release-1.2.zip');
 
         $this->assertTrue($this->release->isSourceAlreadyFetched());
     }
@@ -213,7 +216,7 @@ class ReleaseTest extends TestCase
     public function it_checks_source_is_already_extracted_and_directory_deleted(): void
     {
         vfsStream::newDirectory('release-1.2')->at($this->vfs);
-        $this->release->setStoragePath(Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR) . 'release-1.2.zip');
+        $this->release->setStoragePath(Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).'release-1.2.zip');
         $this->vfs->getChild('release-1.2.zip')->rename('removed');
 
         $this->assertTrue($this->release->isSourceAlreadyFetched());

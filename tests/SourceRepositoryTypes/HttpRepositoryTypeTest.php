@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Codedge\Updater\SourceRepositoryTypes;
 
@@ -33,7 +35,7 @@ class HttpRepositoryTypeTest extends TestCase
                 ->setRelease('release-1.0.zip')
                 ->updateStoragePath()
                 ->setDownloadUrl('some-local-file')
-                ->download($this->getMockedClient([ $this->getResponse200ZipFile() ]));
+                ->download($this->getMockedClient([$this->getResponse200ZipFile()]));
         $release->extract();
 
         $this->assertTrue($http->update($release));
@@ -121,11 +123,11 @@ class HttpRepositoryTypeTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_latest_release_from_collection():void
+    public function it_can_get_latest_release_from_collection(): void
     {
         $items = [
-            [ 'name' => '1.3', ],
-            [ 'name' => '1.2', ],
+            ['name' => '1.3'],
+            ['name' => '1.2'],
         ];
 
         /** @var HttpRepositoryType $http */
@@ -138,8 +140,8 @@ class HttpRepositoryTypeTest extends TestCase
     public function it_can_get_specific_release_from_collection(): void
     {
         $items = [
-            [ 'name' => '1.3', ],
-            [ 'name' => '1.2', ],
+            ['name' => '1.3'],
+            ['name' => '1.2'],
         ];
 
         /** @var HttpRepositoryType $http */
@@ -152,8 +154,8 @@ class HttpRepositoryTypeTest extends TestCase
     public function it_cannot_find_specific_release_and_returns_first_from_collection(): void
     {
         $items = [
-            [ 'name' => '1.3', ],
-            [ 'name' => '1.2', ],
+            ['name' => '1.3'],
+            ['name' => '1.2'],
         ];
 
         /** @var HttpRepositoryType $http */
