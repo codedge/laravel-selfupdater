@@ -76,7 +76,7 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
             if ($collection->contains('commit.author.date', $version)) {
                 $release = $collection->where('commit.author.date', $version)->first();
             } else {
-                Log::info('No release for version "'.$version.'" found. Selecting latest.');
+                Log::info('No commit for date "'.$version.'" found. Selecting latest.');
             }
         }
 
