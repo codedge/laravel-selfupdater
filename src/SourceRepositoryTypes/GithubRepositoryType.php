@@ -47,6 +47,8 @@ class GithubRepositoryType
     {
         $this->config = $config;
         $this->updateExecutor = $updateExecutor;
+
+        $this->setAccessToken($this->config['private_access_token']);
     }
 
     public function create(): SourceRepositoryTypeContract
