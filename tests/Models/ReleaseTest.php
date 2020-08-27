@@ -149,7 +149,7 @@ class ReleaseTest extends TestCase
             $this->assertTrue($this->release->extract());
         } else {
             var_dump($res);
-            die('Cannot open zip.');
+            exit('Cannot open zip.');
         }
     }
 
