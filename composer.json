@@ -1,5 +1,5 @@
 {
-  "name": "codedge/laravel-selfupdater",
+  "name": "hsyir/laravel-selfupdater",
   "description": "Providing an auto-updating functionality for your self-hosted Laravel application.",
   "license": "MIT",
   "keywords": [
