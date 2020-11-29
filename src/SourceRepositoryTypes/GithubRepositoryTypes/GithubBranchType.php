@@ -9,6 +9,7 @@ use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Utils;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -41,7 +42,7 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
     public function fetch(string $version = ''): Release
     {
         $response = $this->getRepositoryReleases();
-        $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()->getContents()));
+        $releaseCollection = collect(Utils::jsonDecode($response->getBody()->getContents()));
 
         if ($releaseCollection->isEmpty()) {
             throw new \Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
@@ -89,7 +90,7 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
             $version = $prepend.$this->getVersionFile().$append;
         } else {
             $response = $this->getRepositoryReleases();
-            $releaseCollection = collect(\GuzzleHttp\json_decode($response->getBody()));
+            $releaseCollection = collect(Utils::jsonDecode($response->getBody()->getContents()));
             $version = $prepend.$releaseCollection->first()->commit->author->date.$append;
         }
 
