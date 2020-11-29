@@ -57,7 +57,7 @@
     "ext-json": "*",
     "ext-zip": "*",
     "laravel/framework": "^6.0|^7.0|^8.0",
-    "guzzlehttp/guzzle": "6.*"
+    "guzzlehttp/guzzle": "6.*|7.*"
   },
   "require-dev": {
     "dg/bypass-finals": "^1.1",
