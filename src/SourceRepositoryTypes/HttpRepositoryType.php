@@ -217,7 +217,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
 
         $headers = [];
 
-        if ($this->hasAccessToken()) {
+        if ($this->release->hasAccessToken()) {
             $headers = [
                 'Authorization' => $this->getAccessToken(),
             ];
