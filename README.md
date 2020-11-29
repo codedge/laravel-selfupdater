@@ -13,11 +13,6 @@ methods to provide a self-update mechanism via Github.
 
 Usually you need this when distributing a self-hosted Laravel application
 that needs some updating mechanism without [Composer](https://getcomposer.org/).
-
-## Compatibility
-
-* PHP: 7.3 & 7.4
-* Laravel: 6.x & 7.x
   
 ## Install
 
