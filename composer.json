@@ -64,7 +64,7 @@
     "mikey179/vfsstream": "^1.6",
     "mockery/mockery": "^1.4",
     "orchestra/testbench": "^6.5.0",
-    "phpunit/phpunit": "^9.4.4"
+    "phpunit/phpunit": "^9.5.0"
   },
   "scripts": {
     "test": "./vendor/bin/phpunit"
