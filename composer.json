@@ -56,7 +56,7 @@
     "php": "^7.3|^7.4|^8.0",
     "ext-json": "*",
     "ext-zip": "*",
-    "laravel/framework": "^8.29.0",
+    "laravel/framework": "^8.30.0",
     "guzzlehttp/guzzle": "6.*|7.*"
   },
   "require-dev": {
