@@ -266,7 +266,8 @@ final class Release
 
             $this->filesystem->moveDirectory(
                 createFolderFromFile($this->getStoragePath()).now()->toDateString(),
-                createFolderFromFile($this->getStoragePath())
+                createFolderFromFile($this->getStoragePath()),
+                true
             );
         }
 
