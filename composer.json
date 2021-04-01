@@ -31,7 +31,7 @@
         "dg/bypass-finals": "^1.3",
         "mikey179/vfsstream": "^1.6",
         "mockery/mockery": "^1.4",
-        "orchestra/testbench": "^6.15.0",
+        "orchestra/testbench": "^6.16.0",
         "phpunit/phpunit": "^9.5.4"
     },
     "config": {
