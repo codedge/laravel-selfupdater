@@ -30,15 +30,12 @@ if (! \function_exists('checkPermissions')) {
      */
     function checkPermissions(string $directory): bool
     {
-
         $directoryIterator = new \RecursiveDirectoryIterator($directory);
 
         foreach(new \RecursiveIteratorIterator($directoryIterator) as $file) {
 
-            if(is_file($file) && !is_writable($file)) {
-
+            if($file->isFile() && !$file->isWritable()){
                 return false;
-
             }
 
         }
