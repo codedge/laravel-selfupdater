@@ -28,17 +28,19 @@ if (! \function_exists('checkPermissions')) {
      *
      * @return bool
      */
-    function checkPermissions(Finder $directory): bool
+    function checkPermissions(string $directory): bool
     {
-        $checkPermission = true;
+        $directoryIterator = new \RecursiveDirectoryIterator($directory);
 
-        collect($directory->getIterator())->each(function (SplFileInfo $file) use (&$checkPermission) {
-            if ($file->isWritable() === false) {
-                $checkPermission = false;
+        foreach(new \RecursiveIteratorIterator($directoryIterator) as $file) {
+
+            if($file->isFile() && !$file->isWritable()){
+                return false;
             }
-        });
 
-        return $checkPermission;
+        }
+
+        return true;
     }
 }
 

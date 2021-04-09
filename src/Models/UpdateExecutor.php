@@ -52,7 +52,7 @@ final class UpdateExecutor
      */
     public function run(Release $release): bool
     {
-        if (checkPermissions((new Finder())->in($this->basePath))) {
+        if (checkPermissions($this->basePath)) {
             $releaseFolder = createFolderFromFile($release->getStoragePath());
 
             // Move all directories first
