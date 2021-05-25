@@ -14,7 +14,6 @@ use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 
 /**
