@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Utils;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -67,7 +68,7 @@ abstract class TestCase extends Orchestra
     {
         return new Response(
             200, ['Content-Type' => 'application/json'],
-            \GuzzleHttp\Psr7\stream_for(fopen('tests/Data/'.$this->mockedResponses[$type], 'r')));
+            Utils::streamFor(fopen('tests/Data/'.$this->mockedResponses[$type], 'r')));
     }
 
     protected function getResponse200ZipFile(): Response
