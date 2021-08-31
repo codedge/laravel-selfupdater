@@ -32,7 +32,7 @@
         "mikey179/vfsstream": "^1.6",
         "mockery/mockery": "^1.4",
         "orchestra/testbench": "^6.20.0",
-        "phpunit/phpunit": "^9.5.8"
+        "phpunit/phpunit": "^9.5.9"
     },
     "config": {
         "sort-packages": true
