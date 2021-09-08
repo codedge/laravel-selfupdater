@@ -74,7 +74,7 @@ final class Release
     }
 
     /**
-     * @param string $release
+     * @param  string  $release
      *
      * @return Release
      */
@@ -94,7 +94,7 @@ final class Release
     }
 
     /**
-     * @param string $storagePath
+     * @param  string  $storagePath
      *
      * @return Release
      */
@@ -134,8 +134,8 @@ final class Release
     }
 
     /**
-     * @param string $updatePath
-     * @param array $excluded
+     * @param  string  $updatePath
+     * @param  array  $excluded
      *
      * @return Release
      */
@@ -155,7 +155,7 @@ final class Release
     }
 
     /**
-     * @param string $version
+     * @param  string  $version
      *
      * @return Release
      */
@@ -175,7 +175,7 @@ final class Release
     }
 
     /**
-     * @param string $downloadUrl
+     * @param  string  $downloadUrl
      *
      * @return Release
      */

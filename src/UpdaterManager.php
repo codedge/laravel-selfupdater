@@ -41,7 +41,7 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Create a new Updater manager instance.
      *
-     * @param Application $app
+     * @param  Application  $app
      */
     public function __construct(Application $app)
     {
@@ -51,7 +51,7 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Get a source repository type instance.
      *
-     * @param string $name
+     * @param  string  $name
      *
      * @return SourceRepositoryTypeContract
      */
@@ -73,7 +73,7 @@ final class UpdaterManager implements UpdaterContract
     }
 
     /**
-     * @param SourceRepositoryTypeContract $sourceRepository
+     * @param  SourceRepositoryTypeContract  $sourceRepository
      *
      * @return SourceRepositoryTypeContract
      */
@@ -85,7 +85,7 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Get the source repository connection configuration.
      *
-     * @param string $name
+     * @param  string  $name
      *
      * @return array
      */
@@ -101,7 +101,7 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Attempt to get the right source repository instance.
      *
-     * @param string $name
+     * @param  string  $name
      *
      * @return SourceRepositoryTypeContract
      */
@@ -113,7 +113,7 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Try to find the correct source repository implementation ;-).
      *
-     * @param string $name
+     * @param  string  $name
      *
      * @throws InvalidArgumentException
      *

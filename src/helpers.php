@@ -9,8 +9,8 @@ if (! \function_exists('dirsIntersect')) {
     /**
      * Check if files in one array (i. e. directory) are also exist in a second one.
      *
-     * @param array $directory
-     * @param array $excludedDirs
+     * @param  array  $directory
+     * @param  array  $excludedDirs
      *
      * @return bool
      */
@@ -24,7 +24,7 @@ if (! \function_exists('checkPermissions')) {
     /**
      * Check a given directory recursively if all files are writeable.
      *
-     * @param Finder $directory
+     * @param  Finder  $directory
      *
      * @return bool
      */
@@ -48,7 +48,7 @@ if (! \function_exists('createFolderFromFile')) {
      * Input: /tmp/my_zip_file.zip
      * Output: /tmp/my_zip_file/.
      *
-     * @param string $file
+     * @param  string  $file
      *
      * @return string
      */

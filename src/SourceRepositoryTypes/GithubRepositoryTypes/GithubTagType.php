@@ -43,8 +43,8 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
      * Get the latest version that has been published in a certain repository.
      * Example: 2.6.5 or v2.6.5.
      *
-     * @param string $prepend Prepend a string to the latest version
-     * @param string $append Append a string to the latest version
+     * @param  string  $prepend  Prepend a string to the latest version
+     * @param  string  $append  Append a string to the latest version
      *
      * @return string
      * @throws Exception
@@ -66,7 +66,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
     /**
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
-     * @param string $version
+     * @param  string  $version
      *
      * @return Release
      * @throws Exception
