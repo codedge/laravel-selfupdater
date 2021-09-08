@@ -31,7 +31,7 @@ abstract class TestCase extends Orchestra
     protected $client;
 
     /**
-     * @param Application $app
+     * @param  Application  $app
      *
      * @return void
      */
@@ -104,7 +104,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @param Application $app
+     * @param  Application  $app
      * @return array
      */
     protected function getPackageProviders($app): array
@@ -115,7 +115,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @param Application $app
+     * @param  Application  $app
      * @return array
      */
     protected function getPackageAliases($app): array

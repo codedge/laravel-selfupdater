@@ -40,8 +40,8 @@ class GithubRepositoryType
     /**
      * Github constructor.
      *
-     * @param array $config
-     * @param UpdateExecutor $updateExecutor
+     * @param  array  $config
+     * @param  UpdateExecutor  $updateExecutor
      */
     public function __construct(array $config, UpdateExecutor $updateExecutor)
     {
@@ -65,7 +65,7 @@ class GithubRepositoryType
     }
 
     /**
-     * @param Release $release
+     * @param  Release  $release
      *
      * @return bool
      * @throws \Exception
@@ -93,7 +93,7 @@ class GithubRepositoryType
      * For updates that are pulled from a commit just checking the SHA won't be enough. So we need to check/compare
      * the commits and dates.
      *
-     * @param string $currentVersion
+     * @param  string  $currentVersion
      *
      * @throws InvalidArgumentException
      * @throws Exception
