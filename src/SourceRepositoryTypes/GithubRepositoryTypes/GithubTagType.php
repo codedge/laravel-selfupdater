@@ -45,8 +45,8 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
      *
      * @param  string  $prepend  Prepend a string to the latest version
      * @param  string  $append  Append a string to the latest version
-     *
      * @return string
+     *
      * @throws Exception
      */
     public function getVersionAvailable(string $prepend = '', string $append = ''): string
@@ -67,8 +67,8 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
      * @param  string  $version
-     *
      * @return Release
+     *
      * @throws Exception
      * @throws Exception
      */

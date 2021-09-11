@@ -80,11 +80,10 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      * Check repository if a newer version than the installed one is available.
      *
      * @param  string  $currentVersion
+     * @return bool
      *
      * @throws InvalidArgumentException
      * @throws Exception
-     *
-     * @return bool
      */
     public function isNewVersionAvailable($currentVersion = ''): bool
     {
@@ -112,10 +111,9 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
      * @param  string  $version
+     * @return Release
      *
      * @throws Exception
-     *
-     * @return Release
      */
     public function fetch($version = ''): Release
     {
@@ -144,7 +142,6 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     /**
      * @param  Collection  $collection
      * @param  string  $version
-     *
      * @return mixed
      */
     public function selectRelease(Collection $collection, string $version)
@@ -164,8 +161,8 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
 
     /**
      * @param  Release  $release
-     *
      * @return bool
+     *
      * @throws Exception
      */
     public function update(Release $release): bool
@@ -187,8 +184,8 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      *
      * @param  string  $prepend  Prepend a string to the latest version
      * @param  string  $append  Append a string to the latest version
-     *
      * @return string
+     *
      * @throws Exception
      */
     public function getVersionAvailable($prepend = '', $append = ''): string
@@ -207,6 +204,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      * Retrieve html body with list of all releases from archive URL.
      *
      * @return ResponseInterface
+     *
      * @throws Exception
      */
     protected function getRepositoryReleases(): ResponseInterface

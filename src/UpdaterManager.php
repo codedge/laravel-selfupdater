@@ -52,7 +52,6 @@ final class UpdaterManager implements UpdaterContract
      * Get a source repository type instance.
      *
      * @param  string  $name
-     *
      * @return SourceRepositoryTypeContract
      */
     public function source(string $name = ''): SourceRepositoryTypeContract
@@ -74,7 +73,6 @@ final class UpdaterManager implements UpdaterContract
 
     /**
      * @param  SourceRepositoryTypeContract  $sourceRepository
-     *
      * @return SourceRepositoryTypeContract
      */
     public function sourceRepository(SourceRepositoryTypeContract $sourceRepository): SourceRepositoryTypeContract
@@ -86,7 +84,6 @@ final class UpdaterManager implements UpdaterContract
      * Get the source repository connection configuration.
      *
      * @param  string  $name
-     *
      * @return array
      */
     protected function getConfig(string $name): array
@@ -102,7 +99,6 @@ final class UpdaterManager implements UpdaterContract
      * Attempt to get the right source repository instance.
      *
      * @param  string  $name
-     *
      * @return SourceRepositoryTypeContract
      */
     protected function get(string $name)
@@ -114,10 +110,9 @@ final class UpdaterManager implements UpdaterContract
      * Try to find the correct source repository implementation ;-).
      *
      * @param  string  $name
+     * @return SourceRepositoryTypeContract
      *
      * @throws InvalidArgumentException
-     *
-     * @return SourceRepositoryTypeContract
      */
     protected function resolve(string $name): SourceRepositoryTypeContract
     {
@@ -134,6 +129,7 @@ final class UpdaterManager implements UpdaterContract
 
     /**
      * @return SourceRepositoryTypeContract
+     *
      * @throws Exception
      */
     protected function createGithubRepository(): SourceRepositoryTypeContract

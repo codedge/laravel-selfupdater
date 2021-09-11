@@ -32,7 +32,6 @@ abstract class TestCase extends Orchestra
 
     /**
      * @param  Application  $app
-     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
