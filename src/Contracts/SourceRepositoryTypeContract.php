@@ -12,7 +12,6 @@ interface SourceRepositoryTypeContract
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
      * @param  string  $version
-     *
      * @return Release
      */
     public function fetch(string $version = ''): Release;
@@ -21,7 +20,6 @@ interface SourceRepositoryTypeContract
      * Perform the actual update process.
      *
      * @param  Release  $release
-     *
      * @return bool
      */
     public function update(Release $release): bool;
@@ -32,7 +30,6 @@ interface SourceRepositoryTypeContract
      * before or after.
      *
      * @param  string  $currentVersion
-     *
      * @return bool
      */
     public function isNewVersionAvailable(string $currentVersion = ''): bool;
@@ -48,7 +45,6 @@ interface SourceRepositoryTypeContract
      *
      * @param  string  $prepend  Prepend a string to the latest version
      * @param  string  $append  Append a string to the latest version
-     *
      * @return string
      */
     public function getVersionAvailable(string $prepend = '', string $append = ''): string;

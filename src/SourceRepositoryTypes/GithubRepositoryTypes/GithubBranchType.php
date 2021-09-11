@@ -66,7 +66,6 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
     /**
      * @param  Collection  $collection
      * @param  string  $version
-     *
      * @return mixed
      */
     public function selectRelease(Collection $collection, string $version)

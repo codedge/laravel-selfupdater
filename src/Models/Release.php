@@ -75,7 +75,6 @@ final class Release
 
     /**
      * @param  string  $release
-     *
      * @return Release
      */
     public function setRelease(string $release): self
@@ -95,7 +94,6 @@ final class Release
 
     /**
      * @param  string  $storagePath
-     *
      * @return Release
      */
     public function setStoragePath(string $storagePath): self
@@ -136,7 +134,6 @@ final class Release
     /**
      * @param  string  $updatePath
      * @param  array  $excluded
-     *
      * @return Release
      */
     public function setUpdatePath(string $updatePath, array $excluded = []): self
@@ -156,7 +153,6 @@ final class Release
 
     /**
      * @param  string  $version
-     *
      * @return Release
      */
     public function setVersion(string $version): self
@@ -176,7 +172,6 @@ final class Release
 
     /**
      * @param  string  $downloadUrl
-     *
      * @return Release
      */
     public function setDownloadUrl(string $downloadUrl): self

@@ -34,7 +34,6 @@ final class UpdateExecutor
      * This might be not good when running unit tests.
      *
      * @param  string  $path
-     *
      * @return $this
      */
     public function setBasePath(string $path): self
@@ -46,8 +45,8 @@ final class UpdateExecutor
 
     /**
      * @param  Release  $release
-     *
      * @return bool
+     *
      * @throws Exception
      */
     public function run(Release $release): bool

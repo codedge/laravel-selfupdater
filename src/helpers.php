@@ -11,7 +11,6 @@ if (! \function_exists('dirsIntersect')) {
      *
      * @param  array  $directory
      * @param  array  $excludedDirs
-     *
      * @return bool
      */
     function dirsIntersect(array $directory, array $excludedDirs): bool
@@ -25,7 +24,6 @@ if (! \function_exists('checkPermissions')) {
      * Check a given directory recursively if all files are writeable.
      *
      * @param  Finder  $directory
-     *
      * @return bool
      */
     function checkPermissions(string $directory): bool
@@ -49,7 +47,6 @@ if (! \function_exists('createFolderFromFile')) {
      * Output: /tmp/my_zip_file/.
      *
      * @param  string  $file
-     *
      * @return string
      */
     function createFolderFromFile(string $file): string

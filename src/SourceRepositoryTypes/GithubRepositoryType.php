@@ -66,8 +66,8 @@ class GithubRepositoryType
 
     /**
      * @param  Release  $release
-     *
      * @return bool
+     *
      * @throws \Exception
      */
     public function update(Release $release): bool
@@ -94,11 +94,10 @@ class GithubRepositoryType
      * the commits and dates.
      *
      * @param  string  $currentVersion
+     * @return bool
      *
      * @throws InvalidArgumentException
      * @throws Exception
-     *
-     * @return bool
      */
     public function isNewVersionAvailable($currentVersion = ''): bool
     {
