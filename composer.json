@@ -24,7 +24,7 @@
         "php": "^7.4 || ^8.0",
         "ext-json": "*",
         "ext-zip": "*",
-        "guzzlehttp/guzzle": "^7.4.0",
+        "guzzlehttp/guzzle": "^7.4.1",
         "laravel/framework": "^8.74.0"
     },
     "require-dev": {
