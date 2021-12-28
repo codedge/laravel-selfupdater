@@ -1,6 +1,7 @@
 {
     "name": "codedge/laravel-selfupdater",
     "description": "Providing an auto-updating functionality for your self-hosted Laravel application.",
+    "license": "MIT",
     "keywords": [
         "self-update",
         "self update",
@@ -11,7 +12,6 @@
         "laravel application",
         "self-hosted laravel application"
     ],
-    "license": "MIT",
     "authors": [
         {
             "name": "Holger Lösken",
@@ -20,6 +20,10 @@
             "role": "Developer"
         }
     ],
+    "support": {
+        "issues": "https://github.com/codedge/laravel-selfupdater/issues",
+        "source": "https://github.com/codedge/laravel-selfupdater"
+    },
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-json": "*",
@@ -32,7 +36,22 @@
         "mikey179/vfsstream": "^1.6",
         "mockery/mockery": "^1.4",
         "orchestra/testbench": "^6.23.2",
-        "phpunit/phpunit": "^9.5.10"
+        "phpunit/phpunit": "^9.5.11"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Codedge\\Updater\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Codedge\\Updater\\Tests\\": "tests/"
+        }
     },
     "config": {
         "sort-packages": true
@@ -47,26 +66,7 @@
             ]
         }
     },
-    "autoload": {
-        "psr-4": {
-            "Codedge\\Updater\\": "src/"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Codedge\\Updater\\Tests\\": "tests/"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "scripts": {
         "test": "./vendor/bin/phpunit"
-    },
-    "support": {
-        "issues": "https://github.com/codedge/laravel-selfupdater/issues",
-        "source": "https://github.com/codedge/laravel-selfupdater"
     }
 }
