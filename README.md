@@ -4,7 +4,7 @@
 [![Total Downloads](https://poser.pugx.org/codedge/laravel-selfupdater/downloads?format=flat-square)](https://packagist.org/packages/codedge/laravel-selfupdater)
 [![](https://github.com/codedge/laravel-selfupdater/workflows/Tests/badge.svg)](https://github.com/codedge/laravel-selfupdater/actions)
 [![StyleCI](https://styleci.io/repos/64463948/shield)](https://styleci.io/repos/64463948)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd836e58656b4e25b34b2a4ac8197142)](https://www.codacy.com/app/codedge/laravel-selfupdater?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=codedge/laravel-selfupdater)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dd836e58656b4e25b34b2a4ac8197142)](https://www.codacy.com/app/codedge/laravel-selfupdater?utm_source=github.com&utm_medium=referral&utm_content=codedge/laravel-selfupdater)
 [![codecov](https://codecov.io/gh/codedge/laravel-selfupdater/branch/master/graph/badge.svg)](https://codecov.io/gh/codedge/laravel-selfupdater)
 
 This package provides some basic methods to implement a self updating
@@ -13,20 +13,23 @@ methods to provide a self-update mechanism via Github.
 
 Usually you need this when distributing a self-hosted Laravel application
 that needs some updating mechanism without [Composer](https://getcomposer.org/).
-  
+
 ## Install
 
 To install the latest version from the master using [Composer](https://getcomposer.org/):
+
 ```sh
 $ composer require codedge/laravel-selfupdater
 ```
 
 ## Configuration
+
 After installing the package you need to publish the configuration file via
+
 ```sh
 $ php artisan vendor:publish --provider="Codedge\Updater\UpdaterServiceProvider"
 ```
- 
+
 **Note:** Please enter correct value for vendor and repository name in your `config/self-updater.php` if you want to use Github as source for your updates.
 
 ### :information_source: Setting the currently installed version
@@ -44,9 +47,11 @@ Set the installed version to to a datetime of one of the latest commits.
 A valid version would be: `2020-04-19T22:35:48Z`
 
 ### Running artisan commands
+
 Artisan commands can be run before or after the update process and can be configured in `config/self-updater.php`:
 
-__Example:__
+**Example:**
+
 ```php
 'artisan_commands' => [
     'pre_update' => [
@@ -75,15 +80,16 @@ env var `SELF_UPDATER_DOWNLOAD_PATH` to something different. Just keep in mind, 
 during the update.
 
 ### Notifications via email
+
 You need to specify a recipient email address and a recipient name to receive
 update available notifications.
 You can specify these values by adding `SELF_UPDATER_MAILTO_NAME` and
 `SELF_UPDATER_MAILTO_ADDRESS` to your `.env` file.
 
-| Config name              | Description |
-| -----------              | ----------- |
-| SELF_UPDATER_MAILTO_NAME | Name of email recipient |
-| SELF_UPDATER_MAILTO_ADDRESS    | Address of email recipient |
+| Config name                                  | Description                       |
+| -------------------------------------------- | --------------------------------- |
+| SELF_UPDATER_MAILTO_NAME                     | Name of email recipient           |
+| SELF_UPDATER_MAILTO_ADDRESS                  | Address of email recipient        |
 | SELF_UPDATER_MAILTO_UPDATE_AVAILABLE_SUBJECT | Subject of update available email |
 | SELF_UPDATER_MAILTO_UPDATE_SUCCEEDED_SUBJECT | Subject of update succeeded email |
 
@@ -95,7 +101,9 @@ a `private_access_token` field, where you can set the token.
 **Note:** Do not prefix the token with `Bearer `. This is done automatically.
 
 ## Usage
+
 To start an update process, i. e. in a controller, just use:
+
 ```php
 Route::get('/', function (\Codedge\Updater\UpdaterManager $updater) {
 
@@ -113,7 +121,7 @@ Route::get('/', function (\Codedge\Updater\UpdaterManager $updater) {
 
         // Run the update process
         $updater->source()->update($release);
-        
+
     } else {
         echo "No new version available.";
     }
@@ -125,7 +133,8 @@ Currently, the fetching of the source is a _synchronous_ process.
 It is not run in background.
 
 ### Using Github
-The package comes with a _Github_ source repository type to fetch 
+
+The package comes with a _Github_ source repository type to fetch
 releases from Github - basically use Github to pull the latest version
 of your software.
 
@@ -149,23 +158,24 @@ Select the branch that should be used via the `use_branch` setting [inside the c
         'repository_name' => env('SELF_UPDATER_REPO_NAME', ''),
         // ...
         'use_branch' => 'v2',
-   ],          
+   ],
    // ...
 ];
 ```
 
 ### Using Http archives
-The package comes with an _Http_ source repository type to fetch 
+
+The package comes with an _Http_ source repository type to fetch
 releases from an HTTP directory listing containing zip archives.
 
 To run with HTTP archives, use following settings in your `.env` file:
 
-| Config name              | Value / Description |
-| -----------              | ----------- |
-| SELF_UPDATER_SOURCE | `http` |
-| SELF_UPDATER_REPO_URL    | Archive URL, e.g. `http://archive.webapp/` |
-| SELF_UPDATER_PKG_FILENAME_FORMAT | Zip package filename format |
-| SELF_UPDATER_DOWNLOAD_PATH | Download path on the webapp host server|
+| Config name                      | Value / Description                        |
+| -------------------------------- | ------------------------------------------ |
+| SELF_UPDATER_SOURCE              | `http`                                     |
+| SELF_UPDATER_REPO_URL            | Archive URL, e.g. `http://archive.webapp/` |
+| SELF_UPDATER_PKG_FILENAME_FORMAT | Zip package filename format                |
+| SELF_UPDATER_DOWNLOAD_PATH       | Download path on the webapp host server    |
 
 The archive URL should contain nothing more than a simple directory listing with corresponding zip-Archives.
 
@@ -174,7 +184,9 @@ The archive URL should contain nothing more than a simple directory listing with
 The target archive files must be zip archives and should contain all files on root level, not within an additional folder named like the archive itself.
 
 ## Contributing
+
 Please see the [contributing guide](CONTRIBUTING.md).
 
 ## Licence
+
 The MIT License (MIT). Please see [Licence file](LICENSE) for more information.
