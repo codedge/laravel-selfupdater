@@ -57,7 +57,7 @@ final class Release
         return $this->release;
     }
 
-    public function setRelease(string $release): Release
+    public function setRelease(string $release): self
     {
         $this->release = $release;
 
@@ -69,11 +69,11 @@ final class Release
         return $this->storagePath;
     }
 
-    public function setStoragePath(string $storagePath): Release
+    public function setStoragePath(string $storagePath): self
     {
         $this->storagePath = $storagePath;
 
-        if (! $this->filesystem->exists($this->storagePath)) {
+        if (!$this->filesystem->exists($this->storagePath)) {
             $this->filesystem->makeDirectory($this->storagePath, 493, true, true);
         }
 
@@ -83,9 +83,9 @@ final class Release
     /**
      * Update the storage path to include the release name.
      */
-    public function updateStoragePath(): Release
+    public function updateStoragePath(): self
     {
-        if (! empty($this->getRelease())) {
+        if (!empty($this->getRelease())) {
             $this->storagePath = Str::finish($this->storagePath, DIRECTORY_SEPARATOR).$this->getRelease();
 
             return $this;
@@ -99,7 +99,7 @@ final class Release
         return $this->updatePath;
     }
 
-    public function setUpdatePath(string $updatePath, array $excluded = []): Release
+    public function setUpdatePath(string $updatePath, array $excluded = []): self
     {
         $this->updatePath = (new Finder())->in($updatePath)->exclude($excluded);
 
@@ -111,7 +111,7 @@ final class Release
         return $this->version;
     }
 
-    public function setVersion(string $version): Release
+    public function setVersion(string $version): self
     {
         $this->version = $version;
 
@@ -123,7 +123,7 @@ final class Release
         return $this->downloadUrl;
     }
 
-    public function setDownloadUrl(string $downloadUrl): Release
+    public function setDownloadUrl(string $downloadUrl): self
     {
         $this->downloadUrl = $downloadUrl;
 
@@ -182,7 +182,7 @@ final class Release
             'GET',
             $this->getDownloadUrl(),
             [
-                'sink' => $this->getStoragePath(),
+                'sink'    => $this->getStoragePath(),
                 'headers' => $headers,
             ]
         );
@@ -199,10 +199,11 @@ final class Release
         if (count($folders) === 1) {
             // Only one sub-folder inside extracted directory
             $moved = $this->filesystem->moveDirectory(
-                $folders[0], createFolderFromFile($this->getStoragePath()).now()->toDateString()
+                $folders[0],
+                createFolderFromFile($this->getStoragePath()).now()->toDateString()
             );
 
-            if (! $moved) {
+            if (!$moved) {
                 return false;
             }
 
@@ -226,14 +227,14 @@ final class Release
         $extractionDir = createFolderFromFile($this->getStoragePath());
 
         // Check if source archive is (probably) deleted but extracted folder is there.
-        if (! $this->filesystem->exists($this->getStoragePath())
+        if (!$this->filesystem->exists($this->getStoragePath())
             && $this->filesystem->exists($extractionDir)) {
             return true;
         }
 
         // Check if source archive is there but not extracted
         if ($this->filesystem->exists($this->getStoragePath())
-            && ! $this->filesystem->exists($extractionDir)) {
+            && !$this->filesystem->exists($extractionDir)) {
             return true;
         }
 

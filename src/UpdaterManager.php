@@ -61,7 +61,7 @@ final class UpdaterManager implements UpdaterContract
      */
     protected function get(string $name): SourceRepositoryTypeContract
     {
-        return $this->sources[ $name ] ?? $this->resolve( $name );
+        return $this->sources[$name] ?? $this->resolve($name);
     }
 
     /**

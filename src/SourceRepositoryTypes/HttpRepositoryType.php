@@ -20,7 +20,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class HttpRepositoryType implements SourceRepositoryTypeContract
 {
-    use UseVersionFile, SupportPrivateAccessToken;
+    use UseVersionFile;
+    use SupportPrivateAccessToken;
 
     protected ClientInterface $client;
     protected array $config;
@@ -56,14 +57,14 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
-        if (! $version) {
+        if (!$version) {
             throw new InvalidArgumentException('No currently installed version specified.');
         }
 
         $versionAvailable = $this->getVersionAvailable();
 
         if (version_compare($version, $versionAvailable, '<')) {
-            if (! $this->versionFileExists()) {
+            if (!$this->versionFileExists()) {
                 $this->setVersionFile($this->getVersionAvailable());
                 event(new UpdateAvailable($this->getVersionAvailable()));
             }
@@ -95,7 +96,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
                       ->updateStoragePath()
                       ->setDownloadUrl($release->zipball_url);
 
-        if (! $this->release->isSourceAlreadyFetched()) {
+        if (!$this->release->isSourceAlreadyFetched()) {
             $this->release->download($this->client);
             $this->release->extract();
         }
@@ -110,7 +111,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     {
         $release = $collection->first();
 
-        if (! empty($version)) {
+        if (!empty($version)) {
             if ($collection->contains('name', $version)) {
                 $release = $collection->where('name', $version)->first();
             } else {
@@ -141,12 +142,12 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      * Get the latest version that has been published in a certain repository.
      * Example: 2.6.5 or v2.6.5.
      *
-     * @param string $prepend  Prepend a string to the latest version
+     * @param string $prepend Prepend a string to the latest version
      * @param string $append  Append a string to the latest version
      *
-     * @return string
-     *
      * @throws Exception
+     *
+     * @return string
      */
     public function getVersionAvailable(string $prepend = '', string $append = ''): string
     {
@@ -185,8 +186,9 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     private function extractFromHtml(string $content): Collection
     {
         $format = str_replace(
-                        '_VERSION_', '(\d+\.\d+\.\d+)',
-                        str_replace('.', '\.', $this->config['pkg_filename_format'])
+            '_VERSION_',
+            '(\d+\.\d+\.\d+)',
+            str_replace('.', '\.', $this->config['pkg_filename_format'])
         ).'.zip';
         $linkPattern = '<a.*href="(.*'.$format.')"';
 
@@ -199,7 +201,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
 
         $releases = collect($files[1])->map(function ($item, $key) use ($baseUrl, $releaseVersions) {
             return (object) [
-                'name' => $releaseVersions[$key],
+                'name'        => $releaseVersions[$key],
                 'zipball_url' => $baseUrl.$item,
             ];
         });

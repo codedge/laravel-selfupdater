@@ -58,7 +58,7 @@ class UpdateExecutorTest extends TestCase
         $this->assertEmpty(File::allFiles($dir.'/folder1'));
         $this->assertTrue(File::exists($dir.'/folder2'));
         $this->assertTrue(File::exists($dir.'/folder2/samplefile-in-folder2.txt'));
-        $this->assertCount(1, File::allFiles( $dir . '/folder2' ) );
+        $this->assertCount(1, File::allFiles($dir.'/folder2'));
         $this->assertFalse(File::exists($dir.'/node_modules'));
         $this->assertFalse(File::exists($dir.'/__MACOSX'));
         $this->assertFalse(File::exists($dir.'/release-1.2'));
