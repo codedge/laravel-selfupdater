@@ -10,9 +10,6 @@ interface SourceRepositoryTypeContract
 {
     /**
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
-     *
-     * @param  string  $version
-     * @return Release
      */
     public function fetch(string $version = ''): Release;
 

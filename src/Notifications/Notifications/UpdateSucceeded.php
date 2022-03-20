@@ -10,10 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 final class UpdateSucceeded extends BaseNotification
 {
-    /**
-     * @var UpdateSucceededEvent
-     */
-    protected $event;
+    protected UpdateSucceededEvent $event;
 
     public function toMail(): MailMessage
     {
@@ -22,7 +19,7 @@ final class UpdateSucceeded extends BaseNotification
             ->subject(config('app.name').': Update succeeded');
     }
 
-    public function setEvent(UpdateSucceededEvent $event)
+    public function setEvent(UpdateSucceededEvent $event): UpdateSucceeded
     {
         $this->event = $event;
 

@@ -7,24 +7,17 @@ use Symfony\Component\Finder\Finder;
 
 if (! \function_exists('dirsIntersect')) {
     /**
-     * Check if files in one array (i. e. directory) are also exist in a second one.
-     *
-     * @param  array  $directory
-     * @param  array  $excludedDirs
-     * @return bool
+     * Check if files in one array (f.ex. directory) are also exist in a second one.
      */
     function dirsIntersect(array $directory, array $excludedDirs): bool
     {
-        return count(array_intersect($directory, $excludedDirs)) ? true : false;
+        return (bool) count( array_intersect( $directory, $excludedDirs ) );
     }
 }
 
 if (! \function_exists('checkPermissions')) {
     /**
      * Check a given directory recursively if all files are writeable.
-     *
-     * @param  Finder  $directory
-     * @return bool
      */
     function checkPermissions(string $directory): bool
     {
@@ -41,16 +34,17 @@ if (! \function_exists('checkPermissions')) {
 }
 
 if (! \function_exists('createFolderFromFile')) {
-    /**
+    /*
      * Create a folder name including path from a given file.
      * Input: /tmp/my_zip_file.zip
      * Output: /tmp/my_zip_file/.
-     *
-     * @param  string  $file
-     * @return string
      */
     function createFolderFromFile(string $file): string
     {
+        if($file === '') {
+            return '';
+        }
+
         $pathinfo = pathinfo($file);
 
         return Str::finish($pathinfo['dirname'], DIRECTORY_SEPARATOR).$pathinfo['filename'];

@@ -19,10 +19,8 @@ final class UpdateExecutor
 
     /**
      * Define the base path where the update should be applied into.
-     *
-     * @var string
      */
-    protected $basePath;
+    protected string $basePath;
 
     public function __construct()
     {
@@ -44,15 +42,18 @@ final class UpdateExecutor
     }
 
     /**
-     * @param  Release  $release
-     * @return bool
-     *
      * @throws Exception
      */
     public function run(Release $release): bool
     {
         if (checkPermissions($this->basePath)) {
             $releaseFolder = createFolderFromFile($release->getStoragePath());
+
+            if($releaseFolder === '') {
+                event(new UpdateFailed($release));
+
+                return false;
+            }
 
             // Move all directories first
             $this->moveFolders($releaseFolder);

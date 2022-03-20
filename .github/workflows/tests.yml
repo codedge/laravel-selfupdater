@@ -49,6 +49,9 @@ jobs:
         env:
           APP_ENV: testing
 
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan
+
       - name: Run tests
         run: ./vendor/bin/phpunit
         env:

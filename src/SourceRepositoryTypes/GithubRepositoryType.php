@@ -107,7 +107,7 @@ class GithubRepositoryType
             throw new InvalidArgumentException('No currently installed version specified.');
         }
 
-        $versionAvailable = $this->getVersionAvailable();
+        $versionAvailable = $this->getVersionAvailable(); //@phpstan-ignore-line
 
         if (version_compare($version, $versionAvailable, '<')) {
             if (! $this->versionFileExists()) {

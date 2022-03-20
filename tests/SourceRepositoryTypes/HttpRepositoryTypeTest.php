@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Codedge\Updater\SourceRepositoryTypes;
+namespace Codedge\Updater\Tests\SourceRepositoryTypes;
 
 use Codedge\Updater\Models\Release;
+use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
 use GuzzleHttp\Client;

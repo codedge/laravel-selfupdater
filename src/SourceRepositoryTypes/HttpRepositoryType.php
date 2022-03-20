@@ -22,43 +22,13 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
 {
     use UseVersionFile, SupportPrivateAccessToken;
 
-    /**
-     * @var ClientInterface
-     */
-    protected $client;
+    protected ClientInterface $client;
+    protected array $config;
+    protected Release $release;
+    protected string $prepend;
+    protected string $append;
+    protected UpdateExecutor $updateExecutor;
 
-    /**
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * @var Release
-     */
-    protected $release;
-
-    /**
-     * @var string prepend string
-     */
-    protected $prepend;
-
-    /**
-     * @var string append string
-     */
-    protected $append;
-
-    /**
-     * @var UpdateExecutor
-     */
-    protected $updateExecutor;
-
-    /**
-     * Github constructor.
-     *
-     * @param  array  $config
-     * @param  ClientInterface  $client
-     * @param  UpdateExecutor  $updateExecutor
-     */
     public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
     {
         $this->client = $client;
@@ -79,13 +49,10 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     /**
      * Check repository if a newer version than the installed one is available.
      *
-     * @param  string  $currentVersion
-     * @return bool
-     *
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function isNewVersionAvailable($currentVersion = ''): bool
+    public function isNewVersionAvailable(string $currentVersion = ''): bool
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
@@ -110,12 +77,9 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     /**
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
-     * @param  string  $version
-     * @return Release
-     *
      * @throws Exception
      */
-    public function fetch($version = ''): Release
+    public function fetch(string $version = ''): Release
     {
         $response = $this->getRepositoryReleases();
         $releaseCollection = $this->extractFromHtml($response->getBody()->getContents());
@@ -140,8 +104,6 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     }
 
     /**
-     * @param  Collection  $collection
-     * @param  string  $version
      * @return mixed
      */
     public function selectRelease(Collection $collection, string $version)
@@ -160,9 +122,6 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     }
 
     /**
-     * @param  Release  $release
-     * @return bool
-     *
      * @throws Exception
      */
     public function update(Release $release): bool
@@ -182,13 +141,14 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      * Get the latest version that has been published in a certain repository.
      * Example: 2.6.5 or v2.6.5.
      *
-     * @param  string  $prepend  Prepend a string to the latest version
-     * @param  string  $append  Append a string to the latest version
+     * @param string $prepend  Prepend a string to the latest version
+     * @param string $append  Append a string to the latest version
+     *
      * @return string
      *
      * @throws Exception
      */
-    public function getVersionAvailable($prepend = '', $append = ''): string
+    public function getVersionAvailable(string $prepend = '', string $append = ''): string
     {
         if ($this->versionFileExists()) {
             $version = $this->getVersionFile();
@@ -203,9 +163,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     /**
      * Retrieve html body with list of all releases from archive URL.
      *
-     * @return ResponseInterface
-     *
-     * @throws Exception
+     * @throws Exception|\GuzzleHttp\Exception\GuzzleException
      */
     protected function getRepositoryReleases(): ResponseInterface
     {

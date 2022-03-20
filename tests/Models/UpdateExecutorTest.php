@@ -12,18 +12,12 @@ use Codedge\Updater\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
 
 class UpdateExecutorTest extends TestCase
 {
-    /**
-     * @var Release
-     */
-    protected $release;
-
-    /**
-     * @var
-     */
-    protected $vfs;
+    protected Release $release;
+    protected vfsStreamDirectory $vfs;
 
     protected function setUp(): void
     {
@@ -64,7 +58,7 @@ class UpdateExecutorTest extends TestCase
         $this->assertEmpty(File::allFiles($dir.'/folder1'));
         $this->assertTrue(File::exists($dir.'/folder2'));
         $this->assertTrue(File::exists($dir.'/folder2/samplefile-in-folder2.txt'));
-        $this->assertEquals(1, count(File::allFiles($dir.'/folder2')));
+        $this->assertCount(1, File::allFiles( $dir . '/folder2' ) );
         $this->assertFalse(File::exists($dir.'/node_modules'));
         $this->assertFalse(File::exists($dir.'/__MACOSX'));
         $this->assertFalse(File::exists($dir.'/release-1.2'));
@@ -78,13 +72,19 @@ class UpdateExecutorTest extends TestCase
     public function it_can_run_and_fail(): void
     {
         vfsStream::newDirectory('updateDirectory')->at($this->vfs);
-        vfsStream::newFile('sample-file', 0500)->at($this->vfs->getChild('updateDirectory'));
+        vfsStream::newFile('sample-file', 0500)->at($this->vfs);
 
-        $this->release->setUpdatePath($this->vfs->url().'/updateDirectory');
+        $basePath = $this->vfs->url().'/updateDirectory';
+
+        $this->release->setUpdatePath($basePath)->setStoragePath('');
 
         Event::fake();
 
-        $this->assertFalse((new UpdateExecutor())->setBasePath($this->vfs->url().'/updateDirectory')->run($this->release));
+//        dd($this->release);
+
+        $result = (new UpdateExecutor())->setBasePath($basePath)
+                                        ->run($this->release);
+        $this->assertFalse($result);
 
         Event::assertDispatched(UpdateFailed::class, 1);
         Event::assertNotDispatched(UpdateSucceeded::class);

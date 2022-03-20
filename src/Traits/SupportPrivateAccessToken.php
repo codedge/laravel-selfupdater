@@ -6,17 +6,10 @@ namespace Codedge\Updater\Traits;
 
 trait SupportPrivateAccessToken
 {
-    /**
-     * @var string
-     */
-    private $accessTokenPrefix = 'Bearer ';
+    private string $accessTokenPrefix = 'Bearer ';
+    protected string $accessToken = '';
 
-    /**
-     * @var string
-     */
-    protected $accessToken = '';
-
-    public function getAccessToken($withPrefix = true): string
+    public function getAccessToken(bool $withPrefix = true): string
     {
         if ($withPrefix) {
             return $this->accessTokenPrefix.$this->accessToken;

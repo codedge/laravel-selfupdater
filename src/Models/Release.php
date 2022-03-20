@@ -19,84 +19,57 @@ final class Release
     /**
      * Name of release file.
      * Example: release-1.1.zip.
-     *
-     * @var string
      */
-    private $release;
+    private ?string $release = null;
 
     /**
      * Path to download the release to.
      * Example: /tmp/release-1.1.zip.
-     *
-     * @var string
      */
-    private $storagePath;
+    private ?string $storagePath = null;
 
     /**
      * Path where the update should be applied to. Most probably to your base_path() - that's where your
      * current Laravel installation runs.
-     *
-     * @var Finder
      */
-    private $updatePath;
+    private ?Finder $updatePath = null;
 
     /**
      * The version name.
      * Example: 1.1 or v1.1.
-     *
-     * @var string
      */
-    private $version;
+    private ?string $version = null;
 
     /**
      * Url to download the release from.
-     *
-     * @var string
      */
-    private $downloadUrl;
+    private ?string $downloadUrl = null;
 
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
+    protected Filesystem $filesystem;
 
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
     }
 
-    /**
-     * @return string
-     */
     public function getRelease(): ?string
     {
         return $this->release;
     }
 
-    /**
-     * @param  string  $release
-     * @return Release
-     */
-    public function setRelease(string $release): self
+    public function setRelease(string $release): Release
     {
         $this->release = $release;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getStoragePath(): ?string
     {
         return $this->storagePath;
     }
 
-    /**
-     * @param  string  $storagePath
-     * @return Release
-     */
-    public function setStoragePath(string $storagePath): self
+    public function setStoragePath(string $storagePath): Release
     {
         $this->storagePath = $storagePath;
 
@@ -109,10 +82,8 @@ final class Release
 
     /**
      * Update the storage path to include the release name.
-     *
-     * @return Release
      */
-    public function updateStoragePath(): self
+    public function updateStoragePath(): Release
     {
         if (! empty($this->getRelease())) {
             $this->storagePath = Str::finish($this->storagePath, DIRECTORY_SEPARATOR).$this->getRelease();
@@ -123,58 +94,36 @@ final class Release
         return $this;
     }
 
-    /**
-     * @return Finder
-     */
     public function getUpdatePath(): ?Finder
     {
         return $this->updatePath;
     }
 
-    /**
-     * @param  string  $updatePath
-     * @param  array  $excluded
-     * @return Release
-     */
-    public function setUpdatePath(string $updatePath, array $excluded = []): self
+    public function setUpdatePath(string $updatePath, array $excluded = []): Release
     {
         $this->updatePath = (new Finder())->in($updatePath)->exclude($excluded);
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getVersion(): ?string
     {
         return $this->version;
     }
 
-    /**
-     * @param  string  $version
-     * @return Release
-     */
-    public function setVersion(string $version): self
+    public function setVersion(string $version): Release
     {
         $this->version = $version;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDownloadUrl(): ?string
     {
         return $this->downloadUrl;
     }
 
-    /**
-     * @param  string  $downloadUrl
-     * @return Release
-     */
-    public function setDownloadUrl(string $downloadUrl): self
+    public function setDownloadUrl(string $downloadUrl): Release
     {
         $this->downloadUrl = $downloadUrl;
 
@@ -242,8 +191,6 @@ final class Release
     /**
      * Create a release sub-folder inside the storage dir.
      * Example: /tmp/release-1.2/.
-     *
-     * @return bool
      */
     protected function createReleaseFolder(): bool
     {
@@ -273,8 +220,6 @@ final class Release
 
     /**
      * Check if the release file has already been downloaded.
-     *
-     * @return bool
      */
     public function isSourceAlreadyFetched(): bool
     {

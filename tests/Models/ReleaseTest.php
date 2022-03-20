@@ -8,18 +8,12 @@ use Codedge\Updater\Models\Release;
 use Codedge\Updater\Tests\TestCase;
 use Illuminate\Support\Str;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
 
 class ReleaseTest extends TestCase
 {
-    /**
-     * @var Release
-     */
-    protected $release;
-
-    /**
-     * @var
-     */
-    protected $vfs;
+    protected Release $release;
+    protected vfsStreamDirectory $vfs;
 
     protected function setUp(): void
     {

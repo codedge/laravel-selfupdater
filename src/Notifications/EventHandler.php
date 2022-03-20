@@ -14,8 +14,7 @@ use Illuminate\Notifications\Notification;
 
 final class EventHandler
 {
-    /** @var Repository */
-    protected $config;
+    protected Repository $config;
 
     public function __construct(Repository $config)
     {
