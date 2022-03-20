@@ -68,6 +68,12 @@ __Example:__
 ]
 ```
 
+### Configure the download path
+
+Sometimes your web host does not allow saving files into the `/tmp` folder of the server. You can change the folder the application is downloaded to by setting the
+env var `SELF_UPDATER_DOWNLOAD_PATH` to something different. Just keep in mind, that the folder is not inside the folder your application lives in as it might be overwritten
+during the update.
+
 ### Notifications via email
 You need to specify a recipient email address and a recipient name to receive
 update available notifications.
