@@ -27,7 +27,7 @@ class CheckForUpdate extends Command
     /**
      * CheckForUpdate constructor.
      *
-     * @param  UpdaterManager  $updater
+     * @param UpdaterManager $updater
      */
     public function __construct(UpdaterManager $updater)
     {

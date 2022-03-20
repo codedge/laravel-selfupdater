@@ -18,7 +18,8 @@ use InvalidArgumentException;
 
 class GithubRepositoryType
 {
-    use UseVersionFile, SupportPrivateAccessToken;
+    use UseVersionFile;
+    use SupportPrivateAccessToken;
 
     const GITHUB_API_URL = 'https://api.github.com';
 
@@ -40,8 +41,8 @@ class GithubRepositoryType
     /**
      * Github constructor.
      *
-     * @param  array  $config
-     * @param  UpdateExecutor  $updateExecutor
+     * @param array          $config
+     * @param UpdateExecutor $updateExecutor
      */
     public function __construct(array $config, UpdateExecutor $updateExecutor)
     {
@@ -65,10 +66,11 @@ class GithubRepositoryType
     }
 
     /**
-     * @param  Release  $release
-     * @return bool
+     * @param Release $release
      *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function update(Release $release): bool
     {
@@ -77,7 +79,7 @@ class GithubRepositoryType
 
     protected function useBranchForVersions(): bool
     {
-        return ! empty($this->config['use_branch']);
+        return !empty($this->config['use_branch']);
     }
 
     /**
@@ -93,24 +95,25 @@ class GithubRepositoryType
      * For updates that are pulled from a commit just checking the SHA won't be enough. So we need to check/compare
      * the commits and dates.
      *
-     * @param  string  $currentVersion
-     * @return bool
+     * @param string $currentVersion
      *
      * @throws InvalidArgumentException
      * @throws Exception
+     *
+     * @return bool
      */
     public function isNewVersionAvailable($currentVersion = ''): bool
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
-        if (! $version) {
+        if (!$version) {
             throw new InvalidArgumentException('No currently installed version specified.');
         }
 
         $versionAvailable = $this->getVersionAvailable(); //@phpstan-ignore-line
 
         if (version_compare($version, $versionAvailable, '<')) {
-            if (! $this->versionFileExists()) {
+            if (!$this->versionFileExists()) {
                 $this->setVersionFile($versionAvailable);
             }
             event(new UpdateAvailable($versionAvailable));

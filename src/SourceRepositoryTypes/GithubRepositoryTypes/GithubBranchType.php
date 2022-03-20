@@ -55,7 +55,7 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
                       ->updateStoragePath()
                       ->setDownloadUrl($this->generateArchiveUrl($release->sha));
 
-        if (! $this->release->isSourceAlreadyFetched()) {
+        if (!$this->release->isSourceAlreadyFetched()) {
             $this->release->download($this->client);
             $this->release->extract();
         }
@@ -64,15 +64,16 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
     }
 
     /**
-     * @param  Collection  $collection
-     * @param  string  $version
+     * @param Collection $collection
+     * @param string     $version
+     *
      * @return mixed
      */
     public function selectRelease(Collection $collection, string $version)
     {
         $release = $collection->first();
 
-        if (! empty($version)) {
+        if (!empty($version)) {
             if ($collection->contains('commit.author.date', $version)) {
                 $release = $collection->where('commit.author.date', $version)->first();
             } else {

@@ -49,7 +49,7 @@ final class EventHandler
                 return $notificationName === $eventName;
             });
 
-        if (! $notificationClass) {
+        if (!$notificationClass) {
             throw new Exception('Notification could not be sent.');
         }
 
