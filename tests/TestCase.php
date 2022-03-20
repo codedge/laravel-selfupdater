@@ -23,34 +23,35 @@ abstract class TestCase extends Orchestra
      * @var array
      */
     protected $mockedResponses = [
-        'tag' => 'releases-tag.json',
+        'tag'    => 'releases-tag.json',
         'branch' => 'releases-branch.json',
-        'http' => 'releases-http.json',
+        'http'   => 'releases-http.json',
     ];
 
     protected $client;
 
     /**
-     * @param  Application  $app
+     * @param Application $app
+     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('self-update.repository_types', [
             'github' => [
-                'type' => 'github',
-                'repository_vendor' => 'laravel',
-                'repository_name' => 'laravel',
-                'repository_url' => '',
-                'download_path' => self::DOWNLOAD_PATH,
+                'type'                 => 'github',
+                'repository_vendor'    => 'laravel',
+                'repository_name'      => 'laravel',
+                'repository_url'       => '',
+                'download_path'        => self::DOWNLOAD_PATH,
                 'private_access_token' => '',
-                'use_branch' => '',
+                'use_branch'           => '',
             ],
             'http' => [
-                'type' => 'http',
-                'repository_url' => 'https://github.com/invoiceninja/invoiceninja/releases',
-                'pkg_filename_format' => env('SELF_UPDATER_PKG_FILENAME_FORMAT', 'v_VERSION_'),
-                'download_path' => self::DOWNLOAD_PATH,
+                'type'                 => 'http',
+                'repository_url'       => 'https://github.com/invoiceninja/invoiceninja/releases',
+                'pkg_filename_format'  => env('SELF_UPDATER_PKG_FILENAME_FORMAT', 'v_VERSION_'),
+                'download_path'        => self::DOWNLOAD_PATH,
                 'private_access_token' => '',
             ],
         ]);
@@ -66,8 +67,10 @@ abstract class TestCase extends Orchestra
     protected function getResponse200Type(string $type): Response
     {
         return new Response(
-            200, ['Content-Type' => 'application/json'],
-            Utils::streamFor(fopen('tests/Data/'.$this->mockedResponses[$type], 'r')));
+            200,
+            ['Content-Type' => 'application/json'],
+            Utils::streamFor(fopen('tests/Data/'.$this->mockedResponses[$type], 'r'))
+        );
     }
 
     protected function getResponse200ZipFile(): Response
@@ -75,7 +78,7 @@ abstract class TestCase extends Orchestra
         return new Response(
             200,
             [
-                'Content-Type' => 'application/zip',
+                'Content-Type'        => 'application/zip',
                 'Content-Disposition' => 'attachment; filename="release-1.2.zip"',
             ],
             fopen(__DIR__.'/Data/release-1.2.zip', 'r')
@@ -85,7 +88,9 @@ abstract class TestCase extends Orchestra
     protected function getResponseEmpty(): Response
     {
         return new Response(
-            200, ['Content-Type' => 'text/html'], ''
+            200,
+            ['Content-Type' => 'text/html'],
+            ''
         );
     }
 
@@ -103,7 +108,8 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @param  Application  $app
+     * @param Application $app
+     *
      * @return array
      */
     protected function getPackageProviders($app): array
@@ -114,7 +120,8 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @param  Application  $app
+     * @param Application $app
+     *
      * @return array
      */
     protected function getPackageAliases($app): array

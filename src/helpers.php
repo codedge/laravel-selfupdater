@@ -5,12 +5,13 @@ declare(strict_types=1);
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
 
-if (! \function_exists('dirsIntersect')) {
+if (!\function_exists('dirsIntersect')) {
     /**
      * Check if files in one array (i. e. directory) are also exist in a second one.
      *
-     * @param  array  $directory
-     * @param  array  $excludedDirs
+     * @param array $directory
+     * @param array $excludedDirs
+     *
      * @return bool
      */
     function dirsIntersect(array $directory, array $excludedDirs): bool
@@ -19,11 +20,12 @@ if (! \function_exists('dirsIntersect')) {
     }
 }
 
-if (! \function_exists('checkPermissions')) {
+if (!\function_exists('checkPermissions')) {
     /**
      * Check a given directory recursively if all files are writeable.
      *
-     * @param  Finder  $directory
+     * @param Finder $directory
+     *
      * @return bool
      */
     function checkPermissions(string $directory): bool
@@ -31,7 +33,7 @@ if (! \function_exists('checkPermissions')) {
         $directoryIterator = new \RecursiveDirectoryIterator($directory);
 
         foreach (new \RecursiveIteratorIterator($directoryIterator) as $file) {
-            if ($file->isFile() && ! $file->isWritable()) {
+            if ($file->isFile() && !$file->isWritable()) {
                 return false;
             }
         }
@@ -40,13 +42,14 @@ if (! \function_exists('checkPermissions')) {
     }
 }
 
-if (! \function_exists('createFolderFromFile')) {
+if (!\function_exists('createFolderFromFile')) {
     /**
      * Create a folder name including path from a given file.
      * Input: /tmp/my_zip_file.zip
      * Output: /tmp/my_zip_file/.
      *
-     * @param  string  $file
+     * @param string $file
+     *
      * @return string
      */
     function createFolderFromFile(string $file): string

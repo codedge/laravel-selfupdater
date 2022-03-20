@@ -27,6 +27,7 @@ trait UseVersionFile
      * Write the version file.
      *
      * @param $content
+     *
      * @return bool
      */
     public function setVersionFile(string $content): bool
