@@ -33,7 +33,8 @@ final class UpdateExecutor
      * Use the base_path() function to determine the project root folder.
      * This might be not good when running unit tests.
      *
-     * @param  string  $path
+     * @param string $path
+     *
      * @return $this
      */
     public function setBasePath(string $path): self
@@ -44,10 +45,11 @@ final class UpdateExecutor
     }
 
     /**
-     * @param  Release  $release
-     * @return bool
+     * @param Release $release
      *
      * @throws Exception
+     *
+     * @return bool
      */
     public function run(Release $release): bool
     {
@@ -86,7 +88,8 @@ final class UpdateExecutor
         collect($files)->each(function (SplFileInfo $file) {
             if ($file->getRealPath()) {
                 File::copy(
-                    $file->getRealPath(), Str::finish($this->basePath, DIRECTORY_SEPARATOR).$file->getFilename()
+                    $file->getRealPath(),
+                    Str::finish($this->basePath, DIRECTORY_SEPARATOR).$file->getFilename()
                 );
             }
         });
@@ -101,7 +104,7 @@ final class UpdateExecutor
         }));
 
         $sorted->each(function (SplFileInfo $directory) {
-            if (! dirsIntersect(File::directories($directory->getRealPath()), config('self-update.exclude_folders'))) {
+            if (!dirsIntersect(File::directories($directory->getRealPath()), config('self-update.exclude_folders'))) {
                 File::copyDirectory(
                     $directory->getRealPath(),
                     Str::finish($this->basePath, DIRECTORY_SEPARATOR).Str::finish($directory->getRelativePath(), DIRECTORY_SEPARATOR).$directory->getBasename()

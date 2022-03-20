@@ -43,11 +43,12 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
      * Get the latest version that has been published in a certain repository.
      * Example: 2.6.5 or v2.6.5.
      *
-     * @param  string  $prepend  Prepend a string to the latest version
-     * @param  string  $append  Append a string to the latest version
-     * @return string
+     * @param string $prepend Prepend a string to the latest version
+     * @param string $append  Append a string to the latest version
      *
      * @throws Exception
+     *
+     * @return string
      */
     public function getVersionAvailable(string $prepend = '', string $append = ''): string
     {
@@ -66,11 +67,12 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
     /**
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
-     * @param  string  $version
-     * @return Release
+     * @param string $version
      *
      * @throws Exception
      * @throws Exception
+     *
+     * @return Release
      */
     public function fetch($version = ''): Release
     {
@@ -88,7 +90,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
                       ->updateStoragePath()
                       ->setDownloadUrl($release->zipball_url);
 
-        if (! $this->release->isSourceAlreadyFetched()) {
+        if (!$this->release->isSourceAlreadyFetched()) {
             $this->release->download($this->client);
             $this->release->extract();
         }
@@ -100,7 +102,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
     {
         $release = $collection->first();
 
-        if (! empty($version)) {
+        if (!empty($version)) {
             if ($collection->contains('tag_name', $version)) {
                 $release = $collection->where('tag_name', $version)->first();
             } else {

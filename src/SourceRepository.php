@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Artisan;
  */
 final class SourceRepository implements SourceRepositoryTypeContract
 {
-    use UseVersionFile, SupportPrivateAccessToken;
+    use UseVersionFile;
+    use SupportPrivateAccessToken;
 
     /**
      * @var SourceRepositoryTypeContract
@@ -32,7 +33,7 @@ final class SourceRepository implements SourceRepositoryTypeContract
     /**
      * SourceRepository constructor.
      *
-     * @param  SourceRepositoryTypeContract  $sourceRepository
+     * @param SourceRepositoryTypeContract $sourceRepository
      */
     public function __construct(SourceRepositoryTypeContract $sourceRepository, UpdateExecutor $updateExecutor)
     {
@@ -43,7 +44,8 @@ final class SourceRepository implements SourceRepositoryTypeContract
     /**
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
-     * @param  string  $version
+     * @param string $version
+     *
      * @return Release
      */
     public function fetch($version = ''): Release
@@ -54,10 +56,11 @@ final class SourceRepository implements SourceRepositoryTypeContract
     }
 
     /**
-     * @param  Release  $release
-     * @return bool
+     * @param Release $release
      *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function update(Release $release): bool
     {
@@ -67,7 +70,8 @@ final class SourceRepository implements SourceRepositoryTypeContract
     /**
      * Check repository if a newer version than the installed one is available.
      *
-     * @param  string  $currentVersion
+     * @param string $currentVersion
+     *
      * @return bool
      */
     public function isNewVersionAvailable($currentVersion = ''): bool
@@ -79,8 +83,9 @@ final class SourceRepository implements SourceRepositoryTypeContract
      * Get the version that is currenly installed.
      * Example: 1.1.0 or v1.1.0 or "1.1.0 version".
      *
-     * @param  string  $prepend
-     * @param  string  $append
+     * @param string $prepend
+     * @param string $append
+     *
      * @return string
      */
     public function getVersionInstalled($prepend = '', $append = ''): string
@@ -92,8 +97,9 @@ final class SourceRepository implements SourceRepositoryTypeContract
      * Get the latest version that has been published in a certain repository.
      * Example: 2.6.5 or v2.6.5.
      *
-     * @param  string  $prepend  Prepend a string to the latest version
-     * @param  string  $append  Append a string to the latest version
+     * @param string $prepend Prepend a string to the latest version
+     * @param string $append  Append a string to the latest version
+     *
      * @return string
      */
     public function getVersionAvailable($prepend = '', $append = ''): string

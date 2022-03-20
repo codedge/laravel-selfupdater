@@ -32,7 +32,7 @@ trait SupportPrivateAccessToken
 
     public function hasAccessToken(): bool
     {
-        return ! empty($this->accessToken);
+        return !empty($this->accessToken);
     }
 
     public function setAccessTokenPrefix(string $prefix): void

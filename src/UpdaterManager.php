@@ -41,7 +41,7 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Create a new Updater manager instance.
      *
-     * @param  Application  $app
+     * @param Application $app
      */
     public function __construct(Application $app)
     {
@@ -51,7 +51,8 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Get a source repository type instance.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return SourceRepositoryTypeContract
      */
     public function source(string $name = ''): SourceRepositoryTypeContract
@@ -72,7 +73,8 @@ final class UpdaterManager implements UpdaterContract
     }
 
     /**
-     * @param  SourceRepositoryTypeContract  $sourceRepository
+     * @param SourceRepositoryTypeContract $sourceRepository
+     *
      * @return SourceRepositoryTypeContract
      */
     public function sourceRepository(SourceRepositoryTypeContract $sourceRepository): SourceRepositoryTypeContract
@@ -83,7 +85,8 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Get the source repository connection configuration.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return array
      */
     protected function getConfig(string $name): array
@@ -98,7 +101,8 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Attempt to get the right source repository instance.
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return SourceRepositoryTypeContract
      */
     protected function get(string $name)
@@ -109,10 +113,11 @@ final class UpdaterManager implements UpdaterContract
     /**
      * Try to find the correct source repository implementation ;-).
      *
-     * @param  string  $name
-     * @return SourceRepositoryTypeContract
+     * @param string $name
      *
      * @throws InvalidArgumentException
+     *
+     * @return SourceRepositoryTypeContract
      */
     protected function resolve(string $name): SourceRepositoryTypeContract
     {
@@ -128,9 +133,9 @@ final class UpdaterManager implements UpdaterContract
     }
 
     /**
-     * @return SourceRepositoryTypeContract
-     *
      * @throws Exception
+     *
+     * @return SourceRepositoryTypeContract
      */
     protected function createGithubRepository(): SourceRepositoryTypeContract
     {
