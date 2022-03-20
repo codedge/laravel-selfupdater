@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Artisan;
  */
 final class SourceRepository implements SourceRepositoryTypeContract
 {
-    use UseVersionFile, SupportPrivateAccessToken;
+    use UseVersionFile;
+    use SupportPrivateAccessToken;
 
     protected SourceRepositoryTypeContract $sourceRepository;
     protected UpdateExecutor $updateExecutor;
@@ -39,10 +40,11 @@ final class SourceRepository implements SourceRepositoryTypeContract
     }
 
     /**
-     * @param  Release  $release
-     * @return bool
+     * @param Release $release
      *
      * @throws \Exception
+     *
+     * @return bool
      */
     public function update(Release $release): bool
     {
@@ -71,7 +73,7 @@ final class SourceRepository implements SourceRepositoryTypeContract
      * Get the latest version that has been published in a certain repository.
      * Example: 2.6.5 or v2.6.5.
      *
-     * @param string $prepend  Prepend a string to the latest version
+     * @param string $prepend Prepend a string to the latest version
      * @param string $append  Append a string to the latest version
      *
      * @return string

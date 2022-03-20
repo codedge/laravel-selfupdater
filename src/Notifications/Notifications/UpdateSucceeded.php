@@ -19,7 +19,7 @@ final class UpdateSucceeded extends BaseNotification
             ->subject(config('app.name').': Update succeeded');
     }
 
-    public function setEvent(UpdateSucceededEvent $event): UpdateSucceeded
+    public function setEvent(UpdateSucceededEvent $event): self
     {
         $this->event = $event;
 
