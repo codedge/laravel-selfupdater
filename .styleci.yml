@@ -1,3 +1,2 @@
-php:
-  risky: true
-  version: 8.0
+risky: true
+version: 8.0
