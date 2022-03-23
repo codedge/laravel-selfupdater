@@ -22,7 +22,7 @@ final class UpdateAvailable extends BaseNotification
             ->subject(config('app.name').': Update available');
     }
 
-    public function setEvent(UpdateAvailableEvent $event)
+    public function setEvent(UpdateAvailableEvent $event): self
     {
         $this->event = $event;
 

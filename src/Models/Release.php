@@ -99,6 +99,9 @@ final class Release
         return $this->updatePath;
     }
 
+    /**
+     * @param array<string> $excluded
+     */
     public function setUpdatePath(string $updatePath, array $excluded = []): self
     {
         $this->updatePath = (new Finder())->in($updatePath)->exclude($excluded);

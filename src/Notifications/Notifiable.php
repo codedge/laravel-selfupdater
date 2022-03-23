@@ -15,7 +15,7 @@ final class Notifiable
         return config('backup.notifications.mail.to');
     }
 
-    public function getKey()
+    public function getKey(): int
     {
         return 1;
     }

@@ -19,23 +19,16 @@ abstract class TestCase extends Orchestra
 {
     const DOWNLOAD_PATH = '/tmp/self-updater';
 
-    /**
-     * @var array
-     */
-    protected $mockedResponses = [
+    protected array $mockedResponses = [
         'tag'    => 'releases-tag.json',
         'branch' => 'releases-branch.json',
         'http'   => 'releases-http.json',
     ];
 
-    protected $client;
-
     /**
      * @param Application $app
-     *
-     * @return void
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('self-update.repository_types', [
             'github' => [
@@ -94,17 +87,16 @@ abstract class TestCase extends Orchestra
         );
     }
 
-    protected function resetDownloadDir()
+    protected function resetDownloadDir(): void
     {
         /** @var Filesystem $filesystem */
         $filesystem = $this->app->make(Filesystem::class);
 
         if ($filesystem->exists(self::DOWNLOAD_PATH)) {
             $filesystem->deleteDirectory(self::DOWNLOAD_PATH);
-            $filesystem->makeDirectory(self::DOWNLOAD_PATH);
-        } else {
-            $filesystem->makeDirectory(self::DOWNLOAD_PATH);
         }
+
+        $filesystem->makeDirectory(self::DOWNLOAD_PATH);
     }
 
     /**

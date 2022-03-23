@@ -10,10 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 final class UpdateFailed extends BaseNotification
 {
-    /**
-     * @var UpdateFailedEvent
-     */
-    protected $event;
+    protected UpdateFailedEvent $event;
 
     public function toMail(): MailMessage
     {
@@ -22,7 +19,7 @@ final class UpdateFailed extends BaseNotification
             ->subject(config('app.name').': Update failed');
     }
 
-    public function setEvent(UpdateFailedEvent $event)
+    public function setEvent(UpdateFailedEvent $event): self
     {
         $this->event = $event;
 

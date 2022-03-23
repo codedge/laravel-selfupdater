@@ -21,7 +21,7 @@ class EventHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_will_send_a_notification_by_default_when_update_failed()
+    public function it_will_send_a_notification_by_default_when_update_failed(): void
     {
         $this->fireUpdateFailedEvent();
 
@@ -33,9 +33,9 @@ class EventHandlerTest extends TestCase
      *
      * @dataProvider channelProvider
      *
-     * @param array $expectedChannels
+     * @param array<string, array> $expectedChannels
      */
-    public function it_will_send_a_notification_via_the_configured_notification_channels(array $expectedChannels)
+    public function it_will_send_a_notification_via_the_configured_notification_channels(array $expectedChannels): void
     {
         config()->set('self-update.notifications.notifications.'.UpdateFailedNotification::class, $expectedChannels);
 
@@ -46,7 +46,10 @@ class EventHandlerTest extends TestCase
         });
     }
 
-    public function channelProvider()
+    /**
+     * @return array<array>
+     */
+    public function channelProvider(): array
     {
         return [
             [[]],
@@ -54,7 +57,7 @@ class EventHandlerTest extends TestCase
         ];
     }
 
-    protected function fireUpdateFailedEvent()
+    protected function fireUpdateFailedEvent(): void
     {
         $release = resolve(Release::class);
 
