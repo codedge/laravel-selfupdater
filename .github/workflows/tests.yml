@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@2.17.1
+        uses: shivammathur/setup-php@2.18.0
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, intl, json, zip
@@ -37,7 +37,7 @@ jobs:
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache dependencies
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v3
         with:
           path: ~/.composer/cache/files
           key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
