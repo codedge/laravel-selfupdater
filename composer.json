@@ -31,7 +31,7 @@
         "guzzlehttp/guzzle": "^7.4",
         "laravel/framework": "^8.0 || ^9.0",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan-phpunit": "^1.0"
+        "phpstan/phpstan-phpunit": "^1.1"
     },
     "require-dev": {
         "dg/bypass-finals": "^1.3",
