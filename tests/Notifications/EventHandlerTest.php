@@ -47,7 +47,7 @@ class EventHandlerTest extends TestCase
     }
 
     /**
-     * @return array<array>
+     * @return array<array<string[]>>
      */
     public function channelProvider(): array
     {

@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 if (!\function_exists('dirsIntersect')) {
     /**
      * Check if files in one array (f.ex. directory) are also exist in a second one.
+     *
+     * @param array<string> $directory
+     * @param array<string> $excludedDirs
      */
     function dirsIntersect(array $directory, array $excludedDirs): bool
     {
