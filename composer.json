@@ -29,7 +29,7 @@
         "ext-json": "*",
         "ext-zip": "*",
         "guzzlehttp/guzzle": "^7.4",
-        "laravel/framework": "^8.83.8",
+        "laravel/framework": "^8.83.9",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-phpunit": "^1.1"
     },
