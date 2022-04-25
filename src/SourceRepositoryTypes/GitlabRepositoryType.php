@@ -133,7 +133,7 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         return $this->release;
     }
 
-    public function selectRelease(Collection $collection, string $version): object
+    public function selectRelease(Collection $collection, string $version)
     {
         $release = $collection->first();
 

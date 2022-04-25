@@ -10,10 +10,12 @@ use Codedge\Updater\Exceptions\ReleaseException;
 use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\GitlabRepositoryType;
+use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 
 final class GitlabRepositoryTypeTest extends TestCase
 {
@@ -162,5 +164,47 @@ final class GitlabRepositoryTypeTest extends TestCase
         $release = $gitlab->fetch();
 
         $this->assertInstanceOf(Release::class, $release);
+    }
+
+    /** @test */
+    public function it_can_get_specific_release_from_collection(): void
+    {
+        $items = [
+            [
+                'tag_name' => '1.3',
+                'name' => 'New version 1.3',
+            ],
+            [
+                'tag_name' => '1.2',
+                'name' => 'New version 1.2',
+            ],
+        ];
+
+        /** @var GitlabRepositoryType $gitlab */
+        $gitlab = resolve(GitlabRepositoryType::class);
+
+        $this->assertEquals($items[1], $gitlab->selectRelease(collect($items), '1.2'));
+    }
+
+    /** @test */
+    public function it_takes_latest_release_if_no_other_found(): void
+    {
+        $items = [
+            [
+                'tag_name' => '1.3',
+                'name' => 'New version 1.3',
+            ],
+            [
+                'tag_name' => '1.2',
+                'name' => 'New version 1.2',
+            ],
+        ];
+
+        /** @var GitlabRepositoryType $gitlab */
+        $gitlab = resolve(GitlabRepositoryType::class);
+
+        Log::shouldReceive('info')->once()->with('No release for version "1.7" found. Selecting latest.');
+
+        $this->assertEquals('1.3', $gitlab->selectRelease(collect($items), '1.7')['tag_name']);
     }
 }
