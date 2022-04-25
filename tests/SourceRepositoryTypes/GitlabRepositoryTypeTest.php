@@ -109,7 +109,7 @@ final class GitlabRepositoryTypeTest extends TestCase
         $client = $this->getMockedClient([
             $this->getResponse200Type('gitlab'),
             $this->getResponseEmpty(),
-            $this->getResponseEmpty()
+            $this->getResponseEmpty(),
         ]);
         $this->app->instance(Client::class, $client);
 
