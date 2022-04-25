@@ -11,7 +11,7 @@ use Exception;
 use GuzzleHttp\Client;
 use InvalidArgumentException;
 
-class HttpRepositoryTypeTest extends TestCase
+final class HttpRepositoryTypeTest extends TestCase
 {
     protected function setUp(): void
     {

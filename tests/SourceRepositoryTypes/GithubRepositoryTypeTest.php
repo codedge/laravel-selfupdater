@@ -16,7 +16,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Event;
 use InvalidArgumentException;
 
-class GithubRepositoryTypeTest extends TestCase
+final class GithubRepositoryTypeTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -99,7 +99,7 @@ class GithubRepositoryTypeTest extends TestCase
 
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
-        $github->isNewVersionAvailable('');
+        $github->isNewVersionAvailable();
     }
 
     /** @test */

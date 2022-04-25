@@ -21,26 +21,13 @@ class GithubRepositoryType
     use UseVersionFile;
     use SupportPrivateAccessToken;
 
-    const GITHUB_API_URL = 'https://api.github.com';
+    const API_URL = 'https://api.github.com';
+
+    protected ClientInterface $client;
+    protected array $config;
+    protected UpdateExecutor $updateExecutor;
 
     /**
-     * @var ClientInterface
-     */
-    protected $client;
-
-    /**
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * @var UpdateExecutor
-     */
-    protected $updateExecutor;
-
-    /**
-     * Github constructor.
-     *
      * @param array          $config
      * @param UpdateExecutor $updateExecutor
      */
@@ -102,7 +89,7 @@ class GithubRepositoryType
      *
      * @return bool
      */
-    public function isNewVersionAvailable($currentVersion = ''): bool
+    public function isNewVersionAvailable(string $currentVersion = ''): bool
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 

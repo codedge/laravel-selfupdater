@@ -32,6 +32,7 @@ return [
     | A repository can be of different types, which can be specified here.
     | Current options:
     | - github
+    | - gitlab
     | - http
     |
     */
@@ -45,6 +46,12 @@ return [
             'download_path'        => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
             'private_access_token' => env('SELF_UPDATER_GITHUB_PRIVATE_ACCESS_TOKEN', ''),
             'use_branch'           => env('SELF_UPDATER_USE_BRANCH', ''),
+        ],
+        'gitlab' => [
+            'type'                 => 'gitlab',
+            'repository_id'       => env('SELF_UPDATER_REPO_URL', ''),
+            'download_path'        => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
+            'private_access_token' => env('SELF_UPDATER_GITLAB_PRIVATE_ACCESS_TOKEN', ''),
         ],
         'http' => [
             'type'                 => 'http',

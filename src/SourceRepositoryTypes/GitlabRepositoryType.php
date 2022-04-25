@@ -2,42 +2,76 @@
 
 declare(strict_types=1);
 
-namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
+namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
+use Codedge\Updater\Traits\SupportPrivateAccessToken;
+use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Utils;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 
-final class GithubTagType extends GithubRepositoryType implements SourceRepositoryTypeContract
+class GitlabRepositoryType implements SourceRepositoryTypeContract
 {
-    /**
-     * @var ClientInterface
-     */
-    protected ClientInterface $client;
+    use UseVersionFile;
+    use SupportPrivateAccessToken;
 
-    /**
-     * @var Release
-     */
+    const API_URL = 'https://gitlab.com/api/v4';
+
+    protected ClientInterface $client;
+    protected array $config;
     protected Release $release;
+    protected UpdateExecutor $updateExecutor;
 
     public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
     {
-        parent::__construct($config, $updateExecutor);
+        $this->client = $client;
+        $this->config = $config;
 
         $this->release = resolve(Release::class);
         $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
                       ->setAccessToken($config['private_access_token']);
 
-        $this->client = $client;
+        $this->updateExecutor = $updateExecutor;
+    }
+
+    public function update( Release $release ): bool
+    {
+        return $this->updateExecutor->run($release);
+    }
+
+    public function isNewVersionAvailable( string $currentVersion = '' ): bool {
+        $version = $currentVersion ?: $this->getVersionInstalled();
+
+        if (!$version) {
+            throw new InvalidArgumentException('No currently installed version specified.');
+        }
+
+        $versionAvailable = $this->getVersionAvailable();
+
+        if (version_compare($version, $versionAvailable, '<')) {
+            if (!$this->versionFileExists()) {
+                $this->setVersionFile($versionAvailable);
+            }
+            event(new UpdateAvailable($versionAvailable));
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getVersionInstalled(): string {
+        return (string) config('self-update.version_installed');
     }
 
     /**
@@ -65,18 +99,10 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
         return $version;
     }
 
-    /**
-     * Fetches the latest version. If you do not want the latest version, specify one and pass it.
-     *
-     * @param string $version
-     *
-     * @throws Exception
-     *
-     * @return Release
-     */
-    public function fetch(string $version = ''): Release
+    public function fetch( string $version = '' ): Release
     {
         $response = $this->getRepositoryReleases();
+
         $releases = collect(Utils::jsonDecode($response->getBody()->getContents()));
 
         if ($releases->isEmpty()) {
@@ -88,7 +114,8 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
         $this->release->setVersion($release->tag_name)
                       ->setRelease($release->tag_name.'.zip')
                       ->updateStoragePath()
-                      ->setDownloadUrl($release->zipball_url);
+                      ->setDownloadUrl($release->assets->sources[0]->url)
+        ;
 
         if (!$this->release->isSourceAlreadyFetched()) {
             $this->release->download($this->client);
@@ -97,6 +124,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
 
         return $this->release;
     }
+
 
     public function selectRelease(Collection $collection, string $version)
     {
@@ -115,9 +143,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
 
     protected function getRepositoryReleases(): ResponseInterface
     {
-        $url = '/repos/'.$this->config['repository_vendor']
-               .'/'.$this->config['repository_name']
-               .'/releases';
+        $url = '/projects/'.$this->config['repository_id'].'/repository'.'/releases';
 
         $headers = [];
 

@@ -12,6 +12,7 @@ use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -78,7 +79,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     /**
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
-     * @throws Exception
+     * @throws Exception|GuzzleException
      */
     public function fetch(string $version = ''): Release
     {
@@ -164,7 +165,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     /**
      * Retrieve html body with list of all releases from archive URL.
      *
-     * @throws Exception|\GuzzleHttp\Exception\GuzzleException
+     * @throws Exception|GuzzleException
      */
     protected function getRepositoryReleases(): ResponseInterface
     {

@@ -1,2 +1,6 @@
+preset: recommended
 risky: true
 version: 8.0
+enabled:
+  - declare_strict_types
+  - no_superfluous_phpdoc_tags

@@ -20,12 +20,12 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
     /**
      * @var ClientInterface
      */
-    protected $client;
+    protected ClientInterface $client;
 
     /**
      * @var Release
      */
-    protected $release;
+    protected Release $release;
 
     public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
     {

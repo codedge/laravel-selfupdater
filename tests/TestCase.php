@@ -23,6 +23,7 @@ abstract class TestCase extends Orchestra
         'tag'    => 'releases-tag.json',
         'branch' => 'releases-branch.json',
         'http'   => 'releases-http.json',
+        'gitlab' => 'releases-gitlab.json',
     ];
 
     /**
@@ -39,6 +40,12 @@ abstract class TestCase extends Orchestra
                 'download_path'        => self::DOWNLOAD_PATH,
                 'private_access_token' => '',
                 'use_branch'           => '',
+            ],
+            'gitlab' => [
+                'type'                 => 'gitlab',
+                'repository_id'       => '35488518',
+                'download_path'        => self::DOWNLOAD_PATH,
+                'private_access_token' => '',
             ],
             'http' => [
                 'type'                 => 'http',

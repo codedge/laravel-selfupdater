@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 trait UseVersionFile
 {
-    /**
-     * @var string
-     */
-    protected $versionFile = 'self-updater-new-version';
+    protected string $versionFile = 'self-updater-new-version';
 
     /**
      * Check if the file with the new version already exists.

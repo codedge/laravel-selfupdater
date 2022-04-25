@@ -10,18 +10,13 @@ use Codedge\Updater\Notifications\EventHandler;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
+use Codedge\Updater\SourceRepositoryTypes\GitlabRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 
-/**
- * UpdaterServiceProvider.php.
- *
- * @author Holger Lösken <holger.loesken@codedge.de>
- * @copyright See LICENSE file that was distributed with this source code.
- */
 class UpdaterServiceProvider extends ServiceProvider
 {
     protected bool $defer = false;
@@ -83,9 +78,18 @@ class UpdaterServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(ClientInterface::class, Client::class);
-        $this->app->bind(Client::class, function () {
-            return new Client(['base_uri' => GithubRepositoryType::GITHUB_API_URL]);
-        });
+
+        $this->app->when(GithubRepositoryType::class)
+                  ->needs(ClientInterface::class)
+                  ->give(function() {
+                      return new Client(['base_uri' => GithubRepositoryType::API_URL]);
+                  });
+
+        $this->app->when(GitlabRepositoryType::class)
+                  ->needs(ClientInterface::class)
+                  ->give(function() {
+                      return new Client(['base_uri' => GitlabRepositoryType::API_URL]);
+                  });
 
         $this->app->bind(GithubRepositoryType::class, function (): GithubRepositoryType {
             return new GithubRepositoryType(
@@ -113,6 +117,14 @@ class UpdaterServiceProvider extends ServiceProvider
         $this->app->bind(HttpRepositoryType::class, function () {
             return new HttpRepositoryType(
                 config('self-update.repository_types.http'),
+                $this->app->make(ClientInterface::class),
+                $this->app->make(UpdateExecutor::class)
+            );
+        });
+
+        $this->app->bind(GitlabRepositoryType::class, function () {
+            return new GitlabRepositoryType(
+                config('self-update.repository_types.gitlab'),
                 $this->app->make(ClientInterface::class),
                 $this->app->make(UpdateExecutor::class)
             );
