@@ -150,13 +150,13 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
 
     protected function getRepositoryReleases(): ResponseInterface
     {
-        $url = '/projects/'.$this->config['repository_id'].'/repository'.'/releases';
+        $url = '/projects/'.$this->config['repository_id'].'/releases';
 
         $headers = [];
 
         if ($this->hasAccessToken()) {
             $headers = [
-                'Authorization' => $this->getAccessToken(),
+                'PRIVATE-TOKEN' => $this->getAccessToken(),
             ];
         }
 
