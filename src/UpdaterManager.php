@@ -22,8 +22,11 @@ use InvalidArgumentException;
 final class UpdaterManager implements UpdaterContract
 {
     protected Application $app;
+
+    /**
+     * @var array<string, SourceRepositoryTypeContract>
+     */
     protected array $sources = [];
-    protected array $customSourceCreators = [];
 
     public function __construct(Application $app)
     {

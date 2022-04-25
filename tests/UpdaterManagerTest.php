@@ -68,7 +68,7 @@ class UpdaterManagerTest extends TestCase
         $manager = resolve(UpdaterManager::class);
 
         /** @var SourceRepository $repository */
-        $repository = $manager->source('');
+        $repository = $manager->source();
         $repository->deleteVersionFile();
 
         $this->assertFalse($repository->isNewVersionAvailable('2.7'));

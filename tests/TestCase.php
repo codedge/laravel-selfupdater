@@ -19,6 +19,7 @@ abstract class TestCase extends Orchestra
 {
     const DOWNLOAD_PATH = '/tmp/self-updater';
 
+    /** @var array<string, string>  */
     protected array $mockedResponses = [
         'tag'    => 'releases-tag.json',
         'branch' => 'releases-branch.json',
@@ -57,7 +58,10 @@ abstract class TestCase extends Orchestra
         ]);
     }
 
-    protected function getMockedClient($responses): Client
+    /**
+     * @param Response[] $responses
+     */
+    protected function getMockedClient(array $responses): Client
     {
         $handler = HandlerStack::create(new MockHandler($responses));
 

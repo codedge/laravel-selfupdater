@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Codedge\Updater\Tests\SourceRepositoryTypes;
 
+use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
@@ -168,11 +169,12 @@ final class HttpRepositoryTypeTest extends TestCase
     /** @test */
     public function it_cannot_get_new_version_available_and_fails_with_exception(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(VersionException::class);
+        $this->expectExceptionMessage('Version installed not found.');
 
         /** @var HttpRepositoryType $http */
         $http = resolve(HttpRepositoryType::class);
-        $http->isNewVersionAvailable('');
+        $http->isNewVersionAvailable();
     }
 
     /** @test */

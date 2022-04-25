@@ -6,6 +6,7 @@ namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
+use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
@@ -80,7 +81,7 @@ class GithubRepositoryType
         $version = $currentVersion ?: $this->getVersionInstalled();
 
         if (!$version) {
-            throw new InvalidArgumentException('No currently installed version specified.');
+            throw VersionException::versionInstalledNotFound();
         }
 
         $versionAvailable = $this->getVersionAvailable(); //@phpstan-ignore-line

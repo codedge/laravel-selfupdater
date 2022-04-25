@@ -6,6 +6,7 @@ namespace Codedge\Updater\Tests\SourceRepositoryTypes;
 
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateSucceeded;
+use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
@@ -95,7 +96,8 @@ final class GithubRepositoryTypeTest extends TestCase
     /** @test */
     public function it_cannot_get_new_version_available_and_fails_with_exception(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(VersionException::class);
+        $this->expectExceptionMessage('Version installed not found.');
 
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();

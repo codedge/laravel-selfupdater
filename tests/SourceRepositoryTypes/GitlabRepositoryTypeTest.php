@@ -6,13 +6,13 @@ namespace Codedge\Updater\Tests\SourceRepositoryTypes;
 
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateSucceeded;
+use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\GitlabRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Event;
-use InvalidArgumentException;
 
 final class GitlabRepositoryTypeTest extends TestCase
 {
@@ -68,7 +68,8 @@ final class GitlabRepositoryTypeTest extends TestCase
     /** @test */
     public function it_cannot_get_new_version_available_and_fails_with_exception(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(VersionException::class);
+        $this->expectExceptionMessage('Version installed not found.');
 
         /** @var GitlabRepositoryType $gitlab */
         $gitlab = resolve(GitlabRepositoryType::class);

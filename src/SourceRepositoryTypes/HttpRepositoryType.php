@@ -6,6 +6,8 @@ namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
+use Codedge\Updater\Exceptions\ReleaseException;
+use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
@@ -59,7 +61,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         $version = $currentVersion ?: $this->getVersionInstalled();
 
         if (!$version) {
-            throw new InvalidArgumentException('No currently installed version specified.');
+            throw VersionException::versionInstalledNotFound();
         }
 
         $versionAvailable = $this->getVersionAvailable();
@@ -79,7 +81,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     /**
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
-     * @throws Exception|GuzzleException
+     * @throws GuzzleException|ReleaseException
      */
     public function fetch(string $version = ''): Release
     {
@@ -87,7 +89,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         $releaseCollection = $this->extractFromHtml($response->getBody()->getContents());
 
         if ($releaseCollection->isEmpty()) {
-            throw new Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
+            throw ReleaseException::noReleaseFound($version);
         }
 
         $release = $this->selectRelease($releaseCollection, $version);
@@ -143,7 +145,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      * @param string $prepend Prepend a string to the latest version
      * @param string $append  Append a string to the latest version
      *
-     * @throws Exception
+     * @throws Exception|GuzzleException
      */
     public function getVersionAvailable(string $prepend = '', string $append = ''): string
     {

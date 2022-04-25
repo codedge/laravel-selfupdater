@@ -9,5 +9,5 @@ interface UpdaterContract
     /**
      * Get a source type instance.
      */
-    public function source(string $name = '');
+    public function source(string $name = ''): SourceRepositoryTypeContract;
 }
