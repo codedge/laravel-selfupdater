@@ -18,7 +18,6 @@ use GuzzleHttp\Utils;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 
 class GitlabRepositoryType implements SourceRepositoryTypeContract

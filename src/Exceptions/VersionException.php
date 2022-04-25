@@ -6,8 +6,8 @@ namespace Codedge\Updater\Exceptions;
 
 final class VersionException extends \Exception
 {
-    public static function versionInstalledNotFound(): VersionException
+    public static function versionInstalledNotFound(): self
     {
-        return new VersionException('Version installed not found.');
+        return new self('Version installed not found.');
     }
 }

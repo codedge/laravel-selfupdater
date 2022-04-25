@@ -15,7 +15,6 @@ use Codedge\Updater\Tests\TestCase;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Event;
-use InvalidArgumentException;
 
 final class GithubRepositoryTypeTest extends TestCase
 {

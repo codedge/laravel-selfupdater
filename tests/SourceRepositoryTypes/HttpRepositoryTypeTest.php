@@ -10,7 +10,6 @@ use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
 use GuzzleHttp\Client;
-use InvalidArgumentException;
 
 final class HttpRepositoryTypeTest extends TestCase
 {
