@@ -155,7 +155,15 @@ final class Release
     protected function extractZip(string $extractTo): bool
     {
         $zip = new \ZipArchive();
-        $res = $zip->open($this->getStoragePath(), \ZipArchive::OVERWRITE);
+
+        /*
+         * @see https://bugs.php.net/bug.php?id=79296
+         */
+        if(filesize($this->getStoragePath()) === 0) {
+            $res = $zip->open($this->getStoragePath(), \ZipArchive::OVERWRITE);
+        } else {
+            $res = $zip->open($this->getStoragePath());
+        }
 
         if ($res !== true) {
             throw new Exception("Cannot open zip archive [{$this->getStoragePath()}]. Error: $res");
