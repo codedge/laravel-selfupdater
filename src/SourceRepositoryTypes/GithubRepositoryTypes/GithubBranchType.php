@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use Codedge\Updater\Exceptions\ReleaseException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Utils;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -36,13 +38,18 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
     public function fetch(string $version = ''): Release
     {
         $response = $this->getRepositoryReleases();
-        $releaseCollection = collect(Utils::jsonDecode($response->getBody()->getContents()));
 
-        if ($releaseCollection->isEmpty()) {
-            throw new \Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
+        try {
+            $releases = collect(Utils::jsonDecode($response->getBody()->getContents()));
+        } catch (InvalidArgumentException $e) {
+            throw ReleaseException::noReleaseFound($version);
         }
 
-        $release = $this->selectRelease($releaseCollection, $version);
+        if ($releases->isEmpty()) {
+            throw ReleaseException::noReleaseFound($version);
+        }
+
+        $release = $this->selectRelease($releases, $version);
 
         $this->release->setVersion($release->commit->author->date)
                       ->setRelease($release->sha.'.zip')
@@ -57,7 +64,7 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
         return $this->release;
     }
 
-    public function selectRelease(Collection $collection, string $version)
+    public function selectRelease(Collection $collection, string $version): object
     {
         $release = $collection->first();
 

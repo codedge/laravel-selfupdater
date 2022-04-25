@@ -6,6 +6,7 @@ namespace Codedge\Updater\Tests\SourceRepositoryTypes;
 
 use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Events\UpdateSucceeded;
+use Codedge\Updater\Exceptions\ReleaseException;
 use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\GitlabRepositoryType;
@@ -107,7 +108,8 @@ final class GitlabRepositoryTypeTest extends TestCase
     {
         $client = $this->getMockedClient([
             $this->getResponse200Type('gitlab'),
-            $this->getResponse200ZipFile(),
+            $this->getResponseEmpty(),
+            $this->getResponseEmpty()
         ]);
         $this->app->instance(Client::class, $client);
 
@@ -116,7 +118,9 @@ final class GitlabRepositoryTypeTest extends TestCase
 
         $this->assertInstanceOf(Release::class, $gitlab->fetch());
 
-        $this->expectException(Exception::class);
+        $this->expectException(ReleaseException::class);
+        $this->expectExceptionMessage('No release found for version "latest version". Please check the repository you\'re pulling from');
+
         $this->assertInstanceOf(Release::class, $gitlab->fetch());
     }
 

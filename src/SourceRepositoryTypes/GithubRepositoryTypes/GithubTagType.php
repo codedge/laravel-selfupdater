@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use Codedge\Updater\Exceptions\ReleaseException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Exception;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Utils;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -66,10 +68,15 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
     public function fetch(string $version = ''): Release
     {
         $response = $this->getRepositoryReleases();
-        $releases = collect(Utils::jsonDecode($response->getBody()->getContents()));
+
+        try {
+            $releases = collect(Utils::jsonDecode($response->getBody()->getContents()));
+        } catch (InvalidArgumentException $e) {
+            throw ReleaseException::noReleaseFound($version);
+        }
 
         if ($releases->isEmpty()) {
-            throw new \Exception('Cannot find a release to update. Please check the repository you\'re pulling from');
+            throw ReleaseException::noReleaseFound($version);
         }
 
         $release = $this->selectRelease($releases, $version);
@@ -87,7 +94,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
         return $this->release;
     }
 
-    public function selectRelease(Collection $collection, string $version)
+    public function selectRelease(Collection $collection, string $version): object
     {
         $release = $collection->first();
 

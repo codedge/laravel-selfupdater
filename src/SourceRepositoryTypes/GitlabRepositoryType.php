@@ -14,6 +14,7 @@ use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Utils;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -100,11 +101,18 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         return $version;
     }
 
+    /**
+     * @throws ReleaseException
+     */
     public function fetch(string $version = ''): Release
     {
         $response = $this->getRepositoryReleases();
 
-        $releases = collect(Utils::jsonDecode($response->getBody()->getContents()));
+        try {
+            $releases = collect(Utils::jsonDecode($response->getBody()->getContents()));
+        } catch (InvalidArgumentException $e) {
+            throw ReleaseException::noReleaseFound($version);
+        }
 
         if ($releases->isEmpty()) {
             throw ReleaseException::noReleaseFound($version);
@@ -125,7 +133,7 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         return $this->release;
     }
 
-    public function selectRelease(Collection $collection, string $version)
+    public function selectRelease(Collection $collection, string $version): object
     {
         $release = $collection->first();
 
