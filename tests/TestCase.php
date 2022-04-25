@@ -43,7 +43,7 @@ abstract class TestCase extends Orchestra
             ],
             'gitlab' => [
                 'type'                 => 'gitlab',
-                'repository_id'       => '35488518',
+                'repository_id'        => '35488518',
                 'download_path'        => self::DOWNLOAD_PATH,
                 'private_access_token' => '',
             ],
@@ -108,8 +108,6 @@ abstract class TestCase extends Orchestra
 
     /**
      * @param Application $app
-     *
-     * @return array
      */
     protected function getPackageProviders($app): array
     {
@@ -120,8 +118,6 @@ abstract class TestCase extends Orchestra
 
     /**
      * @param Application $app
-     *
-     * @return array
      */
     protected function getPackageAliases($app): array
     {

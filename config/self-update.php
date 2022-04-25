@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
 
     /*
@@ -49,7 +51,7 @@ return [
         ],
         'gitlab' => [
             'type'                 => 'gitlab',
-            'repository_id'       => env('SELF_UPDATER_REPO_URL', ''),
+            'repository_id'        => env('SELF_UPDATER_REPO_URL', ''),
             'download_path'        => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
             'private_access_token' => env('SELF_UPDATER_GITLAB_PRIVATE_ACCESS_TOKEN', ''),
         ],

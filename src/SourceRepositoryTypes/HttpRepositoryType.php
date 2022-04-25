@@ -105,9 +105,6 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         return $this->release;
     }
 
-    /**
-     * @return mixed
-     */
     public function selectRelease(Collection $collection, string $version)
     {
         $release = $collection->first();
@@ -147,8 +144,6 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      * @param string $append  Append a string to the latest version
      *
      * @throws Exception
-     *
-     * @return string
      */
     public function getVersionAvailable(string $prepend = '', string $append = ''): string
     {

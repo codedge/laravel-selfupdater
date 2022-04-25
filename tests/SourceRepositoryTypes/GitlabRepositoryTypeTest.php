@@ -158,5 +158,4 @@ final class GitlabRepositoryTypeTest extends TestCase
 
         $this->assertInstanceOf(Release::class, $release);
     }
-
 }

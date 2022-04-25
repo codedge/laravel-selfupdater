@@ -44,12 +44,13 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         $this->updateExecutor = $updateExecutor;
     }
 
-    public function update( Release $release ): bool
+    public function update(Release $release): bool
     {
         return $this->updateExecutor->run($release);
     }
 
-    public function isNewVersionAvailable( string $currentVersion = '' ): bool {
+    public function isNewVersionAvailable(string $currentVersion = ''): bool
+    {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
         if (!$version) {
@@ -70,7 +71,8 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         return false;
     }
 
-    public function getVersionInstalled(): string {
+    public function getVersionInstalled(): string
+    {
         return (string) config('self-update.version_installed');
     }
 
@@ -82,8 +84,6 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
      * @param string $append  Append a string to the latest version
      *
      * @throws Exception
-     *
-     * @return string
      */
     public function getVersionAvailable(string $prepend = '', string $append = ''): string
     {
@@ -99,7 +99,7 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         return $version;
     }
 
-    public function fetch( string $version = '' ): Release
+    public function fetch(string $version = ''): Release
     {
         $response = $this->getRepositoryReleases();
 
@@ -114,8 +114,7 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         $this->release->setVersion($release->tag_name)
                       ->setRelease($release->tag_name.'.zip')
                       ->updateStoragePath()
-                      ->setDownloadUrl($release->assets->sources[0]->url)
-        ;
+                      ->setDownloadUrl($release->assets->sources[0]->url);
 
         if (!$this->release->isSourceAlreadyFetched()) {
             $this->release->download($this->client);
@@ -124,7 +123,6 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
 
         return $this->release;
     }
-
 
     public function selectRelease(Collection $collection, string $version)
     {

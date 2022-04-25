@@ -31,7 +31,6 @@ final class UpdateExecutor
      * Use the base_path() function to determine the project root folder.
      * This might be not good when running unit tests.
      *
-     * @param string $path
      *
      * @return $this
      */
