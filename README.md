@@ -8,12 +8,13 @@
 [![codecov](https://codecov.io/gh/codedge/laravel-selfupdater/branch/master/graph/badge.svg)](https://codecov.io/gh/codedge/laravel-selfupdater)
 
 This package provides some basic methods to implement a self updating
-functionality for your Laravel application. 
+functionality for your Laravel application.
 
 **Supported update provider:**
-- GitHub
-- Gitlab
-- Http-based archives
+
+-   GitHub
+-   Gitlab
+-   Http-based archives
 
 Usually you need this when distributing a self-hosted Laravel application
 that needs some updating mechanism without [Composer](https://getcomposer.org/).
