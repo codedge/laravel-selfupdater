@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codedge\Updater\Commands;
 
 use Codedge\Updater\UpdaterManager;

@@ -15,10 +15,6 @@ interface SourceRepositoryTypeContract
 
     /**
      * Perform the actual update process.
-     *
-     * @param Release $release
-     *
-     * @return bool
      */
     public function update(Release $release): bool;
 
@@ -26,10 +22,6 @@ interface SourceRepositoryTypeContract
      * Check repository if a newer version than the installed one is available.
      * Caution: v.1.1 compared to 1.1 is not the same. Check to actually compare correct version, including letters
      * before or after.
-     *
-     * @param string $currentVersion
-     *
-     * @return bool
      */
     public function isNewVersionAvailable(string $currentVersion = ''): bool;
 
@@ -44,8 +36,6 @@ interface SourceRepositoryTypeContract
      *
      * @param string $prepend Prepend a string to the latest version
      * @param string $append  Append a string to the latest version
-     *
-     * @return string
      */
     public function getVersionAvailable(string $prepend = '', string $append = ''): string;
 }

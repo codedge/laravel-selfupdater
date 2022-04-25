@@ -18,14 +18,8 @@ use Psr\Http\Message\ResponseInterface;
 
 final class GithubTagType extends GithubRepositoryType implements SourceRepositoryTypeContract
 {
-    /**
-     * @var ClientInterface
-     */
     protected ClientInterface $client;
 
-    /**
-     * @var Release
-     */
     protected Release $release;
 
     public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
@@ -48,8 +42,6 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
      * @param string $append  Append a string to the latest version
      *
      * @throws Exception
-     *
-     * @return string
      */
     public function getVersionAvailable(string $prepend = '', string $append = ''): string
     {
@@ -68,11 +60,8 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
     /**
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
-     * @param string $version
      *
      * @throws Exception
-     *
-     * @return Release
      */
     public function fetch(string $version = ''): Release
     {

@@ -17,14 +17,8 @@ use Psr\Http\Message\ResponseInterface;
 
 final class GithubBranchType extends GithubRepositoryType implements SourceRepositoryTypeContract
 {
-    /**
-     * @var ClientInterface
-     */
     protected ClientInterface $client;
 
-    /**
-     * @var Release
-     */
     protected Release $release;
 
     public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
@@ -63,12 +57,6 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
         return $this->release;
     }
 
-    /**
-     * @param Collection $collection
-     * @param string     $version
-     *
-     * @return mixed
-     */
     public function selectRelease(Collection $collection, string $version)
     {
         $release = $collection->first();

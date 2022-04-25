@@ -27,10 +27,6 @@ class GithubRepositoryType
     protected array $config;
     protected UpdateExecutor $updateExecutor;
 
-    /**
-     * @param array          $config
-     * @param UpdateExecutor $updateExecutor
-     */
     public function __construct(array $config, UpdateExecutor $updateExecutor)
     {
         $this->config = $config;
@@ -53,11 +49,7 @@ class GithubRepositoryType
     }
 
     /**
-     * @param Release $release
-     *
      * @throws \Exception
-     *
-     * @return bool
      */
     public function update(Release $release): bool
     {
@@ -69,9 +61,6 @@ class GithubRepositoryType
         return !empty($this->config['use_branch']);
     }
 
-    /**
-     * @return string
-     */
     public function getVersionInstalled(): string
     {
         return (string) config('self-update.version_installed');
@@ -82,12 +71,9 @@ class GithubRepositoryType
      * For updates that are pulled from a commit just checking the SHA won't be enough. So we need to check/compare
      * the commits and dates.
      *
-     * @param string $currentVersion
      *
      * @throws InvalidArgumentException
      * @throws Exception
-     *
-     * @return bool
      */
     public function isNewVersionAvailable(string $currentVersion = ''): bool
     {

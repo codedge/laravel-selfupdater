@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codedge\Updater;
 
 use Codedge\Updater\Commands\CheckForUpdate;
@@ -81,13 +83,13 @@ class UpdaterServiceProvider extends ServiceProvider
 
         $this->app->when(GithubRepositoryType::class)
                   ->needs(ClientInterface::class)
-                  ->give(function() {
+                  ->give(function () {
                       return new Client(['base_uri' => GithubRepositoryType::API_URL]);
                   });
 
         $this->app->when(GitlabRepositoryType::class)
                   ->needs(ClientInterface::class)
-                  ->give(function() {
+                  ->give(function () {
                       return new Client(['base_uri' => GitlabRepositoryType::API_URL]);
                   });
 

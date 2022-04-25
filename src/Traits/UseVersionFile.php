@@ -12,8 +12,6 @@ trait UseVersionFile
 
     /**
      * Check if the file with the new version already exists.
-     *
-     * @return bool
      */
     public function versionFileExists(): bool
     {
@@ -30,8 +28,6 @@ trait UseVersionFile
 
     /**
      * Get the content of the version file.
-     *
-     * @return string
      */
     public function getVersionFile(): string
     {
@@ -40,8 +36,6 @@ trait UseVersionFile
 
     /**
      * Delete the version file.
-     *
-     * @return bool
      */
     public function deleteVersionFile(): bool
     {
