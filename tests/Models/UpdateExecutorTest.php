@@ -32,7 +32,7 @@ class UpdateExecutorTest extends TestCase
     /** @test */
     public function it_can_run_successfully(): void
     {
-        $dir = config('self-update.repository_types.github.download_path') . '/update-dir';
+        $dir = config('self-update.repository_types.github.download_path').'/update-dir';
         File::makeDirectory($dir, 0775, true, true);
 
         $client = $this->getMockedClient([

@@ -159,7 +159,7 @@ final class Release
         /*
          * @see https://bugs.php.net/bug.php?id=79296
          */
-        if(filesize($this->getStoragePath()) === 0) {
+        if (filesize($this->getStoragePath()) === 0) {
             $res = $zip->open($this->getStoragePath(), \ZipArchive::OVERWRITE);
         } else {
             $res = $zip->open($this->getStoragePath());
