@@ -156,7 +156,7 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
 
         if ($this->hasAccessToken()) {
             $headers = [
-                'PRIVATE-TOKEN' => $this->getAccessToken(),
+                'PRIVATE-TOKEN' => $this->getAccessToken(false),
             ];
         }
 
