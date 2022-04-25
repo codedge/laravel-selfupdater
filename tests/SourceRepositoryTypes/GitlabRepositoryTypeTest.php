@@ -10,7 +10,6 @@ use Codedge\Updater\Exceptions\ReleaseException;
 use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\GitlabRepositoryType;
-use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
 use GuzzleHttp\Client;
@@ -172,11 +171,11 @@ final class GitlabRepositoryTypeTest extends TestCase
         $items = [
             [
                 'tag_name' => '1.3',
-                'name' => 'New version 1.3',
+                'name'     => 'New version 1.3',
             ],
             [
                 'tag_name' => '1.2',
-                'name' => 'New version 1.2',
+                'name'     => 'New version 1.2',
             ],
         ];
 
@@ -192,11 +191,11 @@ final class GitlabRepositoryTypeTest extends TestCase
         $items = [
             [
                 'tag_name' => '1.3',
-                'name' => 'New version 1.3',
+                'name'     => 'New version 1.3',
             ],
             [
                 'tag_name' => '1.2',
-                'name' => 'New version 1.2',
+                'name'     => 'New version 1.2',
             ],
         ];
 
