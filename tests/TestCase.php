@@ -19,7 +19,7 @@ abstract class TestCase extends Orchestra
 {
     const DOWNLOAD_PATH = '/tmp/self-updater';
 
-    /** @var array<string, string>  */
+    /** @var array<string, string> */
     protected array $mockedResponses = [
         'tag'    => 'releases-tag.json',
         'branch' => 'releases-branch.json',
