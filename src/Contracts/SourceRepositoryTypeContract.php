@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Codedge\Updater\Contracts;
 
 use Codedge\Updater\Models\Release;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Client\Response;
 
 interface SourceRepositoryTypeContract

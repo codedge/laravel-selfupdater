@@ -9,7 +9,6 @@ use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
 
 final class HttpRepositoryTypeTest extends TestCase
@@ -67,8 +66,7 @@ final class HttpRepositoryTypeTest extends TestCase
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200HttpType())
-            ->pushResponse($this->getResponse200ZipFile())
-        ;
+            ->pushResponse($this->getResponse200ZipFile());
 
         $this->assertInstanceOf(Release::class, $http->fetch());
 
@@ -86,8 +84,7 @@ final class HttpRepositoryTypeTest extends TestCase
             ->pushResponse($this->getResponse200HttpType())
             ->pushResponse($this->getResponse200ZipFile())
             ->pushResponse($this->getResponse200HttpType())
-            ->pushResponse($this->getResponse200HttpType())
-        ;
+            ->pushResponse($this->getResponse200HttpType());
 
         $release = $http->fetch();
 
@@ -167,8 +164,7 @@ final class HttpRepositoryTypeTest extends TestCase
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200HttpType())
-            ->pushResponse($this->getResponse200HttpType())
-        ;
+            ->pushResponse($this->getResponse200HttpType());
 
         $this->assertTrue($http->isNewVersionAvailable('4.5'));
         $this->assertFalse($http->isNewVersionAvailable('5.0'));

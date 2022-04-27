@@ -16,10 +16,9 @@ use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Utils;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Psr\Http\Message\ResponseInterface;
-use Illuminate\Support\Facades\Http;
 
 class GitlabRepositoryType implements SourceRepositoryTypeContract
 {
@@ -38,8 +37,7 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         $this->release = resolve(Release::class);
         $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
-                      ->setAccessToken($this->config['private_access_token'])
-        ;
+                      ->setAccessToken($this->config['private_access_token']);
 
         $this->updateExecutor = $updateExecutor;
     }

@@ -13,7 +13,6 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 
@@ -154,7 +153,7 @@ final class GithubRepositoryTypeTest extends TestCase
         $github->deleteVersionFile();
 
         Http::fake([
-           '*' => $this->getResponse200Type('branch')
+            '*' => $this->getResponse200Type('branch'),
         ]);
 
         $this->assertFalse($github->isNewVersionAvailable('2020-02-08T21:09:15Z'));
@@ -182,8 +181,7 @@ final class GithubRepositoryTypeTest extends TestCase
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('tag'))
-            ->pushResponse($this->getResponse200ZipFile())
-        ;
+            ->pushResponse($this->getResponse200ZipFile());
 
         $release = $github->fetch();
 
@@ -200,9 +198,7 @@ final class GithubRepositoryTypeTest extends TestCase
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('tag'))
-            ->pushResponse($this->getResponse200ZipFile())
-        ;
-
+            ->pushResponse($this->getResponse200ZipFile());
 
         $release = $github->fetch('2.6.0');
 
@@ -219,8 +215,7 @@ final class GithubRepositoryTypeTest extends TestCase
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('tag'))
-            ->pushResponse($this->getResponse200ZipFile())
-        ;
+            ->pushResponse($this->getResponse200ZipFile());
 
         $release = $github->fetch('v3.22.1');
 
@@ -239,8 +234,7 @@ final class GithubRepositoryTypeTest extends TestCase
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('branch'))
-            ->pushResponse($this->getResponse200ZipFile())
-        ;
+            ->pushResponse($this->getResponse200ZipFile());
 
         $release = $github->fetch();
 
@@ -259,8 +253,7 @@ final class GithubRepositoryTypeTest extends TestCase
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('branch'))
-            ->pushResponse($this->getResponse200ZipFile())
-        ;
+            ->pushResponse($this->getResponse200ZipFile());
 
         $release = $github->fetch('2020-02-06T09:35:51Z');
 
@@ -279,8 +272,7 @@ final class GithubRepositoryTypeTest extends TestCase
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('branch'))
-            ->pushResponse($this->getResponse200ZipFile())
-        ;
+            ->pushResponse($this->getResponse200ZipFile());
 
         $release = $github->fetch('2020-01-01T11:11:11Z');
 
@@ -298,7 +290,7 @@ final class GithubRepositoryTypeTest extends TestCase
         $github = (resolve(GithubRepositoryType::class))->create();
 
         Http::fake([
-            '*' => $this->getResponseEmpty()
+            '*' => $this->getResponseEmpty(),
         ]);
 
         $this->expectException(Exception::class);

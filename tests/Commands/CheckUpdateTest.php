@@ -8,7 +8,6 @@ use Codedge\Updater\Commands\CheckForUpdate;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Tests\TestCase;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
 
 final class CheckUpdateTest extends TestCase
@@ -24,8 +23,7 @@ final class CheckUpdateTest extends TestCase
     {
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('tag'))
-            ->pushResponse($this->getResponse200ZipFile())
-        ;
+            ->pushResponse($this->getResponse200ZipFile());
 
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
