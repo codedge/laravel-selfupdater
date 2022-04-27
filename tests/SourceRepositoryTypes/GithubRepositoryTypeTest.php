@@ -15,6 +15,7 @@ use Codedge\Updater\Tests\TestCase;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 
 final class GithubRepositoryTypeTest extends TestCase
 {
@@ -61,6 +62,10 @@ final class GithubRepositoryTypeTest extends TestCase
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
 
+        Http::fake([
+            '*' => $this->getResponse200ZipFile(),
+        ]);
+
         /** @var Release $release */
         $release = resolve(Release::class);
         $release->setStoragePath((string) config('self-update.repository_types.github.download_path'))
@@ -68,7 +73,7 @@ final class GithubRepositoryTypeTest extends TestCase
                 ->setRelease('release-1.0.zip')
                 ->updateStoragePath()
                 ->setDownloadUrl('some-local-file')
-                ->download($this->getMockedClient([$this->getResponse200ZipFile()]));
+                ->download();
         $release->extract();
 
         Event::fake();
@@ -106,19 +111,14 @@ final class GithubRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_get_new_version_available_from_type_tag_without_version_file(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('tag'),
-            $this->getResponse200Type('tag'),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
         $github->deleteVersionFile();
 
-        $github->setAccessToken('123');
-
         Event::fake();
+        Http::fake([
+            '*' => $this->getResponse200Type('tag'),
+        ]);
 
         $this->assertFalse($github->isNewVersionAvailable('2.7'));
         $this->assertTrue($github->isNewVersionAvailable('1.1'));
@@ -149,15 +149,13 @@ final class GithubRepositoryTypeTest extends TestCase
     {
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('branch'),
-            $this->getResponse200Type('branch'),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GithubBranchType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
         $github->deleteVersionFile();
+
+        Http::fake([
+           '*' => $this->getResponse200Type('branch')
+        ]);
 
         $this->assertFalse($github->isNewVersionAvailable('2020-02-08T21:09:15Z'));
         $this->assertTrue($github->isNewVersionAvailable('2020-02-04T21:09:15Z'));
@@ -177,31 +175,15 @@ final class GithubRepositoryTypeTest extends TestCase
     }
 
     /** @test */
-    public function it_can_handle_access_tokens_in_github_branch_type_repo(): void
-    {
-        /** @var GithubBranchType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
-
-        $github->setAccessTokenPrefix('MyPrefix ');
-        $github->setAccessToken('001');
-
-        $this->assertEquals('MyPrefix 001', $github->getAccessToken());
-        $this->assertTrue($github->hasAccessToken());
-        $this->assertEquals('MyPrefix ', $github->getAccessTokenPrefix());
-        $this->assertEquals('001', $github->getAccessToken(false));
-    }
-
-    /** @test */
     public function it_can_fetch_github_tag_releases_latest(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('tag'),
-            $this->getResponse200ZipFile(),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('tag'))
+            ->pushResponse($this->getResponse200ZipFile())
+        ;
 
         $release = $github->fetch();
 
@@ -213,14 +195,14 @@ final class GithubRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_fetch_github_tag_releases_specific_version(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('tag'),
-            $this->getResponse200ZipFile(),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('tag'))
+            ->pushResponse($this->getResponse200ZipFile())
+        ;
+
 
         $release = $github->fetch('2.6.0');
 
@@ -232,14 +214,13 @@ final class GithubRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_fetch_github_tag_releases_and_takes_latest_if_version_not_available(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('tag'),
-            $this->getResponse200ZipFile(),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('tag'))
+            ->pushResponse($this->getResponse200ZipFile())
+        ;
 
         $release = $github->fetch('v3.22.1');
 
@@ -253,15 +234,13 @@ final class GithubRepositoryTypeTest extends TestCase
     {
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('branch'),
-            $this->getResponse200ZipFile(),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GithubBranchType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
-        $github->setAccessToken('123');
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('branch'))
+            ->pushResponse($this->getResponse200ZipFile())
+        ;
 
         $release = $github->fetch();
 
@@ -275,14 +254,13 @@ final class GithubRepositoryTypeTest extends TestCase
     {
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('branch'),
-            $this->getResponse200ZipFile(),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GithubBranchType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('branch'))
+            ->pushResponse($this->getResponse200ZipFile())
+        ;
 
         $release = $github->fetch('2020-02-06T09:35:51Z');
 
@@ -296,14 +274,13 @@ final class GithubRepositoryTypeTest extends TestCase
     {
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('branch'),
-            $this->getResponse200ZipFile(),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GithubBranchType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('branch'))
+            ->pushResponse($this->getResponse200ZipFile())
+        ;
 
         $release = $github->fetch('2020-01-01T11:11:11Z');
 
@@ -317,13 +294,12 @@ final class GithubRepositoryTypeTest extends TestCase
     {
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
-        $client = $this->getMockedClient([
-            $this->getResponseEmpty(),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GithubBranchType $github */
         $github = (resolve(GithubRepositoryType::class))->create();
+
+        Http::fake([
+            '*' => $this->getResponseEmpty()
+        ]);
 
         $this->expectException(Exception::class);
         $github->fetch();

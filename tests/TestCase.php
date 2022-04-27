@@ -6,13 +6,11 @@ namespace Codedge\Updater\Tests;
 
 use Codedge\Updater\UpdaterFacade;
 use Codedge\Updater\UpdaterServiceProvider;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Utils;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Http;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
@@ -58,43 +56,44 @@ abstract class TestCase extends Orchestra
         ]);
     }
 
-    /**
-     * @param Response[] $responses
-     */
-    protected function getMockedClient(array $responses): Client
+    protected function getResponse200HttpType(): PromiseInterface
     {
-        $handler = HandlerStack::create(new MockHandler($responses));
+        $stream = Utils::streamFor(fopen('tests/Data/'.$this->mockedResponses['http'], 'r'));
+        $response = $stream->getContents();
 
-        return new Client(['handler' => $handler]);
+        return Http::response($response, 200, [
+            'Content-Type' => 'application/html'
+        ]);
     }
 
-    protected function getResponse200Type(string $type): Response
+    protected function getResponse200Type(string $type): PromiseInterface
     {
-        return new Response(
-            200,
-            ['Content-Type' => 'application/json'],
-            Utils::streamFor(fopen('tests/Data/'.$this->mockedResponses[$type], 'r'))
-        );
+        $stream = Utils::streamFor(fopen('tests/Data/'.$this->mockedResponses[$type], 'r'));
+        $response = json_decode($stream->getContents(), true);
+
+        return Http::response($response, 200, [
+            'Content-Type' => 'application/json'
+        ]);
     }
 
-    protected function getResponse200ZipFile(): Response
+    protected function getResponse200ZipFile(): PromiseInterface
     {
-        return new Response(
+        return Http::response(
+            fopen(__DIR__.'/Data/release-1.2.zip', 'r'),
             200,
             [
                 'Content-Type'        => 'application/zip',
                 'Content-Disposition' => 'attachment; filename="release-1.2.zip"',
             ],
-            fopen(__DIR__.'/Data/release-1.2.zip', 'r')
         );
     }
 
-    protected function getResponseEmpty(): Response
+    protected function getResponseEmpty(): PromiseInterface
     {
-        return new Response(
+        return Http::response(
+            '',
             200,
             ['Content-Type' => 'text/html'],
-            ''
         );
     }
 

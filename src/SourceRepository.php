@@ -9,6 +9,7 @@ use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Artisan;
 
 /**
@@ -47,6 +48,11 @@ final class SourceRepository implements SourceRepositoryTypeContract
     public function update(Release $release): bool
     {
         return $this->updateExecutor->run($release);
+    }
+
+    public function getReleases(): Response
+    {
+        return $this->sourceRepository->getReleases();
     }
 
     /**

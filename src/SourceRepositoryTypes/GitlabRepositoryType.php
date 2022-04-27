@@ -10,38 +10,36 @@ use Codedge\Updater\Exceptions\ReleaseException;
 use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
-use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
-use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Utils;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
+use Illuminate\Support\Facades\Http;
 
 class GitlabRepositoryType implements SourceRepositoryTypeContract
 {
     use UseVersionFile;
-    use SupportPrivateAccessToken;
 
-    const API_URL = 'https://gitlab.com/api/v4';
+    const BASE_URL = 'https://gitlab.com';
 
-    protected ClientInterface $client;
     protected array $config;
     protected Release $release;
     protected UpdateExecutor $updateExecutor;
 
-    public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
+    public function __construct(UpdateExecutor $updateExecutor)
     {
-        $this->client = $client;
-        $this->config = $config;
+        $this->config = config('self-update.repository_types.gitlab');
 
         $this->release = resolve(Release::class);
         $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
-                      ->setAccessToken($config['private_access_token']);
+                      ->setAccessToken($this->config['private_access_token'])
+        ;
 
         $this->updateExecutor = $updateExecutor;
     }
@@ -92,9 +90,9 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         if ($this->versionFileExists()) {
             $version = $prepend.$this->getVersionFile().$append;
         } else {
-            $response = $this->getRepositoryReleases();
+            $response = $this->getReleases();
 
-            $releaseCollection = collect(json_decode($response->getBody()->getContents()));
+            $releaseCollection = collect(json_decode($response->body()));
             $version = $prepend.$releaseCollection->first()->tag_name.$append;
         }
 
@@ -106,10 +104,10 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
      */
     public function fetch(string $version = ''): Release
     {
-        $response = $this->getRepositoryReleases();
+        $response = $this->getReleases();
 
         try {
-            $releases = collect(Utils::jsonDecode($response->getBody()->getContents()));
+            $releases = collect(Utils::jsonDecode($response->body()));
         } catch (InvalidArgumentException $e) {
             throw ReleaseException::noReleaseFound($version);
         }
@@ -126,7 +124,7 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
                       ->setDownloadUrl($release->assets->sources[0]->url);
 
         if (!$this->release->isSourceAlreadyFetched()) {
-            $this->release->download($this->client);
+            $this->release->download();
             $this->release->extract();
         }
 
@@ -148,18 +146,18 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         return $release;
     }
 
-    protected function getRepositoryReleases(): ResponseInterface
+    final public function getReleases(): Response
     {
-        $url = '/projects/'.$this->config['repository_id'].'/releases';
+        $url = '/api/v4/projects/'.$this->config['repository_id'].'/releases';
 
         $headers = [];
 
-        if ($this->hasAccessToken()) {
+        if ($this->release->hasAccessToken()) {
             $headers = [
-                'PRIVATE-TOKEN' => $this->getAccessToken(false),
+                'PRIVATE-TOKEN' => $this->release->getAccessToken(false),
             ];
         }
 
-        return $this->client->request('GET', $url, ['headers' => $headers]);
+        return Http::withHeaders($headers)->baseUrl(self::BASE_URL)->get($url);
     }
 }

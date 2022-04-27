@@ -7,6 +7,7 @@ namespace Codedge\Updater\Tests;
 use Codedge\Updater\SourceRepository;
 use Codedge\Updater\UpdaterManager;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 use InvalidArgumentException;
 
 class UpdaterManagerTest extends TestCase
@@ -58,18 +59,16 @@ class UpdaterManagerTest extends TestCase
     /** @test */
     public function it_can_get_new_version_through_updater_manager_available_from_type_tag_without_version_file(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('tag'),
-            $this->getResponse200Type('tag'),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var UpdaterManager $manager */
         $manager = resolve(UpdaterManager::class);
 
         /** @var SourceRepository $repository */
         $repository = $manager->source();
         $repository->deleteVersionFile();
+
+        Http::fake([
+            'github.com/*' => $this->getResponse200Type('tag'),
+        ]);
 
         $this->assertFalse($repository->isNewVersionAvailable('2.7'));
         $this->assertTrue($repository->isNewVersionAvailable('1.1'));

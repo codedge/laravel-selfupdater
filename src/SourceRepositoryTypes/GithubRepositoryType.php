@@ -11,20 +11,16 @@ use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
-use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
-use GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 
 class GithubRepositoryType
 {
     use UseVersionFile;
-    use SupportPrivateAccessToken;
 
-    const API_URL = 'https://api.github.com';
+    const BASE_URL = 'https://api.github.com';
 
-    protected ClientInterface $client;
     protected array $config;
     protected UpdateExecutor $updateExecutor;
 
@@ -32,8 +28,6 @@ class GithubRepositoryType
     {
         $this->config = $config;
         $this->updateExecutor = $updateExecutor;
-
-        $this->setAccessToken($this->config['private_access_token']);
     }
 
     public function create(): SourceRepositoryTypeContract

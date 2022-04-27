@@ -8,6 +8,8 @@ use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Finder\Finder;
@@ -175,7 +177,7 @@ final class Release
         return $extracted;
     }
 
-    public function download(ClientInterface $client): ResponseInterface
+    public function download(): Response
     {
         if (empty($this->getStoragePath())) {
             throw new Exception('No storage path set.');
@@ -189,14 +191,12 @@ final class Release
             ];
         }
 
-        return $client->request(
-            'GET',
-            $this->getDownloadUrl(),
-            [
-                'sink'    => $this->getStoragePath(),
-                'headers' => $headers,
-            ]
-        );
+        return Http::withHeaders($headers)
+                   ->withOptions([
+                       'sink' => $this->getStoragePath(),
+                   ])
+                   ->get($this->getDownloadUrl())
+        ;
     }
 
     /**

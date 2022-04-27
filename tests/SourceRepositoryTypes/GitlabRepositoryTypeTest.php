@@ -14,6 +14,7 @@ use Codedge\Updater\Tests\TestCase;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 final class GitlabRepositoryTypeTest extends TestCase
@@ -42,11 +43,15 @@ final class GitlabRepositoryTypeTest extends TestCase
                 ->setVersion('1.0')
                 ->setRelease('release-1.0.zip')
                 ->updateStoragePath()
-                ->setDownloadUrl('some-local-file')
-                ->download($this->getMockedClient([$this->getResponse200ZipFile()]));
-        $release->extract();
+                ->setDownloadUrl('https://gitlab.com/download/target')
+        ;
 
         Event::fake();
+        Http::fake([
+            'gitlab.com/*' => $this->getResponse200ZipFile(),
+        ]);
+        $release->download();
+        $release->extract();
 
         $this->assertTrue($gitlab->update($release));
 
@@ -81,19 +86,14 @@ final class GitlabRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_get_new_version_available_without_version_file(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('gitlab'),
-            $this->getResponse200Type('gitlab'),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GitlabRepositoryType $gitlab */
         $gitlab = resolve(GitlabRepositoryType::class);
         $gitlab->deleteVersionFile();
 
-        $gitlab->setAccessToken('123');
-
         Event::fake();
+        Http::fake([
+            '*' => $this->getResponse200Type('gitlab')
+        ]);
 
         $this->assertFalse($gitlab->isNewVersionAvailable('2.7'));
         $this->assertTrue($gitlab->isNewVersionAvailable('0.8'));
@@ -107,15 +107,14 @@ final class GitlabRepositoryTypeTest extends TestCase
     /** @test */
     public function it_cannot_fetch_releases_because_there_is_no_release(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('gitlab'),
-            $this->getResponseEmpty(),
-            $this->getResponseEmpty(),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GitlabRepositoryType $gitlab */
         $gitlab = resolve(GitlabRepositoryType::class);
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('gitlab'))
+            ->pushResponse($this->getResponseEmpty())
+            ->pushResponse($this->getResponseEmpty())
+        ;
 
         $this->assertInstanceOf(Release::class, $gitlab->fetch());
 
@@ -126,39 +125,16 @@ final class GitlabRepositoryTypeTest extends TestCase
     }
 
     /** @test */
-    public function it_cannot_fetch_releases_because_there_is_no_release_with_access_token(): void
-    {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('gitlab'),
-            $this->getResponse200ZipFile(),
-            $this->getResponse200Type('gitlab'),
-            $this->getResponse200Type('gitlab'),
-        ]);
-        $this->app->instance(Client::class, $client);
-
-        /** @var GitlabRepositoryType $gitlab */
-        $gitlab = resolve(GitlabRepositoryType::class);
-        $gitlab->setAccessToken('123');
-
-        $this->assertInstanceOf(Release::class, $gitlab->fetch());
-
-        $this->expectException(Exception::class);
-        $this->assertInstanceOf(Release::class, $gitlab->fetch());
-    }
-
-    /** @test */
     public function it_can_fetch_releases(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('gitlab'),
-            $this->getResponse200ZipFile(),
-            $this->getResponse200Type('gitlab'),
-            $this->getResponse200Type('gitlab'),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var GitlabRepositoryType $gitlab */
         $gitlab = resolve(GitlabRepositoryType::class);
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('gitlab'))
+            ->pushResponse($this->getResponse200ZipFile())
+            ->pushResponse($this->getResponse200Type('gitlab'))
+        ;
 
         $release = $gitlab->fetch();
 

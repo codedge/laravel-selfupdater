@@ -15,7 +15,9 @@ use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -24,7 +26,6 @@ use Psr\Http\Message\ResponseInterface;
 class HttpRepositoryType implements SourceRepositoryTypeContract
 {
     use UseVersionFile;
-    use SupportPrivateAccessToken;
 
     protected ClientInterface $client;
     protected array $config;
@@ -33,10 +34,9 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     protected string $append;
     protected UpdateExecutor $updateExecutor;
 
-    public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
+    public function __construct(UpdateExecutor $updateExecutor)
     {
-        $this->client = $client;
-        $this->config = $config;
+        $this->config = config('self-update.repository_types.http');
 
         // Get prepend and append strings
         $this->prepend = preg_replace('/_VERSION_.*$/', '', $this->config['pkg_filename_format']);
@@ -45,7 +45,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         $this->release = resolve(Release::class);
         $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
-                      ->setAccessToken($config['private_access_token']);
+                      ->setAccessToken($this->config['private_access_token']);
 
         $this->updateExecutor = $updateExecutor;
     }
@@ -85,8 +85,8 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
      */
     public function fetch(string $version = ''): Release
     {
-        $response = $this->getRepositoryReleases();
-        $releaseCollection = $this->extractFromHtml($response->getBody()->getContents());
+        $response = $this->getReleases();
+        $releaseCollection = $this->extractFromHtml($response->body());
 
         if ($releaseCollection->isEmpty()) {
             throw ReleaseException::noReleaseFound($version);
@@ -100,7 +100,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
                       ->setDownloadUrl($release->zipball_url);
 
         if (!$this->release->isSourceAlreadyFetched()) {
-            $this->release->download($this->client);
+            $this->release->download();
             $this->release->extract();
         }
 
@@ -152,21 +152,18 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         if ($this->versionFileExists()) {
             $version = $this->getVersionFile();
         } else {
-            $releaseCollection = $this->extractFromHtml($this->getRepositoryReleases()->getBody()->getContents());
+            $releaseCollection = $this->extractFromHtml($this->getReleases()->body());
             $version = $releaseCollection->first()->name;
         }
 
         return $version;
     }
 
-    /**
-     * Retrieve html body with list of all releases from archive URL.
-     *
-     * @throws Exception|GuzzleException
-     */
-    protected function getRepositoryReleases(): ResponseInterface
+    final public function getReleases(): Response
     {
-        if (empty($this->config['repository_url'])) {
+        $repositoryUrl = $this->config['repository_url'];
+
+        if (empty($repositoryUrl)) {
             throw new Exception('No repository specified. Please enter a valid URL in your config.');
         }
 
@@ -174,11 +171,11 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
 
         if ($this->release->hasAccessToken()) {
             $headers = [
-                'Authorization' => $this->getAccessToken(),
+                'Authorization' => $this->release->getAccessToken(),
             ];
         }
 
-        return $this->client->request('GET', $this->config['repository_url'], ['headers' => $headers]);
+        return Http::withHeaders($headers)->get($repositoryUrl);
     }
 
     private function extractFromHtml(string $content): Collection

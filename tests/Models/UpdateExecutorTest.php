@@ -11,6 +11,7 @@ use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 
@@ -35,8 +36,8 @@ class UpdateExecutorTest extends TestCase
         $dir = config('self-update.repository_types.github.download_path').'/update-dir';
         File::makeDirectory($dir, 0775, true, true);
 
-        $client = $this->getMockedClient([
-            $this->getResponse200ZipFile(),
+        Http::fake([
+            '*' => $this->getResponse200ZipFile(),
         ]);
 
         $this->release->setVersion('release-1.2')
@@ -44,7 +45,7 @@ class UpdateExecutorTest extends TestCase
                       ->setRelease('release-1.2.zip')
                       ->updateStoragePath()
                       ->setDownloadUrl('some/url/')
-                      ->download($client);
+                      ->download();
         $this->release->extract();
 
         $updateExecutor = (new UpdateExecutor())->setBasePath($dir);

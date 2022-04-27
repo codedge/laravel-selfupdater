@@ -10,30 +10,26 @@ use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Exception;
-use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Utils;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Psr\Http\Message\ResponseInterface;
 
 final class GithubTagType extends GithubRepositoryType implements SourceRepositoryTypeContract
 {
-    protected ClientInterface $client;
-
     protected Release $release;
 
-    public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
+    public function __construct(UpdateExecutor $updateExecutor)
     {
-        parent::__construct($config, $updateExecutor);
+        parent::__construct(config('self-update.repository_types.github'), $updateExecutor);
 
         $this->release = resolve(Release::class);
         $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
-                      ->setAccessToken($config['private_access_token']);
-
-        $this->client = $client;
+                      ->setAccessToken($this->config['private_access_token']);
     }
 
     /**
@@ -50,9 +46,9 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
         if ($this->versionFileExists()) {
             $version = $prepend.$this->getVersionFile().$append;
         } else {
-            $response = $this->getRepositoryReleases();
+            $response = $this->getReleases();
 
-            $releaseCollection = collect(json_decode($response->getBody()->getContents()));
+            $releaseCollection = collect(json_decode($response->body()));
             $version = $prepend.$releaseCollection->first()->tag_name.$append;
         }
 
@@ -67,10 +63,10 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
      */
     public function fetch(string $version = ''): Release
     {
-        $response = $this->getRepositoryReleases();
+        $response = $this->getReleases();
 
         try {
-            $releases = collect(Utils::jsonDecode($response->getBody()->getContents()));
+            $releases = collect(Utils::jsonDecode($response->body()));
         } catch (InvalidArgumentException $e) {
             throw ReleaseException::noReleaseFound($version);
         }
@@ -87,7 +83,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
                       ->setDownloadUrl($release->zipball_url);
 
         if (!$this->release->isSourceAlreadyFetched()) {
-            $this->release->download($this->client);
+            $this->release->download();
             $this->release->extract();
         }
 
@@ -109,7 +105,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
         return $release;
     }
 
-    protected function getRepositoryReleases(): ResponseInterface
+    final public function getReleases(): Response
     {
         $url = '/repos/'.$this->config['repository_vendor']
                .'/'.$this->config['repository_name']
@@ -117,12 +113,12 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
 
         $headers = [];
 
-        if ($this->hasAccessToken()) {
+        if ($this->release->hasAccessToken()) {
             $headers = [
-                'Authorization' => $this->getAccessToken(),
+                'Authorization' => $this->release->getAccessToken(),
             ];
         }
 
-        return $this->client->request('GET', $url, ['headers' => $headers]);
+        return Http::withHeaders($headers)->baseUrl(self::BASE_URL)->get($url);
     }
 }

@@ -71,63 +71,9 @@ class UpdaterServiceProvider extends ServiceProvider
             return new UpdaterManager(app());
         });
 
-        $this->app->bind(Release::class, function (): Release {
-            return new Release(new Filesystem());
-        });
-
-        $this->app->bind(UpdateExecutor::class, function () {
-            return new UpdateExecutor();
-        });
-
-        $this->app->bind(ClientInterface::class, Client::class);
-
-        $this->app->when(GithubRepositoryType::class)
-                  ->needs(ClientInterface::class)
-                  ->give(function () {
-                      return new Client(['base_uri' => GithubRepositoryType::API_URL]);
-                  });
-
-        $this->app->when(GitlabRepositoryType::class)
-                  ->needs(ClientInterface::class)
-                  ->give(function () {
-                      return new Client(['base_uri' => GitlabRepositoryType::API_URL]);
-                  });
-
         $this->app->bind(GithubRepositoryType::class, function (): GithubRepositoryType {
             return new GithubRepositoryType(
                 config('self-update.repository_types.github'),
-                $this->app->make(UpdateExecutor::class)
-            );
-        });
-
-        $this->app->bind(GithubBranchType::class, function (): SourceRepositoryTypeContract {
-            return new GithubBranchType(
-                config('self-update.repository_types.github'),
-                $this->app->make(ClientInterface::class),
-                $this->app->make(UpdateExecutor::class)
-            );
-        });
-
-        $this->app->bind(GithubTagType::class, function (): SourceRepositoryTypeContract {
-            return new GithubTagType(
-                config('self-update.repository_types.github'),
-                $this->app->make(ClientInterface::class),
-                $this->app->make(UpdateExecutor::class)
-            );
-        });
-
-        $this->app->bind(HttpRepositoryType::class, function () {
-            return new HttpRepositoryType(
-                config('self-update.repository_types.http'),
-                $this->app->make(ClientInterface::class),
-                $this->app->make(UpdateExecutor::class)
-            );
-        });
-
-        $this->app->bind(GitlabRepositoryType::class, function () {
-            return new GitlabRepositoryType(
-                config('self-update.repository_types.gitlab'),
-                $this->app->make(ClientInterface::class),
                 $this->app->make(UpdateExecutor::class)
             );
         });

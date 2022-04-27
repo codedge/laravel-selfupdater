@@ -12,7 +12,9 @@ use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Utils;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
@@ -20,27 +22,24 @@ use Psr\Http\Message\ResponseInterface;
 final class GithubBranchType extends GithubRepositoryType implements SourceRepositoryTypeContract
 {
     protected ClientInterface $client;
-
     protected Release $release;
 
-    public function __construct(array $config, ClientInterface $client, UpdateExecutor $updateExecutor)
+    public function __construct(UpdateExecutor $updateExecutor)
     {
-        parent::__construct($config, $updateExecutor);
+        parent::__construct(config('self-update.repository_types.github'), $updateExecutor);
 
         $this->release = resolve(Release::class);
         $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
-                      ->setAccessToken($config['private_access_token']);
-
-        $this->client = $client;
+                      ->setAccessToken($this->config['private_access_token']);
     }
 
     public function fetch(string $version = ''): Release
     {
-        $response = $this->getRepositoryReleases();
+        $response = $this->getReleases();
 
         try {
-            $releases = collect(Utils::jsonDecode($response->getBody()->getContents()));
+            $releases = collect(Utils::jsonDecode($response->body()));
         } catch (InvalidArgumentException $e) {
             throw ReleaseException::noReleaseFound($version);
         }
@@ -57,7 +56,7 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
                       ->setDownloadUrl($this->generateArchiveUrl($release->sha));
 
         if (!$this->release->isSourceAlreadyFetched()) {
-            $this->release->download($this->client);
+            $this->release->download();
             $this->release->extract();
         }
 
@@ -84,15 +83,15 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
         if ($this->versionFileExists()) {
             $version = $prepend.$this->getVersionFile().$append;
         } else {
-            $response = $this->getRepositoryReleases();
-            $releaseCollection = collect(Utils::jsonDecode($response->getBody()->getContents()));
+            $response = $this->getReleases();
+            $releaseCollection = collect(Utils::jsonDecode($response->body()));
             $version = $prepend.$releaseCollection->first()->commit->author->date.$append;
         }
 
         return $version;
     }
 
-    protected function getRepositoryReleases(): ResponseInterface
+    final public function getReleases(): Response
     {
         $url = DIRECTORY_SEPARATOR.'repos'
                .DIRECTORY_SEPARATOR.$this->config['repository_vendor']
@@ -102,13 +101,13 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
 
         $headers = [];
 
-        if ($this->hasAccessToken()) {
+        if ($this->release->hasAccessToken()) {
             $headers = [
-                'Authorization' => $this->getAccessToken(),
+                'Authorization' => $this->release->getAccessToken(),
             ];
         }
 
-        return $this->client->request('GET', $url, ['headers' => $headers]);
+        return Http::withHeaders($headers)->baseUrl(self::BASE_URL)->get($url);
     }
 
     private function generateArchiveUrl(string $name): string

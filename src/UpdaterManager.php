@@ -8,6 +8,7 @@ use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Contracts\UpdaterContract;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
+use Codedge\Updater\SourceRepositoryTypes\GitlabRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Exception;
 use Illuminate\Foundation\Application;
@@ -96,9 +97,11 @@ final class UpdaterManager implements UpdaterContract
         return $this->sourceRepository($factory->create());
     }
 
-    /**
-     * Create an instance for the Http source repository.
-     */
+    protected function createGitlabRepository(): SourceRepositoryTypeContract
+    {
+        return $this->sourceRepository($this->app->make(GitlabRepositoryType::class));
+    }
+
     protected function createHttpRepository(): SourceRepositoryTypeContract
     {
         return $this->sourceRepository($this->app->make(HttpRepositoryType::class));

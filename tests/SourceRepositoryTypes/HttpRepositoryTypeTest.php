@@ -10,6 +10,7 @@ use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 final class HttpRepositoryTypeTest extends TestCase
 {
@@ -31,12 +32,16 @@ final class HttpRepositoryTypeTest extends TestCase
         /** @var HttpRepositoryType $http */
         $http = resolve(HttpRepositoryType::class);
 
+        Http::fake([
+            '*' => $this->getResponse200ZipFile(),
+        ]);
+
         $release = resolve(Release::class);
         $release->setStoragePath((string) config('self-update.repository_types.http.download_path'))
                 ->setRelease('release-1.0.zip')
                 ->updateStoragePath()
                 ->setDownloadUrl('some-local-file')
-                ->download($this->getMockedClient([$this->getResponse200ZipFile()]));
+                ->download();
         $release->extract();
 
         $this->assertTrue($http->update($release));
@@ -57,35 +62,13 @@ final class HttpRepositoryTypeTest extends TestCase
     /** @test */
     public function it_cannot_fetch_releases_because_there_is_no_release(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('http'),
-            $this->getResponse200ZipFile(),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var HttpRepositoryType $http */
         $http = resolve(HttpRepositoryType::class);
 
-        $this->assertInstanceOf(Release::class, $http->fetch());
-
-        $this->expectException(Exception::class);
-        $this->assertInstanceOf(Release::class, $http->fetch());
-    }
-
-    /** @test */
-    public function it_cannot_fetch_releases_because_there_is_no_release_with_access_token(): void
-    {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('http'),
-            $this->getResponse200ZipFile(),
-            $this->getResponse200Type('http'),
-            $this->getResponse200Type('http'),
-        ]);
-        $this->app->instance(Client::class, $client);
-
-        /** @var HttpRepositoryType $http */
-        $http = $this->app->make(HttpRepositoryType::class);
-        $http->setAccessToken('123');
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200HttpType())
+            ->pushResponse($this->getResponse200ZipFile())
+        ;
 
         $this->assertInstanceOf(Release::class, $http->fetch());
 
@@ -96,16 +79,15 @@ final class HttpRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_fetch_http_releases(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('http'),
-            $this->getResponse200ZipFile(),
-            $this->getResponse200Type('http'),
-            $this->getResponse200Type('http'),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var HttpRepositoryType $http */
         $http = $this->app->make(HttpRepositoryType::class);
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200HttpType())
+            ->pushResponse($this->getResponse200ZipFile())
+            ->pushResponse($this->getResponse200HttpType())
+            ->pushResponse($this->getResponse200HttpType())
+        ;
 
         $release = $http->fetch();
 
@@ -179,32 +161,16 @@ final class HttpRepositoryTypeTest extends TestCase
     /** @test */
     public function it_can_get_new_version_available_without_version_file(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('http'),
-            $this->getResponse200Type('http'),
-        ]);
-        $this->app->instance(Client::class, $client);
-
         /** @var HttpRepositoryType $http */
         $http = $this->app->make(HttpRepositoryType::class);
         $http->deleteVersionFile();
 
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200HttpType())
+            ->pushResponse($this->getResponse200HttpType())
+        ;
+
         $this->assertTrue($http->isNewVersionAvailable('4.5'));
         $this->assertFalse($http->isNewVersionAvailable('5.0'));
-    }
-
-    /** @test */
-    public function it_can_handle_access_tokens(): void
-    {
-        /** @var HttpRepositoryType $http */
-        $http = resolve(HttpRepositoryType::class);
-
-        $http->setAccessTokenPrefix('Tester ');
-        $http->setAccessToken('123');
-
-        $this->assertEquals('Tester 123', $http->getAccessToken());
-        $this->assertTrue($http->hasAccessToken());
-        $this->assertEquals('Tester ', $http->getAccessTokenPrefix());
-        $this->assertEquals('123', $http->getAccessToken(false));
     }
 }

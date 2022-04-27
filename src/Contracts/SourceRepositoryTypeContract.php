@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Codedge\Updater\Contracts;
 
 use Codedge\Updater\Models\Release;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Client\Response;
 
 interface SourceRepositoryTypeContract
 {
@@ -17,6 +19,8 @@ interface SourceRepositoryTypeContract
      * Perform the actual update process.
      */
     public function update(Release $release): bool;
+
+    public function getReleases(): Response;
 
     /**
      * Check repository if a newer version than the installed one is available.
