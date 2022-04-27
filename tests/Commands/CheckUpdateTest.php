@@ -8,7 +8,7 @@ use Codedge\Updater\Commands\CheckForUpdate;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
 use Codedge\Updater\Tests\TestCase;
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 final class CheckUpdateTest extends TestCase
 {
@@ -21,11 +21,9 @@ final class CheckUpdateTest extends TestCase
     /** @test */
     public function it_can_run_check_update_command_without_new_version_available(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('tag'),
-            $this->getResponse200ZipFile(),
-        ]);
-        $this->app->instance(Client::class, $client);
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('tag'))
+            ->pushResponse($this->getResponse200ZipFile());
 
         /** @var GithubTagType $github */
         $github = (resolve(GithubRepositoryType::class))->create();

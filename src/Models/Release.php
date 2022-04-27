@@ -6,10 +6,10 @@ namespace Codedge\Updater\Models;
 
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Exception;
-use GuzzleHttp\ClientInterface;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Finder\Finder;
 
 final class Release
@@ -155,7 +155,15 @@ final class Release
     protected function extractZip(string $extractTo): bool
     {
         $zip = new \ZipArchive();
-        $res = $zip->open($this->getStoragePath());
+
+        /*
+         * @see https://bugs.php.net/bug.php?id=79296
+         */
+        if (filesize($this->getStoragePath()) === 0) {
+            $res = $zip->open($this->getStoragePath(), \ZipArchive::OVERWRITE);
+        } else {
+            $res = $zip->open($this->getStoragePath());
+        }
 
         if ($res !== true) {
             throw new Exception("Cannot open zip archive [{$this->getStoragePath()}]. Error: $res");
@@ -167,7 +175,7 @@ final class Release
         return $extracted;
     }
 
-    public function download(ClientInterface $client): ResponseInterface
+    public function download(): Response
     {
         if (empty($this->getStoragePath())) {
             throw new Exception('No storage path set.');
@@ -181,14 +189,11 @@ final class Release
             ];
         }
 
-        return $client->request(
-            'GET',
-            $this->getDownloadUrl(),
-            [
-                'sink'    => $this->getStoragePath(),
-                'headers' => $headers,
-            ]
-        );
+        return Http::withHeaders($headers)
+                   ->withOptions([
+                       'sink' => $this->getStoragePath(),
+                   ])
+                   ->get($this->getDownloadUrl());
     }
 
     /**

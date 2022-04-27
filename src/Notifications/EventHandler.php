@@ -21,7 +21,7 @@ final class EventHandler
         $this->config = $config;
     }
 
-    public function subscribe(Dispatcher $events)
+    public function subscribe(Dispatcher $events): void
     {
         $events->listen($this->allEventClasses(), function ($event) {
             $notification = $this->determineNotification($event);

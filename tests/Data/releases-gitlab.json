@@ -1,0 +1,71 @@
+[
+    {
+        "_links": {
+            "edit_url": "https://gitlab.com/my534/my-test-project/-/releases/1.0/edit",
+            "self": "https://gitlab.com/my534/my-test-project/-/releases/1.0"
+        },
+        "assets": {
+            "count": 4,
+            "links": [],
+            "sources": [
+                {
+                    "format": "zip",
+                    "url": "https://gitlab.com/my534/my-test-project/-/archive/1.0/my-test-project-1.0.zip"
+                },
+                {
+                    "format": "tar.gz",
+                    "url": "https://gitlab.com/my534/my-test-project/-/archive/1.0/my-test-project-1.0.tar.gz"
+                },
+                {
+                    "format": "tar.bz2",
+                    "url": "https://gitlab.com/my534/my-test-project/-/archive/1.0/my-test-project-1.0.tar.bz2"
+                },
+                {
+                    "format": "tar",
+                    "url": "https://gitlab.com/my534/my-test-project/-/archive/1.0/my-test-project-1.0.tar"
+                }
+            ]
+        },
+        "author": {
+            "avatar_url": "https://secure.gravatar.com/avatar/4db692b7a818b87200d426f8bdec05e3?s=80&d=identicon",
+            "id": 11395845,
+            "name": "Holger Lösken",
+            "state": "active",
+            "username": "codedge1",
+            "web_url": "https://gitlab.com/codedge1"
+        },
+        "commit": {
+            "author_email": "my-email@example.com",
+            "author_name": "Holger Lösken",
+            "authored_date": "2022-04-19T23:20:22.000+02:00",
+            "committed_date": "2022-04-19T23:20:22.000+02:00",
+            "committer_email": "my-email@example.com",
+            "committer_name": "Holger Lösken",
+            "created_at": "2022-04-19T23:20:22.000+02:00",
+            "id": "e9d815b94c59a295a4c9d98072c523563c8c838f",
+            "message": "Sample project\n",
+            "parent_ids": [
+                "150149b256d092ec40cda82bfb690f61e35cb604"
+            ],
+            "short_id": "e9d815b9",
+            "title": "Sample project",
+            "trailers": {},
+            "web_url": "https://gitlab.com/my534/my-test-project/-/commit/e9d815b94c59a295a4c9d98072c523563c8c838f"
+        },
+        "commit_path": "/my534/my-test-project/-/commit/e9d815b94c59a295a4c9d98072c523563c8c838f",
+        "created_at": "2022-04-25T19:17:26.422Z",
+        "description": "",
+        "evidences": [
+            {
+                "collected_at": "2022-04-25T19:17:27.059Z",
+                "filepath": "https://gitlab.com/my534/my-test-project/-/releases/1.0/evidences/2521598.json",
+                "sha": "b11d0280f71f7bf4c2c0130ef781eef41851b288bbed"
+            }
+        ],
+        "name": "Initial release",
+        "released_at": "2022-04-25T19:17:26.422Z",
+        "tag_name": "1.0",
+        "tag_path": "/my534/my-test-project/-/tags/1.0",
+        "upcoming_release": false
+    }
+]

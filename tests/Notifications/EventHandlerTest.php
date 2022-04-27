@@ -33,7 +33,7 @@ class EventHandlerTest extends TestCase
      *
      * @dataProvider channelProvider
      *
-     * @param array<string, array> $expectedChannels
+     * @param array<array<string>> $expectedChannels
      */
     public function it_will_send_a_notification_via_the_configured_notification_channels(array $expectedChannels): void
     {

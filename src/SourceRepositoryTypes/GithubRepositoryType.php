@@ -6,50 +6,28 @@ namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
 use Codedge\Updater\Events\UpdateAvailable;
+use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
-use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
-use GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 
 class GithubRepositoryType
 {
     use UseVersionFile;
-    use SupportPrivateAccessToken;
 
-    const GITHUB_API_URL = 'https://api.github.com';
+    const BASE_URL = 'https://api.github.com';
 
-    /**
-     * @var ClientInterface
-     */
-    protected $client;
+    protected array $config;
+    protected UpdateExecutor $updateExecutor;
 
-    /**
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * @var UpdateExecutor
-     */
-    protected $updateExecutor;
-
-    /**
-     * Github constructor.
-     *
-     * @param array          $config
-     * @param UpdateExecutor $updateExecutor
-     */
     public function __construct(array $config, UpdateExecutor $updateExecutor)
     {
         $this->config = $config;
         $this->updateExecutor = $updateExecutor;
-
-        $this->setAccessToken($this->config['private_access_token']);
     }
 
     public function create(): SourceRepositoryTypeContract
@@ -66,11 +44,7 @@ class GithubRepositoryType
     }
 
     /**
-     * @param Release $release
-     *
      * @throws \Exception
-     *
-     * @return bool
      */
     public function update(Release $release): bool
     {
@@ -82,9 +56,6 @@ class GithubRepositoryType
         return !empty($this->config['use_branch']);
     }
 
-    /**
-     * @return string
-     */
     public function getVersionInstalled(): string
     {
         return (string) config('self-update.version_installed');
@@ -95,19 +66,16 @@ class GithubRepositoryType
      * For updates that are pulled from a commit just checking the SHA won't be enough. So we need to check/compare
      * the commits and dates.
      *
-     * @param string $currentVersion
      *
      * @throws InvalidArgumentException
      * @throws Exception
-     *
-     * @return bool
      */
-    public function isNewVersionAvailable($currentVersion = ''): bool
+    public function isNewVersionAvailable(string $currentVersion = ''): bool
     {
         $version = $currentVersion ?: $this->getVersionInstalled();
 
         if (!$version) {
-            throw new InvalidArgumentException('No currently installed version specified.');
+            throw VersionException::versionInstalledNotFound();
         }
 
         $versionAvailable = $this->getVersionAvailable(); //@phpstan-ignore-line

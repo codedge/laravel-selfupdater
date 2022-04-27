@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes;
+namespace Codedge\Updater\SourceRepositoryTypes;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
+use Codedge\Updater\Events\UpdateAvailable;
 use Codedge\Updater\Exceptions\ReleaseException;
+use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
+use Codedge\Updater\Traits\UseVersionFile;
 use Exception;
 use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Utils;
@@ -18,18 +20,58 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-final class GithubTagType extends GithubRepositoryType implements SourceRepositoryTypeContract
+class GitlabRepositoryType implements SourceRepositoryTypeContract
 {
+    use UseVersionFile;
+
+    const BASE_URL = 'https://gitlab.com';
+
+    protected array $config;
     protected Release $release;
+    protected UpdateExecutor $updateExecutor;
 
     public function __construct(UpdateExecutor $updateExecutor)
     {
-        parent::__construct(config('self-update.repository_types.github'), $updateExecutor);
+        $this->config = config('self-update.repository_types.gitlab');
 
         $this->release = resolve(Release::class);
         $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
                       ->setAccessToken($this->config['private_access_token']);
+
+        $this->updateExecutor = $updateExecutor;
+    }
+
+    public function update(Release $release): bool
+    {
+        return $this->updateExecutor->run($release);
+    }
+
+    public function isNewVersionAvailable(string $currentVersion = ''): bool
+    {
+        $version = $currentVersion ?: $this->getVersionInstalled();
+
+        if (!$version) {
+            throw VersionException::versionInstalledNotFound();
+        }
+
+        $versionAvailable = $this->getVersionAvailable();
+
+        if (version_compare($version, $versionAvailable, '<')) {
+            if (!$this->versionFileExists()) {
+                $this->setVersionFile($versionAvailable);
+            }
+            event(new UpdateAvailable($versionAvailable));
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getVersionInstalled(): string
+    {
+        return (string) config('self-update.version_installed');
     }
 
     /**
@@ -56,10 +98,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
     }
 
     /**
-     * Fetches the latest version. If you do not want the latest version, specify one and pass it.
-     *
-     *
-     * @throws Exception
+     * @throws ReleaseException
      */
     public function fetch(string $version = ''): Release
     {
@@ -80,7 +119,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
         $this->release->setVersion($release->tag_name)
                       ->setRelease($release->tag_name.'.zip')
                       ->updateStoragePath()
-                      ->setDownloadUrl($release->zipball_url);
+                      ->setDownloadUrl($release->assets->sources[0]->url);
 
         if (!$this->release->isSourceAlreadyFetched()) {
             $this->release->download();
@@ -107,15 +146,13 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
 
     final public function getReleases(): Response
     {
-        $url = '/repos/'.$this->config['repository_vendor']
-               .'/'.$this->config['repository_name']
-               .'/releases';
+        $url = '/api/v4/projects/'.$this->config['repository_id'].'/releases';
 
         $headers = [];
 
         if ($this->release->hasAccessToken()) {
             $headers = [
-                'Authorization' => $this->release->getAccessToken(),
+                'PRIVATE-TOKEN' => $this->release->getAccessToken(false),
             ];
         }
 

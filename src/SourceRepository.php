@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codedge\Updater;
 
 use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
@@ -7,6 +9,7 @@ use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Codedge\Updater\Traits\UseVersionFile;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Artisan;
 
 /**
@@ -40,15 +43,16 @@ final class SourceRepository implements SourceRepositoryTypeContract
     }
 
     /**
-     * @param Release $release
-     *
      * @throws \Exception
-     *
-     * @return bool
      */
     public function update(Release $release): bool
     {
         return $this->updateExecutor->run($release);
+    }
+
+    public function getReleases(): Response
+    {
+        return $this->sourceRepository->getReleases();
     }
 
     /**
@@ -75,8 +79,6 @@ final class SourceRepository implements SourceRepositoryTypeContract
      *
      * @param string $prepend Prepend a string to the latest version
      * @param string $append  Append a string to the latest version
-     *
-     * @return string
      */
     public function getVersionAvailable(string $prepend = '', string $append = ''): string
     {

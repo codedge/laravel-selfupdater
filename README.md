@@ -8,8 +8,13 @@
 [![codecov](https://codecov.io/gh/codedge/laravel-selfupdater/branch/master/graph/badge.svg)](https://codecov.io/gh/codedge/laravel-selfupdater)
 
 This package provides some basic methods to implement a self updating
-functionality for your Laravel 5 application. Already bundled are some
-methods to provide a self-update mechanism via Github.
+functionality for your Laravel application.
+
+**Supported update provider:**
+
+-   GitHub
+-   Gitlab
+-   Http-based archives
 
 Usually you need this when distributing a self-hosted Laravel application
 that needs some updating mechanism without [Composer](https://getcomposer.org/).
@@ -43,7 +48,7 @@ Set the installed version to one of the tags set for a release.
 
 #### `branch`-based updates
 
-Set the installed version to to a datetime of one of the latest commits.  
+Set the installed version to a datetime of one of the latest commits.  
 A valid version would be: `2020-04-19T22:35:48Z`
 
 ### Running artisan commands
@@ -132,10 +137,10 @@ Route::get('/', function (\Codedge\Updater\UpdaterManager $updater) {
 Currently, the fetching of the source is a _synchronous_ process.
 It is not run in background.
 
-### Using Github
+### Using GitHub
 
-The package comes with a _Github_ source repository type to fetch
-releases from Github - basically use Github to pull the latest version
+The package comes with a _GitHub_ source repository type to fetch
+releases from GitHub - basically use GitHub to pull the latest version
 of your software.
 
 Just make sure you set the proper repository in your `config/self-updater.php`
@@ -158,6 +163,21 @@ Select the branch that should be used via the `use_branch` setting [inside the c
         'repository_name' => env('SELF_UPDATER_REPO_NAME', ''),
         // ...
         'use_branch' => 'v2',
+   ],
+   // ...
+];
+```
+
+### Using Gitlab
+
+```php
+// ...
+'repository_types' => [
+    'gitlab' => [
+            'type'                 => 'gitlab',
+            'repository_id'        => env('SELF_UPDATER_REPO_URL', ''),
+            'download_path'        => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
+            'private_access_token' => env('SELF_UPDATER_GITLAB_PRIVATE_ACCESS_TOKEN', ''),
    ],
    // ...
 ];

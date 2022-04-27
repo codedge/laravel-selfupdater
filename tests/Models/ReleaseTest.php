@@ -6,6 +6,7 @@ namespace Codedge\Updater\Tests\Models;
 
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\Tests\TestCase;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -150,30 +151,25 @@ class ReleaseTest extends TestCase
     /** @test */
     public function it_cannot_download_and_fails_with_exception(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('tag'),
-        ]);
-
         $this->expectException(\Exception::class);
-        $this->release->download($client);
+        $this->release->download();
     }
 
     /** @test */
     public function it_can_download(): void
     {
-        $client = $this->getMockedClient([
-            $this->getResponse200Type('tag'),
-        ]);
-
-        $this->release->setDownloadUrl('url-to-download')
+        $this->release->setDownloadUrl('https://github.com/some-file')
                       ->setStoragePath((string) config('self-update.repository_types.github.download_path'))
                       ->setRelease('release-1.0.zip')
                       ->updateStoragePath();
 
-        $response = $this->release->download($client);
+        Http::fake([
+            'https://github.com/*' => $this->getResponse200Type('tag'),
+        ]);
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertGreaterThan(0, $response->getBody()->getSize());
+        $response = $this->release->download();
+
+        $this->assertEquals(200, $response->status());
         $this->assertFileExists($this->release->getStoragePath());
     }
 
