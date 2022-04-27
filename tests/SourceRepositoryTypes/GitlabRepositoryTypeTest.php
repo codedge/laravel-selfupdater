@@ -11,8 +11,6 @@ use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\GitlabRepositoryType;
 use Codedge\Updater\Tests\TestCase;
-use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -43,8 +41,7 @@ final class GitlabRepositoryTypeTest extends TestCase
                 ->setVersion('1.0')
                 ->setRelease('release-1.0.zip')
                 ->updateStoragePath()
-                ->setDownloadUrl('https://gitlab.com/download/target')
-        ;
+                ->setDownloadUrl('https://gitlab.com/download/target');
 
         Event::fake();
         Http::fake([
@@ -92,7 +89,7 @@ final class GitlabRepositoryTypeTest extends TestCase
 
         Event::fake();
         Http::fake([
-            '*' => $this->getResponse200Type('gitlab')
+            '*' => $this->getResponse200Type('gitlab'),
         ]);
 
         $this->assertFalse($gitlab->isNewVersionAvailable('2.7'));
@@ -113,8 +110,7 @@ final class GitlabRepositoryTypeTest extends TestCase
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('gitlab'))
             ->pushResponse($this->getResponseEmpty())
-            ->pushResponse($this->getResponseEmpty())
-        ;
+            ->pushResponse($this->getResponseEmpty());
 
         $this->assertInstanceOf(Release::class, $gitlab->fetch());
 
@@ -133,8 +129,7 @@ final class GitlabRepositoryTypeTest extends TestCase
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('gitlab'))
             ->pushResponse($this->getResponse200ZipFile())
-            ->pushResponse($this->getResponse200Type('gitlab'))
-        ;
+            ->pushResponse($this->getResponse200Type('gitlab'));
 
         $release = $gitlab->fetch();
 

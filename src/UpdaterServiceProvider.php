@@ -5,18 +5,9 @@ declare(strict_types=1);
 namespace Codedge\Updater;
 
 use Codedge\Updater\Commands\CheckForUpdate;
-use Codedge\Updater\Contracts\SourceRepositoryTypeContract;
-use Codedge\Updater\Models\Release;
 use Codedge\Updater\Models\UpdateExecutor;
 use Codedge\Updater\Notifications\EventHandler;
 use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryType;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubBranchType;
-use Codedge\Updater\SourceRepositoryTypes\GithubRepositoryTypes\GithubTagType;
-use Codedge\Updater\SourceRepositoryTypes\GitlabRepositoryType;
-use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\ServiceProvider;
 
 class UpdaterServiceProvider extends ServiceProvider

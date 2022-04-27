@@ -62,7 +62,7 @@ abstract class TestCase extends Orchestra
         $response = $stream->getContents();
 
         return Http::response($response, 200, [
-            'Content-Type' => 'application/html'
+            'Content-Type' => 'application/html',
         ]);
     }
 
@@ -72,7 +72,7 @@ abstract class TestCase extends Orchestra
         $response = json_decode($stream->getContents(), true);
 
         return Http::response($response, 200, [
-            'Content-Type' => 'application/json'
+            'Content-Type' => 'application/json',
         ]);
     }
 

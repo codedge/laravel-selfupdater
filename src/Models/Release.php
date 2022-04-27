@@ -6,12 +6,10 @@ namespace Codedge\Updater\Models;
 
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Exception;
-use GuzzleHttp\ClientInterface;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Finder\Finder;
 
 final class Release
@@ -195,8 +193,7 @@ final class Release
                    ->withOptions([
                        'sink' => $this->getStoragePath(),
                    ])
-                   ->get($this->getDownloadUrl())
-        ;
+                   ->get($this->getDownloadUrl());
     }
 
     /**

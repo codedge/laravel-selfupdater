@@ -164,7 +164,7 @@ class ReleaseTest extends TestCase
                       ->updateStoragePath();
 
         Http::fake([
-           'https://github.com/*' => $this->getResponse200Type('tag')
+            'https://github.com/*' => $this->getResponse200Type('tag'),
         ]);
 
         $response = $this->release->download();

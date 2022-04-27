@@ -6,7 +6,6 @@ namespace Codedge\Updater\Tests;
 
 use Codedge\Updater\SourceRepository;
 use Codedge\Updater\UpdaterManager;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
 use InvalidArgumentException;
 
