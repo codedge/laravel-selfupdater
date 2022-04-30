@@ -183,6 +183,7 @@ Configure Gitlab either via the `config/self-updater.php` or use the appropriate
    // ...
 ];
 ```
+
 ℹ Although the environment variable is named `SELF_UPDATER_REPO_URL`, only specify your repository id.
 
 ### Using HTTP archives
