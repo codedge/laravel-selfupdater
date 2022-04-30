@@ -37,7 +37,7 @@ $ php artisan vendor:publish --provider="Codedge\Updater\UpdaterServiceProvider"
 
 **Note:** Please enter correct value for vendor and repository name in your `config/self-updater.php` if you want to use Github as source for your updates.
 
-### :information_source: Setting the currently installed version
+### Setting the currently installed version
 
 Before starting an update, make sure to set the version installed correctly.
 You're responsible to set the current version installed, either in the config file or better via the env variable `SELF_UPDATER_VERSION_INSTALLED`.
@@ -103,7 +103,7 @@ You can specify these values by adding `SELF_UPDATER_MAILTO_NAME` and
 Private repositories can be accessed via (Bearer) tokens. Each repository inside the config file should have
 a `private_access_token` field, where you can set the token.
 
-**Note:** Do not prefix the token with `Bearer `. This is done automatically.
+ℹ Do not prefix the token with `Bearer `. This is done automatically.
 
 ## Usage
 
@@ -134,8 +134,7 @@ Route::get('/', function (\Codedge\Updater\UpdaterManager $updater) {
 });
 ```
 
-Currently, the fetching of the source is a _synchronous_ process.
-It is not run in background.
+Currently, the fetching of the source is a _synchronous_ process. It is not run in background.
 
 ### Using GitHub
 
@@ -170,6 +169,8 @@ Select the branch that should be used via the `use_branch` setting [inside the c
 
 ### Using Gitlab
 
+Configure Gitlab either via the `config/self-updater.php` or use the appropriate environment variables.
+
 ```php
 // ...
 'repository_types' => [
@@ -182,10 +183,11 @@ Select the branch that should be used via the `use_branch` setting [inside the c
    // ...
 ];
 ```
+ℹ Although the environment variable is named `SELF_UPDATER_REPO_URL`, only specify your repository id.
 
-### Using Http archives
+### Using HTTP archives
 
-The package comes with an _Http_ source repository type to fetch
+The package comes with an _HTTP_ source repository type to fetch
 releases from an HTTP directory listing containing zip archives.
 
 To run with HTTP archives, use following settings in your `.env` file:
