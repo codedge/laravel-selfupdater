@@ -107,12 +107,9 @@ final class GitlabRepositoryTypeTest extends TestCase
         /** @var GitlabRepositoryType $gitlab */
         $gitlab = resolve(GitlabRepositoryType::class);
 
-        Http::fakeSequence()
-            ->pushResponse($this->getResponse200Type('gitlab'))
-            ->pushResponse($this->getResponseEmpty())
-            ->pushResponse($this->getResponseEmpty());
-
-        $this->assertInstanceOf(Release::class, $gitlab->fetch());
+        Http::fake([
+            '*' => $this->getResponseEmpty(),
+        ]);
 
         $this->expectException(ReleaseException::class);
         $this->expectExceptionMessage('No release found for version "latest version". Please check the repository you\'re pulling from');
