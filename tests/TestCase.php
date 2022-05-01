@@ -21,7 +21,7 @@ abstract class TestCase extends Orchestra
     protected array $mockedResponses = [
         'tag'    => 'releases-tag.json',
         'branch' => 'releases-branch.json',
-        'http'   => 'releases-http.json',
+        'http'   => 'releases-http_gh.json',
         'gitlab' => 'releases-gitlab.json',
     ];
 
@@ -58,7 +58,7 @@ abstract class TestCase extends Orchestra
 
     protected function getResponse200HttpType(): PromiseInterface
     {
-        $stream = Utils::streamFor(fopen('tests/Data/'.$this->mockedResponses['http'], 'r'));
+        $stream = Utils::streamFor(fopen('tests/Data/Http/'.$this->mockedResponses['http'], 'r'));
         $response = $stream->getContents();
 
         return Http::response($response, 200, [

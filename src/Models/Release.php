@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Codedge\Updater\Models;
 
+use Codedge\Updater\Exceptions\ReleaseException;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Exception;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
@@ -45,13 +46,6 @@ final class Release
      */
     private ?string $downloadUrl = null;
 
-    protected Filesystem $filesystem;
-
-    public function __construct(Filesystem $filesystem)
-    {
-        $this->filesystem = $filesystem;
-    }
-
     public function getRelease(): ?string
     {
         return $this->release;
@@ -73,8 +67,8 @@ final class Release
     {
         $this->storagePath = $storagePath;
 
-        if (!$this->filesystem->exists($this->storagePath)) {
-            $this->filesystem->makeDirectory($this->storagePath, 493, true, true);
+        if (!File::exists($this->storagePath)) {
+            File::makeDirectory($this->storagePath, 493, true, true);
         }
 
         return $this;
@@ -135,6 +129,10 @@ final class Release
 
     public function extract(bool $deleteSource = true): bool
     {
+        if (!File::exists($this->getStoragePath())) {
+            throw ReleaseException::archiveFileNotFound($this->getStoragePath());
+        }
+
         $extractTo = createFolderFromFile($this->getStoragePath());
         $extension = pathinfo($this->getStoragePath(), PATHINFO_EXTENSION);
 
@@ -143,30 +141,22 @@ final class Release
 
             // Create the final release directory
             if ($extracted && $this->createReleaseFolder() && $deleteSource) {
-                $this->filesystem->delete($this->storagePath);
+                File::delete($this->getStoragePath());
             }
 
             return true;
         } else {
-            throw new Exception('File is not a zip archive. File is '.$this->filesystem->mimeType($this->getStoragePath()).'.');
+            throw ReleaseException::archiveNotAZipFile(File::mimeType($this->getStoragePath()));
         }
     }
 
     protected function extractZip(string $extractTo): bool
     {
         $zip = new \ZipArchive();
-
-        /*
-         * @see https://bugs.php.net/bug.php?id=79296
-         */
-        if (filesize($this->getStoragePath()) === 0) {
-            $res = $zip->open($this->getStoragePath(), \ZipArchive::OVERWRITE);
-        } else {
-            $res = $zip->open($this->getStoragePath());
-        }
+        $res = $zip->open($this->getStoragePath());
 
         if ($res !== true) {
-            throw new Exception("Cannot open zip archive [{$this->getStoragePath()}]. Error: $res");
+            throw ReleaseException::cannotExtractArchiveFile($this->getStoragePath());
         }
 
         $extracted = $zip->extractTo($extractTo);
@@ -202,11 +192,11 @@ final class Release
      */
     protected function createReleaseFolder(): bool
     {
-        $folders = $this->filesystem->directories(createFolderFromFile($this->getStoragePath()));
+        $folders = File::directories(createFolderFromFile($this->getStoragePath()));
 
         if (count($folders) === 1) {
             // Only one sub-folder inside extracted directory
-            $moved = $this->filesystem->moveDirectory(
+            $moved = File::moveDirectory(
                 $folders[0],
                 createFolderFromFile($this->getStoragePath()).now()->toDateString()
             );
@@ -215,14 +205,14 @@ final class Release
                 return false;
             }
 
-            $this->filesystem->moveDirectory(
+            File::moveDirectory(
                 createFolderFromFile($this->getStoragePath()).now()->toDateString(),
                 createFolderFromFile($this->getStoragePath()),
                 true
             );
         }
 
-        $this->filesystem->delete($this->getStoragePath());
+        File::delete($this->getStoragePath());
 
         return true;
     }
@@ -235,20 +225,20 @@ final class Release
         $extractionDir = createFolderFromFile($this->getStoragePath());
 
         // Check if source archive is (probably) deleted but extracted folder is there.
-        if (!$this->filesystem->exists($this->getStoragePath())
-            && $this->filesystem->exists($extractionDir)) {
+        if (!File::exists($this->getStoragePath())
+            && File::exists($extractionDir)) {
             return true;
         }
 
         // Check if source archive is there but not extracted
-        if ($this->filesystem->exists($this->getStoragePath())
-            && !$this->filesystem->exists($extractionDir)) {
+        if (File::exists($this->getStoragePath())
+            && !File::exists($extractionDir)) {
             return true;
         }
 
         // Check if source archive and folder exists
-        if ($this->filesystem->exists($this->getStoragePath())
-            && $this->filesystem->exists($extractionDir)) {
+        if (File::exists($this->getStoragePath())
+            && File::exists($extractionDir)) {
             return true;
         }
 

@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use League\Uri\Uri;
 
 class HttpRepositoryType implements SourceRepositoryTypeContract
 {
@@ -79,7 +80,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
     /**
      * Fetches the latest version. If you do not want the latest version, specify one and pass it.
      *
-     * @throws GuzzleException|ReleaseException
+     * @throws ReleaseException
      */
     public function fetch(string $version = ''): Release
     {
@@ -176,26 +177,41 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         return Http::withHeaders($headers)->get($repositoryUrl);
     }
 
-    private function extractFromHtml(string $content): Collection
+    /**
+     * @throws ReleaseException
+     */
+    public function extractFromHtml(string $content): Collection
     {
-        $format = str_replace(
-            '_VERSION_',
-            '(\d+\.\d+\.\d+)',
-            str_replace('.', '\.', $this->config['pkg_filename_format'])
-        ).'.zip';
-        $linkPattern = '<a.*href="(.*'.$format.')"';
+        $format = str_replace('_VERSION_', '(\d+\.\d+\.\d+)', $this->config['pkg_filename_format']).'.zip';
+        $linkPattern = 'a.*href="(.*'.$format.')"';
 
-        preg_match_all('/'.$linkPattern.'/i', $content, $files);
-        $releaseVersions = $files[2];
+        preg_match_all('<'.$linkPattern.'>i', $content, $files);
+        $files = array_filter($files);
 
-        // Extract domain only
-        preg_match('/(?:\w+:)?\/\/[^\/]+([^?#]+)/', $this->config['repository_url'], $matches);
-        $baseUrl = preg_replace('#'.$matches[1].'#', '', $this->config['repository_url']);
+        if (count($files) === 0) {
+            throw ReleaseException::cannotExtractDownloadLink($format);
+        }
 
-        $releases = collect($files[1])->map(function ($item, $key) use ($baseUrl, $releaseVersions) {
+        // Special handling when file version cannot be properly detected
+        if (!array_key_exists(2, $files)) {
+            foreach ($files[1] as $key=>$val) {
+                preg_match('/[a-zA-Z\-]([.\d]*)(?=\.\w+$)/', $val, $versions);
+                $files[][$key] = $versions[1];
+            }
+        }
+
+        $releaseVersions = array_combine($files[2], $files[1]);
+
+        $uri = Uri::createFromString($this->config['repository_url']);
+        $baseUrl = $uri->getScheme().'://'.$uri->getHost();
+
+        $releases = collect($releaseVersions)->map(function ($item, $key) use ($baseUrl) {
+            $uri = Uri::createFromString($item);
+            $item = $uri->getHost() ? $item : $baseUrl.Str::start($item, '/');
+
             return (object) [
-                'name'        => $releaseVersions[$key],
-                'zipball_url' => $baseUrl.$item,
+                'name'        => $key,
+                'zipball_url' => $item,
             ];
         });
 

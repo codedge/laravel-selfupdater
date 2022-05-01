@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Codedge\Updater\Tests\SourceRepositoryTypes;
 
+use Codedge\Updater\Exceptions\ReleaseException;
 use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
 use Codedge\Updater\SourceRepositoryTypes\HttpRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 use Exception;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 
 final class HttpRepositoryTypeTest extends TestCase
@@ -68,9 +70,9 @@ final class HttpRepositoryTypeTest extends TestCase
             ->pushResponse($this->getResponse200HttpType())
             ->pushResponse($this->getResponse200ZipFile());
 
-        $this->assertInstanceOf(Release::class, $http->fetch());
+        //$this->expectException(ReleaseException::class);
+        //$this->expectExceptionMessage('Archive file "/tmp/self-updater/v/invoiceninja/invoiceninja/archive/v4.5.17.zip" not found.');
 
-        $this->expectException(Exception::class);
         $this->assertInstanceOf(Release::class, $http->fetch());
     }
 
@@ -85,6 +87,8 @@ final class HttpRepositoryTypeTest extends TestCase
             ->pushResponse($this->getResponse200ZipFile())
             ->pushResponse($this->getResponse200HttpType())
             ->pushResponse($this->getResponse200HttpType());
+
+        File::shouldReceive('exists')->andReturnTrue();
 
         $release = $http->fetch();
 
@@ -168,5 +172,36 @@ final class HttpRepositoryTypeTest extends TestCase
 
         $this->assertTrue($http->isNewVersionAvailable('4.5'));
         $this->assertFalse($http->isNewVersionAvailable('5.0'));
+    }
+
+    /** @test */
+    public function it_can_build_releases_from_local_source(): void
+    {
+        config(['self-update.repository_types.http.repository_url' => 'http://update-server.localhost/']);
+        config(['self-update.repository_types.http.pkg_filename_format' => 'my-test-project-\d+\.\d+']);
+
+        /** @var HttpRepositoryType $http */
+        $http = $this->app->make(HttpRepositoryType::class);
+        $content = file_get_contents('tests/Data/Http/releases-http_local.json');
+
+        $collection = $http->extractFromHtml($content);
+
+        $this->assertSame('1.0', $collection->first()->name);
+        $this->assertSame('http://update-server.localhost/my534/my-test-project/-/archive/1.0/my-test-project-1.0.zip', $collection->first()->zipball_url);
+    }
+
+    /** @test */
+    public function it_can_build_releases_from_github_source(): void
+    {
+        config(['self-update.repository_types.http.repository_url' => 'https://github.com/']);
+
+        /** @var HttpRepositoryType $http */
+        $http = $this->app->make(HttpRepositoryType::class);
+        $content = file_get_contents('tests/Data/Http/releases-http_gh.json');
+
+        $collection = $http->extractFromHtml($content);
+
+        $this->assertSame('4.5.17', $collection->first()->name);
+        $this->assertSame('https://github.com/invoiceninja/invoiceninja/archive/v4.5.17.zip', $collection->first()->zipball_url);
     }
 }
