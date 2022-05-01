@@ -7,8 +7,8 @@ namespace Codedge\Updater\Models;
 use Codedge\Updater\Exceptions\ReleaseException;
 use Codedge\Updater\Traits\SupportPrivateAccessToken;
 use Exception;
-use Illuminate\Support\Facades\File;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
@@ -68,7 +68,7 @@ final class Release
         $this->storagePath = $storagePath;
 
         if (!File::exists($this->storagePath)) {
-           File::makeDirectory($this->storagePath, 493, true, true);
+            File::makeDirectory($this->storagePath, 493, true, true);
         }
 
         return $this;
@@ -129,7 +129,7 @@ final class Release
 
     public function extract(bool $deleteSource = true): bool
     {
-        if(!File::exists($this->getStoragePath())) {
+        if (!File::exists($this->getStoragePath())) {
             throw ReleaseException::archiveFileNotFound($this->getStoragePath());
         }
 
@@ -155,7 +155,7 @@ final class Release
         $zip = new \ZipArchive();
         $res = $zip->open($this->getStoragePath());
 
-        if($res !== true) {
+        if ($res !== true) {
             throw ReleaseException::cannotExtractArchiveFile($this->getStoragePath());
         }
 

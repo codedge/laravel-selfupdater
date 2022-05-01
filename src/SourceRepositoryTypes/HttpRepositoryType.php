@@ -188,12 +188,12 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         preg_match_all('<'.$linkPattern.'>i', $content, $files);
         $files = array_filter($files);
 
-        if(count($files) === 0) {
+        if (count($files) === 0) {
             throw ReleaseException::cannotExtractDownloadLink($format);
         }
 
         // Special handling when file version cannot be properly detected
-        if(!array_key_exists(2, $files)) {
+        if (!array_key_exists(2, $files)) {
             foreach ($files[1] as $key=>$val) {
                 preg_match('/[a-zA-Z\-]([.\d]*)(?=\.\w+$)/', $val, $versions);
                 $files[][$key] = $versions[1];
@@ -207,7 +207,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
 
         $releases = collect($releaseVersions)->map(function ($item, $key) use ($baseUrl) {
             $uri = Uri::createFromString($item);
-            $item = $uri->getHost() ? $item : $baseUrl. Str::start($item, '/');
+            $item = $uri->getHost() ? $item : $baseUrl.Str::start($item, '/');
 
             return (object) [
                 'name'        => $key,

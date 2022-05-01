@@ -16,20 +16,20 @@ final class ReleaseException extends \Exception
     public static function cannotExtractDownloadLink(string $pattern): self
     {
         return new self(sprintf('Cannot extract download/release link from source. Pattern "%s" not found.', $pattern));
-   }
+    }
 
-   public static function archiveFileNotFound(string $path): self
-   {
-       return new self(sprintf('Archive file "%s" not found.', $path));
-   }
+    public static function archiveFileNotFound(string $path): self
+    {
+        return new self(sprintf('Archive file "%s" not found.', $path));
+    }
 
-   public static function archiveNotAZipFile(string $mimeType): self
-   {
-       return new self(sprintf('File is not a zip archive. File is "%s"', $mimeType));
-   }
+    public static function archiveNotAZipFile(string $mimeType): self
+    {
+        return new self(sprintf('File is not a zip archive. File is "%s"', $mimeType));
+    }
 
-   public static function cannotExtractArchiveFile(string $path): self
-   {
+    public static function cannotExtractArchiveFile(string $path): self
+    {
         return new self(sprintf('Cannot open zip archive "%s"', $path));
-   }
+    }
 }
