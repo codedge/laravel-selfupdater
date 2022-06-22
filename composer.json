@@ -12,14 +12,12 @@
         "laravel application",
         "self-hosted laravel application"
     ],
-    "authors": [
-        {
-            "name": "Holger Lösken",
-            "email": "holger.loesken@codedge.de",
-            "homepage": "https://codedge.de",
-            "role": "Developer"
-        }
-    ],
+    "authors": [{
+        "name": "Holger Lösken",
+        "email": "holger.loesken@codedge.de",
+        "homepage": "https://codedge.de",
+        "role": "Developer"
+    }],
     "support": {
         "issues": "https://github.com/codedge/laravel-selfupdater/issues",
         "source": "https://github.com/codedge/laravel-selfupdater"
@@ -29,7 +27,7 @@
         "ext-json": "*",
         "ext-zip": "*",
         "guzzlehttp/guzzle": "^7.4",
-        "laravel/framework": "^8.83.17",
+        "laravel/framework": "^9.0",
         "league/uri": "^6.6",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-phpunit": "^1.1"
