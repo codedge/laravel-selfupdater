@@ -30,7 +30,7 @@
         "ext-zip": "*",
         "guzzlehttp/guzzle": "^7.4",
         "laravel/framework": "^8.83.17",
-        "league/uri": "^6.6",
+        "league/uri": "^6.7",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-phpunit": "^1.1"
     },
