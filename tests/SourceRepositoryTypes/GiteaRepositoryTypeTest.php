@@ -93,7 +93,7 @@ final class GiteaRepositoryTypeTest extends TestCase
         ]);
 
         $this->assertFalse($gitea->isNewVersionAvailable('2.7'));
-        $this->assertTrue($gitea->isNewVersionAvailable('0.8'));
+        $this->assertTrue($gitea->isNewVersionAvailable('0.0.1'));
 
         Event::assertDispatched(UpdateAvailable::class, 1);
         Event::assertDispatched(UpdateAvailable::class, function (UpdateAvailable $e) use ($gitea) {
