@@ -9,7 +9,7 @@ use Codedge\Updater\Events\UpdateSucceeded;
 use Codedge\Updater\Exceptions\ReleaseException;
 use Codedge\Updater\Exceptions\VersionException;
 use Codedge\Updater\Models\Release;
-use Codedge\Updater\SourceRepositoryTypes\GiteabRepositoryType;
+use Codedge\Updater\SourceRepositoryTypes\GiteaRepositoryType;
 use Codedge\Updater\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
