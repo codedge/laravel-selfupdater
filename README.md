@@ -209,6 +209,10 @@ The target archive files must be zip archives and should contain all files on ro
 
 ### Using Gitea
 
+With _Gitea_ you can use your own Gitea-Instance with tag-releases.
+
+To use it, use the following settings in your `.env` file:
+
 | Config name                             | Value / Description                     |
 | --------------------------------------- | --------------------------------------- |
 | SELF_UPDATER_SOURCE                     | `gitea`                                 |
