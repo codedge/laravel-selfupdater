@@ -124,7 +124,7 @@ class GiteaRepositoryType implements SourceRepositoryTypeContract
                       ->setRelease($release->tag_name.'.zip')
                       ->updateStoragePath()
                       ->setDownloadUrl($downloadUrl);
-        
+
         if (!$this->release->isSourceAlreadyFetched()) {
             $this->release->download();
             $this->release->extract();
