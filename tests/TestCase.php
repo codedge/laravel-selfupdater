@@ -53,6 +53,14 @@ abstract class TestCase extends Orchestra
                 'download_path'        => self::DOWNLOAD_PATH,
                 'private_access_token' => '',
             ],
+            'gitea' => [
+                'type'                 => 'gitea',
+                'repository_vendor'    => "phillopp",
+                'gitea_url'            => "https://try.gitea.io",
+                'repository_name'      => "emptyRepo",
+                'download_path'        => self::DOWNLOAD_PATH,
+                'private_access_token' => '',
+            ],
         ]);
     }
 
