@@ -23,7 +23,7 @@ abstract class TestCase extends Orchestra
         'branch' => 'releases-branch.json',
         'http'   => 'releases-http_gh.json',
         'gitlab' => 'releases-gitlab.json',
-        'gitea' => 'releases-gitea.json',
+        'gitea'  => 'releases-gitea.json',
     ];
 
     /**
@@ -56,9 +56,9 @@ abstract class TestCase extends Orchestra
             ],
             'gitea' => [
                 'type'                 => 'gitea',
-                'repository_vendor'    => "phillopp",
-                'gitea_url'            => "https://try.gitea.io",
-                'repository_name'      => "emptyRepo",
+                'repository_vendor'    => 'phillopp',
+                'gitea_url'            => 'https://try.gitea.io',
+                'repository_name'      => 'emptyRepo',
                 'download_path'        => self::DOWNLOAD_PATH,
                 'private_access_token' => '',
             ],

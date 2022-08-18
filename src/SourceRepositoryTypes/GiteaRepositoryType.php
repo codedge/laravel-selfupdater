@@ -38,7 +38,7 @@ class GiteaRepositoryType implements SourceRepositoryTypeContract
         $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
                       ->setAccessToken($this->config['private_access_token']);
-        $this->release->setAccessTokenPrefix("token ");
+        $this->release->setAccessTokenPrefix('token ');
 
         $this->updateExecutor = $updateExecutor;
     }
