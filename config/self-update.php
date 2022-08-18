@@ -62,6 +62,14 @@ return [
             'download_path'        => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
             'private_access_token' => env('SELF_UPDATER_HTTP_PRIVATE_ACCESS_TOKEN', ''),
         ],
+        'gitea' => [
+            'type'                 => 'gitea',
+            'repository_vendor'    => env('SELF_UPDATER_REPO_VENDOR', ''),
+            'gitea_url'            => env('SELF_UPDATER_GITEA_URL', ''),
+            'repository_name'      => env('SELF_UPDATER_REPO_NAME', ''),
+            'download_path'        => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
+            'private_access_token' => env('SELF_UPDATER_GITEA_PRIVATE_ACCESS_TOKEN', ''),
+        ],
     ],
 
     /*
