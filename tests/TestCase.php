@@ -23,6 +23,7 @@ abstract class TestCase extends Orchestra
         'branch' => 'releases-branch.json',
         'http'   => 'releases-http_gh.json',
         'gitlab' => 'releases-gitlab.json',
+        'gitea' => 'releases-gitea.json',
     ];
 
     /**
