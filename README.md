@@ -208,14 +208,14 @@ The target archive files must be zip archives and should contain all files on ro
 
 ### Using Gitea
 
-| Config name                      | Value / Description                        |
-| -------------------------------- | ------------------------------------------ |
-| SELF_UPDATER_SOURCE              | `gitea`                                    |
-| SELF_UPDATER_GITEA_URL           | URL of Gitea Server                        |
-| SELF_UPDATER_REPO_VENDOR         | Repo Vendor Name                           |
-| SELF_UPDATER_REPO_NAME           | Repo Name                                  |
-| SELF_UPDATER_GITEA_PRIVATE_ACCESS_TOKEN | Access Token from Gitea             |
-| SELF_UPDATER_DOWNLOAD_PATH       | Download path on the webapp host server    |
+| Config name                             | Value / Description                     |
+| --------------------------------------- | --------------------------------------- |
+| SELF_UPDATER_SOURCE                     | `gitea`                                 |
+| SELF_UPDATER_GITEA_URL                  | URL of Gitea Server                     |
+| SELF_UPDATER_REPO_VENDOR                | Repo Vendor Name                        |
+| SELF_UPDATER_REPO_NAME                  | Repo Name                               |
+| SELF_UPDATER_GITEA_PRIVATE_ACCESS_TOKEN | Access Token from Gitea                 |
+| SELF_UPDATER_DOWNLOAD_PATH              | Download path on the webapp host server |
 
 ## Contributing
 
