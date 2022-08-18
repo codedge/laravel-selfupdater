@@ -14,6 +14,7 @@ functionality for your Laravel application.
 
 -   GitHub
 -   Gitlab
+-   Gitea
 -   Http-based archives
 
 Usually you need this when distributing a self-hosted Laravel application
