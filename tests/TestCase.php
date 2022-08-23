@@ -23,6 +23,7 @@ abstract class TestCase extends Orchestra
         'branch' => 'releases-branch.json',
         'http'   => 'releases-http_gh.json',
         'gitlab' => 'releases-gitlab.json',
+        'gitea'  => 'releases-gitea.json',
     ];
 
     /**
@@ -50,6 +51,14 @@ abstract class TestCase extends Orchestra
                 'type'                 => 'http',
                 'repository_url'       => 'https://github.com/invoiceninja/invoiceninja/releases',
                 'pkg_filename_format'  => env('SELF_UPDATER_PKG_FILENAME_FORMAT', 'v_VERSION_'),
+                'download_path'        => self::DOWNLOAD_PATH,
+                'private_access_token' => '',
+            ],
+            'gitea' => [
+                'type'                 => 'gitea',
+                'repository_vendor'    => 'phillopp',
+                'gitea_url'            => 'https://try.gitea.io',
+                'repository_name'      => 'emptyRepo',
                 'download_path'        => self::DOWNLOAD_PATH,
                 'private_access_token' => '',
             ],

@@ -14,6 +14,7 @@ functionality for your Laravel application.
 
 -   GitHub
 -   Gitlab
+-   Gitea
 -   Http-based archives
 
 Usually you need this when distributing a self-hosted Laravel application
@@ -205,6 +206,21 @@ The archive URL should contain nothing more than a simple directory listing with
 `SELF_UPDATER_PKG_FILENAME_FORMAT` contains the filename format for all webapp update packages. I.e. when the update packages listed on the archive URL contain names like `webapp-v1.2.0.zip`, `webapp-v1.3.5.zip`, ... then the format should be `webapp-v_VERSION_`. The `_VERSION_` part is used as semantic versionioning variable for `MAJOR.MINOR.PATCH` versioning. The zip-extension is automatically added.
 
 The target archive files must be zip archives and should contain all files on root level, not within an additional folder named like the archive itself.
+
+### Using Gitea
+
+With _Gitea_ you can use your own Gitea-Instance with tag-releases.
+
+To use it, use the following settings in your `.env` file:
+
+| Config name                             | Value / Description                     |
+| --------------------------------------- | --------------------------------------- |
+| SELF_UPDATER_SOURCE                     | `gitea`                                 |
+| SELF_UPDATER_GITEA_URL                  | URL of Gitea Server                     |
+| SELF_UPDATER_REPO_VENDOR                | Repo Vendor Name                        |
+| SELF_UPDATER_REPO_NAME                  | Repo Name                               |
+| SELF_UPDATER_GITEA_PRIVATE_ACCESS_TOKEN | Access Token from Gitea                 |
+| SELF_UPDATER_DOWNLOAD_PATH              | Download path on the webapp host server |
 
 ## Contributing
 
