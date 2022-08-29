@@ -28,7 +28,7 @@
         "php": "^7.4 || ^8.0 || ^8.1",
         "ext-json": "*",
         "ext-zip": "*",
-        "guzzlehttp/guzzle": "^7.4",
+        "guzzlehttp/guzzle": "^7.5",
         "laravel/framework": "^8.83.23",
         "league/uri": "^6.7",
         "phpstan/extension-installer": "^1.1",
