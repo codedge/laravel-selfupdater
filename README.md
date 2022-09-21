@@ -150,6 +150,33 @@ file.
 
 This is the default. Updates will be fetched by using a tagged commit, aka release.
 
+#### Tag-based updates with assets/package file
+
+If you have pre-packaged _tag based_ releases, you can use the `'repository_types.github.package_file_name'` key in your
+`config/self-update.php` file or update the `SELF_UPDATER_PACKAGE_FILE_NAME` `.env` var to specify the asset name to
+download.
+
+If you prefix the file name with `regex:` the package will try to find the latest asset matching the given regex. Note
+however to use only the regex and not the PHP regex `/` prefix and suffixes. For example, an acceptable value would be
+`regex:.releaseV*\.zip`. This will match all assets starting with `releaseV` and ending with `.zip`.
+
+An invalid value would be `regex:/releaseV*\.zip/`. Note the `/` prefix and suffix.
+
+```php
+// ...
+'repository_types' => [
+    'github' => [
+        'type' => 'github',
+        'repository_vendor' => env('SELF_UPDATER_REPO_VENDOR', ''),
+        'repository_name' => env('SELF_UPDATER_REPO_NAME', ''),
+        // ...
+        'package_file_name' => 'release.zip', // Package file name to download
+        'package_file_name' => 'regex:releaseV.*\.zip', // REGEX Package file name to download
+   ],
+   // ...
+];
+```
+
 #### Branch-based updates
 
 Select the branch that should be used via the `use_branch` setting [inside the configuration](https://github.com/codedge/laravel-selfupdater/blob/master/config/self-update.php).

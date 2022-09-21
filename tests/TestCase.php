@@ -19,11 +19,13 @@ abstract class TestCase extends Orchestra
 
     /** @var array<string, string> */
     protected array $mockedResponses = [
-        'tag'    => 'releases-tag.json',
-        'branch' => 'releases-branch.json',
-        'http'   => 'releases-http_gh.json',
-        'gitlab' => 'releases-gitlab.json',
-        'gitea'  => 'releases-gitea.json',
+        'tag'             => 'releases-tag.json',
+        'tag_asset'       => 'releases-tag_asset.json',
+        'tag_regex_asset' => 'releases-tag_regex_asset.json',
+        'branch'          => 'releases-branch.json',
+        'http'            => 'releases-http_gh.json',
+        'gitlab'          => 'releases-gitlab.json',
+        'gitea'           => 'releases-gitea.json',
     ];
 
     /**

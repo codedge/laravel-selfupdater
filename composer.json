@@ -29,7 +29,7 @@
         "ext-json": "*",
         "ext-zip": "*",
         "guzzlehttp/guzzle": "^7.5",
-        "laravel/framework": "^8.83.23",
+        "laravel/framework": ">=8.83 <10",
         "league/uri": "^6.7",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-phpunit": "^1.1"
@@ -73,7 +73,7 @@
         }
     },
     "scripts": {
-        "phpstan": "./vendor/bin/phpstan",
+        "phpstan": "./vendor/bin/phpstan --memory-limit=1G",
         "test": "./vendor/bin/phpunit",
         "test-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html=build/coverage-html"
     }
