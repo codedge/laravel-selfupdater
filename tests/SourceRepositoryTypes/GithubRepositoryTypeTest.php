@@ -225,6 +225,42 @@ final class GithubRepositoryTypeTest extends TestCase
     }
 
     /** @test */
+    public function it_can_fetch_github_tag_asset_latest_release(): void
+    {
+        config(['self-update.repository_types.github.package_file_name' => 'release.zip']);
+
+        /** @var GithubTagType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('tag_asset'))
+            ->pushResponse($this->getResponse200ZipFile());
+
+        $release = $github->fetch();
+        $this->assertInstanceOf(Release::class, $release);
+        $this->assertEquals('v0.0.9', $release->getVersion());
+        $this->assertEquals('release.zip', $release->getRelease());
+    }
+
+    /** @test */
+    public function it_can_fetch_github_tag_regex_asset_latest_release(): void
+    {
+        config(['self-update.repository_types.github.package_file_name' => 'regex:releaseV\d+\.\d+\.\d+\.zip']);
+
+        /** @var GithubTagType $github */
+        $github = (resolve(GithubRepositoryType::class))->create();
+
+        Http::fakeSequence()
+            ->pushResponse($this->getResponse200Type('tag_regex_asset'))
+            ->pushResponse($this->getResponse200ZipFile());
+
+        $release = $github->fetch();
+        $this->assertInstanceOf(Release::class, $release);
+        $this->assertEquals('v0.0.9', $release->getVersion());
+        $this->assertEquals('releaseV0.0.9.zip', $release->getRelease());
+    }
+
+    /** @test */
     public function it_can_fetch_github_branch_releases_latest(): void
     {
         config(['self-update.repository_types.github.use_branch' => 'v2']);
