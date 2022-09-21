@@ -85,7 +85,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
                     // The package is a regex, so do a regex search
                     return Str::match('/'.Str::after($packageName, 'regex:').'/', $asset->name);
                 }
-                
+
                 return Str::contains($asset->name, $packageName);
             });
             if (!$asset) {
