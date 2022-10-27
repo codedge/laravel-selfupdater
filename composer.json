@@ -32,7 +32,7 @@
         "laravel/framework": "^8.83.25",
         "league/uri": "^6.7",
         "phpstan/extension-installer": "^1.2",
-        "phpstan/phpstan-phpunit": "^1.1"
+        "phpstan/phpstan-phpunit": "^1.2"
     },
     "require-dev": {
         "dg/bypass-finals": "^1.3",
