@@ -29,7 +29,7 @@
         "ext-json": "*",
         "ext-zip": "*",
         "guzzlehttp/guzzle": "^7.5",
-        "laravel/framework": "^8.83.25",
+        "laravel/framework": "^8.83.26",
         "league/uri": "^6.7",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan-phpunit": "^1.2"
