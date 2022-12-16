@@ -26,9 +26,8 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
     public function __construct(UpdateExecutor $updateExecutor)
     {
         parent::__construct(config('self-update.repository_types.github'), $updateExecutor);
-
         $this->release = resolve(Release::class);
-        $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
+        $this->release->setStoragePath(Str::finish($this->config['download_path'], urlSeparator()))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
                       ->setAccessToken($this->config['private_access_token']);
     }
@@ -92,10 +91,10 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
 
     final public function getReleases(): Response
     {
-        $url = DIRECTORY_SEPARATOR.'repos'
-               .DIRECTORY_SEPARATOR.$this->config['repository_vendor']
-               .DIRECTORY_SEPARATOR.$this->config['repository_name']
-               .DIRECTORY_SEPARATOR.'commits'
+        $url =  urlSeparator().'repos'
+               .urlSeparator().$this->config['repository_vendor']
+               .urlSeparator().$this->config['repository_name']
+               .urlSeparator().'commits'
                .'?sha='.$this->config['use_branch'];
 
         $headers = [];
@@ -111,10 +110,10 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
 
     private function generateArchiveUrl(string $name): string
     {
-        return DIRECTORY_SEPARATOR.'repos'
-               .DIRECTORY_SEPARATOR.$this->config['repository_vendor']
-               .DIRECTORY_SEPARATOR.$this->config['repository_name']
-               .DIRECTORY_SEPARATOR.'zipball'
-               .DIRECTORY_SEPARATOR.$name;
+        return  urlSeparator().'repos'
+               .urlSeparator().$this->config['repository_vendor']
+               .urlSeparator().$this->config['repository_name']
+               .urlSeparator().'zipball'
+               .urlSeparator().$name;
     }
 }

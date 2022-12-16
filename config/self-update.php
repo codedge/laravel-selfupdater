@@ -21,6 +21,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Set this to the version of your software installed on your system.
+    | By version we mean the "commit hash" of your git repository.
     |
     */
 
