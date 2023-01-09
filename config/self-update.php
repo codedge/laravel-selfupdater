@@ -166,7 +166,6 @@ return [
    */
     'http' => [
         'verify' => false,
-        'cert' => null,
     ]
 
 ];
