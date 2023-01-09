@@ -181,6 +181,7 @@ final class Release
 
         return Http::withHeaders($headers)
                    ->withOptions([
+                       'verify' => config('self-update.http.verify'),
                        'sink' => $this->getStoragePath(),
                    ])
                    ->get($this->getDownloadUrl());
