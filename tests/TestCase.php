@@ -87,14 +87,13 @@ abstract class TestCase extends Orchestra
 
     protected function getResponse200ZipFile(): PromiseInterface
     {
-        return Http::response(
-            fopen(__DIR__.'/Data/release-1.2.zip', 'r'),
-            200,
-            [
-                'Content-Type'        => 'application/zip',
-                'Content-Disposition' => 'attachment; filename="release-1.2.zip"',
-            ],
-        );
+        $stream = Utils::streamFor(fopen(__DIR__.'/Data/release-1.2.zip', 'r'));
+        $response = $stream->getContents();
+
+        return Http::response($response, 200, [
+            'Content-Type'        => 'application/zip',
+            'Content-Disposition' => 'attachment; filename="release-1.2.zip"',
+        ]);
     }
 
     protected function getResponseEmpty(): PromiseInterface
