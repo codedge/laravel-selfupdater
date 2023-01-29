@@ -27,7 +27,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
         parent::__construct(config('self-update.repository_types.github'), $updateExecutor);
 
         $this->release = resolve(Release::class);
-        $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
+        $this->release->setStoragePath(Str::finish($this->config['download_path'], urlSeparator()))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
                       ->setAccessToken($this->config['private_access_token']);
     }

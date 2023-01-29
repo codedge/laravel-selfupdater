@@ -80,7 +80,7 @@ final class Release
     public function updateStoragePath(): self
     {
         if (!empty($this->getRelease())) {
-            $this->storagePath = Str::finish($this->storagePath, DIRECTORY_SEPARATOR).$this->getRelease();
+            $this->storagePath = Str::finish($this->storagePath, urlSeparator()).$this->getRelease();
 
             return $this;
         }

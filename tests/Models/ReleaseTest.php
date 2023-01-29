@@ -39,7 +39,7 @@ class ReleaseTest extends TestCase
     {
         $this->assertNull($this->release->getStoragePath());
 
-        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).'tmp/releaseName.zip';
+        $storagePath = Str::finish($this->vfs->url(), urlSeparator()).'tmp/releaseName.zip';
         $this->release->setStoragePath($storagePath);
 
         $this->assertEquals($storagePath, $this->release->getStoragePath());
@@ -49,14 +49,14 @@ class ReleaseTest extends TestCase
     public function it_can_update_storage_path_when_having_release_name(): void
     {
         $releaseName = 'releaseName';
-        $storagePathWithoutFilename = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).'tmp';
+        $storagePathWithoutFilename = Str::finish($this->vfs->url(), urlSeparator()).'tmp';
 
         $this->release->setStoragePath($storagePathWithoutFilename);
         $this->assertEquals($storagePathWithoutFilename, $this->release->getStoragePath());
 
         $this->release->setRelease($releaseName)->updateStoragePath();
         $this->assertEquals(
-            Str::finish($storagePathWithoutFilename, DIRECTORY_SEPARATOR).$releaseName,
+            Str::finish($storagePathWithoutFilename, urlSeparator()).$releaseName,
             $this->release->getStoragePath()
         );
     }
@@ -64,7 +64,7 @@ class ReleaseTest extends TestCase
     /** @test */
     public function it_should_not_update_storage_path_when_not_having_release_name(): void
     {
-        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).'tmp';
+        $storagePath = Str::finish($this->vfs->url(), urlSeparator()).'tmp';
 
         $this->release->setStoragePath($storagePath);
         $this->assertEquals($storagePath, $this->release->getStoragePath());
@@ -86,7 +86,7 @@ class ReleaseTest extends TestCase
         $subDirectory = 'new-directory-inside';
 
         vfsStream::newDirectory($mainDirectory.'/'.$subDirectory)->at($this->vfs);
-        $this->release->setUpdatePath(Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).$mainDirectory);
+        $this->release->setUpdatePath(Str::finish($this->vfs->url(), urlSeparator()).$mainDirectory);
 
         foreach ($this->release->getUpdatePath()->directories() as $dir) {
             $this->assertEquals($dir->getPath(), $this->vfs->url().'/'.$mainDirectory);
@@ -185,7 +185,7 @@ class ReleaseTest extends TestCase
     public function it_checks_source_is_already_fetched_but_not_extracted(): void
     {
         $file = 'release-1.2.zip';
-        $storagePath = Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).$file;
+        $storagePath = Str::finish($this->vfs->url(), urlSeparator()).$file;
         vfsStream::newFile($file)->at($this->vfs);
 
         $this->release->setStoragePath($storagePath);
@@ -197,7 +197,7 @@ class ReleaseTest extends TestCase
     public function it_checks_source_is_already_extracted_and_directory_still_present(): void
     {
         vfsStream::newDirectory('release-1.2')->at($this->vfs);
-        $this->release->setStoragePath(Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).'release-1.2.zip');
+        $this->release->setStoragePath(Str::finish($this->vfs->url(), urlSeparator()).'release-1.2.zip');
 
         $this->assertTrue($this->release->isSourceAlreadyFetched());
     }
@@ -206,7 +206,7 @@ class ReleaseTest extends TestCase
     public function it_checks_source_is_already_extracted_and_directory_deleted(): void
     {
         vfsStream::newDirectory('release-1.2')->at($this->vfs);
-        $this->release->setStoragePath(Str::finish($this->vfs->url(), DIRECTORY_SEPARATOR).'release-1.2.zip');
+        $this->release->setStoragePath(Str::finish($this->vfs->url(), urlSeparator()).'release-1.2.zip');
         $this->vfs->getChild('release-1.2.zip')->rename('removed');
 
         $this->assertTrue($this->release->isSourceAlreadyFetched());

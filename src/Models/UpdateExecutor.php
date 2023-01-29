@@ -36,7 +36,7 @@ final class UpdateExecutor
      */
     public function setBasePath(string $path): self
     {
-        $this->basePath = Str::finish($path, DIRECTORY_SEPARATOR);
+        $this->basePath = Str::finish($path, urlSeparator());
 
         return $this;
     }
@@ -88,7 +88,7 @@ final class UpdateExecutor
             if ($file->getRealPath()) {
                 File::copy(
                     $file->getRealPath(),
-                    Str::finish($this->basePath, DIRECTORY_SEPARATOR).$file->getFilename()
+                    Str::finish($this->basePath, urlSeparator()).$file->getFilename()
                 );
             }
         });
@@ -106,7 +106,7 @@ final class UpdateExecutor
             if (!dirsIntersect(File::directories($directory->getRealPath()), config('self-update.exclude_folders'))) {
                 File::copyDirectory(
                     $directory->getRealPath(),
-                    Str::finish($this->basePath, DIRECTORY_SEPARATOR).Str::finish($directory->getRelativePath(), DIRECTORY_SEPARATOR).$directory->getBasename()
+                    Str::finish($this->basePath, urlSeparator()).Str::finish($directory->getRelativePath(), DIRECTORY_SEPARATOR).$directory->getBasename()
                 );
             }
 

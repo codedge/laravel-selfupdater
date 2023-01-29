@@ -49,6 +49,13 @@ if (!\function_exists('createFolderFromFile')) {
 
         $pathinfo = pathinfo($file);
 
-        return Str::finish($pathinfo['dirname'], DIRECTORY_SEPARATOR).$pathinfo['filename'];
+        return Str::finish($pathinfo['dirname'], urlSeparator()).$pathinfo['filename'];
+    }
+}
+
+if (!\function_exists('urlSeparator')){
+    function urlSeparator(): string
+    {
+        return '/';
     }
 }

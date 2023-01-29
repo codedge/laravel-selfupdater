@@ -42,7 +42,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         $this->append = preg_replace('/^.*_VERSION_/', '', $this->config['pkg_filename_format']);
 
         $this->release = resolve(Release::class);
-        $this->release->setStoragePath(Str::finish($this->config['download_path'], DIRECTORY_SEPARATOR))
+        $this->release->setStoragePath(Str::finish($this->config['download_path'], urlSeparator()))
                       ->setUpdatePath(base_path(), config('self-update.exclude_folders'))
                       ->setAccessToken($this->config['private_access_token']);
 
