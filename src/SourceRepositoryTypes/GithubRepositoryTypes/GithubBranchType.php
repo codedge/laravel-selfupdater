@@ -111,7 +111,8 @@ final class GithubBranchType extends GithubRepositoryType implements SourceRepos
 
     private function generateArchiveUrl(string $name): string
     {
-        return DIRECTORY_SEPARATOR.'repos'
+        return self::BASE_URL
+               .DIRECTORY_SEPARATOR.'repos'
                .DIRECTORY_SEPARATOR.$this->config['repository_vendor']
                .DIRECTORY_SEPARATOR.$this->config['repository_name']
                .DIRECTORY_SEPARATOR.'zipball'
