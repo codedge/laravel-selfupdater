@@ -151,7 +151,7 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
     {
         return [
             'base_url' => $this->config['base_url'] ?? self::BASE_URL,
-            'url' => '/api/v4/projects/'.$this->config['repository_id'].'/releases',
+            'url'      => '/api/v4/projects/'.$this->config['repository_id'].'/releases',
         ];
     }
 
