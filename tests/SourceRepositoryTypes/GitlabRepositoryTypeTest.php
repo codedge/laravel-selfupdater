@@ -174,4 +174,26 @@ final class GitlabRepositoryTypeTest extends TestCase
 
         $this->assertEquals('1.3', $gitlab->selectRelease(collect($items), '1.7')['tag_name']);
     }
+
+    /** @test */
+    public function it_can_use_default_base_url(): void
+    {
+        /** @var GitlabRepositoryType $gitlab */
+        $gitlab = resolve(GitlabRepositoryType::class);
+        $urls = $gitlab->getReleaseUrl();
+
+        $this->assertEquals('https://gitlab.com', $urls['base_url']);
+    }
+
+    /** @test */
+    public function it_can_use_base_url_from_config(): void
+    {
+        config(['self-update.repository_types.gitlab.base_url' => 'https://example.local']);
+
+        /** @var GitlabRepositoryType $gitlab */
+        $gitlab = resolve(GitlabRepositoryType::class);
+        $urls = $gitlab->getReleaseUrl();
+
+        $this->assertEquals('https://example.local', $urls['base_url']);
+    }
 }
