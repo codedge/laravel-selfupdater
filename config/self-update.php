@@ -50,6 +50,7 @@ return [
             'use_branch'           => env('SELF_UPDATER_USE_BRANCH', ''),
         ],
         'gitlab' => [
+            'base_url'             => '',
             'type'                 => 'gitlab',
             'repository_id'        => env('SELF_UPDATER_REPO_URL', ''),
             'download_path'        => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),

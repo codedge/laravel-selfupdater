@@ -176,6 +176,7 @@ Configure Gitlab either via the `config/self-updater.php` or use the appropriate
 // ...
 'repository_types' => [
     'gitlab' => [
+            'base_url'             => '',
             'type'                 => 'gitlab',
             'repository_id'        => env('SELF_UPDATER_REPO_URL', ''),
             'download_path'        => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
@@ -186,6 +187,8 @@ Configure Gitlab either via the `config/self-updater.php` or use the appropriate
 ```
 
 ℹ Although the environment variable is named `SELF_UPDATER_REPO_URL`, only specify your repository id.
+
+For self-hosted Gitlab instances you can set the `base_url` variable to a domain where the instance is hosted at, f. ex. `http://gitlab.acme.local`.
 
 ### Using HTTP archives
 
