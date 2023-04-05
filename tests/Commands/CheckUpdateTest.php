@@ -26,7 +26,7 @@ final class CheckUpdateTest extends TestCase
             ->pushResponse($this->getResponse200ZipFile());
 
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         $github->deleteVersionFile();
 
@@ -41,7 +41,7 @@ final class CheckUpdateTest extends TestCase
     public function it_can_run_check_update_command_with_new_version_available(): void
     {
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
         $github->setVersionFile('v3.5');
 
         config(['self-update.version_installed' => 'v1.0']);

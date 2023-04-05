@@ -28,7 +28,7 @@ final class GithubRepositoryTypeTest extends TestCase
     public function it_can_instantiate(): void
     {
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         $this->assertInstanceOf(GithubTagType::class, $github);
     }
@@ -39,7 +39,7 @@ final class GithubRepositoryTypeTest extends TestCase
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
         /** @var GithubBranchType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         $this->assertInstanceOf(GithubBranchType::class, $github);
     }
@@ -52,14 +52,14 @@ final class GithubRepositoryTypeTest extends TestCase
         $this->expectException(\Exception::class);
 
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
     }
 
     /** @test */
     public function it_can_run_update(): void
     {
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         Http::fake([
             '*' => $this->getResponse200ZipFile(),
@@ -89,7 +89,7 @@ final class GithubRepositoryTypeTest extends TestCase
     public function it_can_get_the_version_installed(): void
     {
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
         $this->assertEmpty($github->getVersionInstalled());
 
         config(['self-update.version_installed' => '1.0']);
@@ -103,7 +103,7 @@ final class GithubRepositoryTypeTest extends TestCase
         $this->expectExceptionMessage('Version installed not found.');
 
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
         $github->isNewVersionAvailable();
     }
 
@@ -111,7 +111,7 @@ final class GithubRepositoryTypeTest extends TestCase
     public function it_can_get_new_version_available_from_type_tag_without_version_file(): void
     {
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
         $github->deleteVersionFile();
 
         Event::fake();
@@ -132,7 +132,7 @@ final class GithubRepositoryTypeTest extends TestCase
     public function it_can_get_new_version_available_from_type_tag_with_version_file(): void
     {
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
         $github->setVersionFile('v2.7');
 
         $this->assertFalse($github->isNewVersionAvailable('v2.7'));
@@ -149,7 +149,7 @@ final class GithubRepositoryTypeTest extends TestCase
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
         /** @var GithubBranchType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
         $github->deleteVersionFile();
 
         Http::fake([
@@ -166,7 +166,7 @@ final class GithubRepositoryTypeTest extends TestCase
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
         /** @var GithubBranchType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
         $github->setVersionFile('2020-02-07T21:09:15Z');
 
         $this->assertFalse($github->isNewVersionAvailable('2020-02-08T21:09:15Z'));
@@ -177,7 +177,7 @@ final class GithubRepositoryTypeTest extends TestCase
     public function it_can_fetch_github_tag_releases_latest(): void
     {
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('tag'))
@@ -194,7 +194,7 @@ final class GithubRepositoryTypeTest extends TestCase
     public function it_can_fetch_github_tag_releases_specific_version(): void
     {
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('tag'))
@@ -211,7 +211,7 @@ final class GithubRepositoryTypeTest extends TestCase
     public function it_can_fetch_github_tag_releases_and_takes_latest_if_version_not_available(): void
     {
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('tag'))
@@ -230,7 +230,7 @@ final class GithubRepositoryTypeTest extends TestCase
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
         /** @var GithubBranchType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('branch'))
@@ -249,7 +249,7 @@ final class GithubRepositoryTypeTest extends TestCase
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
         /** @var GithubBranchType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('branch'))
@@ -268,7 +268,7 @@ final class GithubRepositoryTypeTest extends TestCase
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
         /** @var GithubBranchType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('branch'))
@@ -287,7 +287,7 @@ final class GithubRepositoryTypeTest extends TestCase
         config(['self-update.repository_types.github.use_branch' => 'v2']);
 
         /** @var GithubBranchType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         Http::fake([
             '*' => $this->getResponseEmpty(),
