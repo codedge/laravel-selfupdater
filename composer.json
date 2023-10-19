@@ -35,7 +35,7 @@
         "phpstan/phpstan-phpunit": "^1.2"
     },
     "require-dev": {
-        "dg/bypass-finals": "^1.4",
+        "dg/bypass-finals": "^1.5",
         "mikey179/vfsstream": "^1.6",
         "mockery/mockery": "^1.5",
         "orchestra/testbench": "^8.1",
