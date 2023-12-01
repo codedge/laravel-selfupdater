@@ -30,7 +30,7 @@
         "ext-zip": "*",
         "guzzlehttp/guzzle": "^7.5.0",
         "illuminate/support": "^10",
-        "league/uri": "~6.7 || ~6.8",
+        "league/uri": "^7.4.0",
         "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan-phpunit": "^1.2"
     },
