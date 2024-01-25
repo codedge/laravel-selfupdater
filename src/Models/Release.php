@@ -183,6 +183,7 @@ final class Release
                    ->withOptions([
                        'sink' => $this->getStoragePath(),
                    ])
+                   ->timeout(400) // Set timeout to 400 seconds
                    ->get($this->getDownloadUrl());
     }
 
