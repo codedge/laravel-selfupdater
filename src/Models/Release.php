@@ -183,6 +183,7 @@ final class Release
                    ->withOptions([
                        'sink' => $this->getStoragePath(),
                    ])
+                   ->timeout(config('self-update.download_timeout') ?? 400)
                    ->get($this->getDownloadUrl());
     }
 
