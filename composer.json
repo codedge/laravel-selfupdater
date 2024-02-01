@@ -37,7 +37,7 @@
     "require-dev": {
         "dg/bypass-finals": "^1.4",
         "mikey179/vfsstream": "^1.6",
-        "mockery/mockery": "^1.5",
+        "mockery/mockery": "^1.6",
         "orchestra/testbench": "^8.1",
         "phpunit/phpunit": "^9.5.26"
     },
