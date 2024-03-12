@@ -203,7 +203,7 @@ class HttpRepositoryType implements SourceRepositoryTypeContract
         $releaseVersions = array_combine($files[2], $files[1]);
 
         $uri = Uri::createFromString($this->config['repository_url']);
-        $baseUrl = $uri->getScheme().'://'.$uri->getHost();
+        $baseUrl = $uri->getScheme().'://'.$uri->getHost().$uri->getPath();
 
         $releases = collect($releaseVersions)->map(function ($item, $key) use ($baseUrl) {
             $uri = Uri::createFromString($item);
