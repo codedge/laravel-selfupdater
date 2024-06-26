@@ -51,6 +51,7 @@ return [
             'package_file_name'    => env('SELF_UPDATER_PACKAGE_FILE_NAME'),
         ],
         'gitlab' => [
+            'base_url'             => '',
             'type'                 => 'gitlab',
             'repository_id'        => env('SELF_UPDATER_REPO_URL', ''),
             'download_path'        => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
@@ -96,6 +97,18 @@ return [
         'storage/self-update',
         'vendor',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Download Timeout
+    |--------------------------------------------------------------------------
+    |
+    | Specifies the duration (in seconds) for how long downloads can take
+    | until they timeout.
+    |
+    */
+
+    'download_timeout' => env('SELF_UPDATER_DOWNLOAD_TIMEOUT', 400),
 
     /*
     |--------------------------------------------------------------------------

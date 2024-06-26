@@ -144,10 +144,19 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
         return $release;
     }
 
+    /**
+     * @return array{base_url:string, url:string}
+     */
+    final public function getReleaseUrl(): array
+    {
+        return [
+            'base_url' => $this->config['base_url'] ?? self::BASE_URL,
+            'url'      => '/api/v4/projects/'.$this->config['repository_id'].'/releases',
+        ];
+    }
+
     final public function getReleases(): Response
     {
-        $url = '/api/v4/projects/'.$this->config['repository_id'].'/releases';
-
         $headers = [];
 
         if ($this->release->hasAccessToken()) {
@@ -156,6 +165,8 @@ class GitlabRepositoryType implements SourceRepositoryTypeContract
             ];
         }
 
-        return Http::withHeaders($headers)->baseUrl(self::BASE_URL)->get($url);
+        $urls = $this->getReleaseUrl();
+
+        return Http::withHeaders($headers)->baseUrl($urls['base_url'])->get($urls['url']);
     }
 }
