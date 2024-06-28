@@ -230,7 +230,7 @@ final class GithubRepositoryTypeTest extends TestCase
         config(['self-update.repository_types.github.package_file_name' => 'release.zip']);
 
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('tag_asset'))
@@ -248,7 +248,7 @@ final class GithubRepositoryTypeTest extends TestCase
         config(['self-update.repository_types.github.package_file_name' => 'regex:releaseV\d+\.\d+\.\d+\.zip']);
 
         /** @var GithubTagType $github */
-        $github = (resolve(GithubRepositoryType::class))->create();
+        $github = resolve(GithubRepositoryType::class)->create();
 
         Http::fakeSequence()
             ->pushResponse($this->getResponse200Type('tag_regex_asset'))
