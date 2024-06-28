@@ -74,7 +74,7 @@
         }
     },
     "scripts": {
-        "phpstan": "./vendor/bin/phpstan",
+        "phpstan": "./vendor/bin/phpstan --memory-limit=1G",
         "test": "./vendor/bin/phpunit",
         "test-coverage": "XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-html=build/coverage-html"
     }

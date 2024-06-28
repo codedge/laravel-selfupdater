@@ -13,6 +13,7 @@ use Exception;
 use GuzzleHttp\Exception\InvalidArgumentException;
 use GuzzleHttp\Utils;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -77,10 +78,30 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
 
         $release = $this->selectRelease($releases, $version);
 
+        $packageName = $this->config['package_file_name'] ?? null;
+        if ($packageName) {
+            $asset = Arr::first($release->assets, static function ($asset) use ($packageName) {
+                if (Str::startsWith($packageName, 'regex:')) {
+                    // The package is a regex, so do a regex search
+                    return Str::match('/'.Str::after($packageName, 'regex:').'/', $asset->name);
+                }
+
+                return Str::contains($asset->name, $packageName);
+            });
+            if (!$asset) {
+                throw ReleaseException::archiveFileNotFound($version);
+            }
+            $downloadUrl = $asset->browser_download_url;
+            $fileName = $asset->name;
+        } else {
+            $downloadUrl = $release->zipball_url;
+            $fileName = $release->tag_name.'.zip';
+        }
+
         $this->release->setVersion($release->tag_name)
-                      ->setRelease($release->tag_name.'.zip')
+                      ->setRelease($fileName)
                       ->updateStoragePath()
-                      ->setDownloadUrl($release->zipball_url);
+                      ->setDownloadUrl($downloadUrl);
 
         if (!$this->release->isSourceAlreadyFetched()) {
             $this->release->download();

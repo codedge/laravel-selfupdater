@@ -48,6 +48,7 @@ return [
             'download_path'        => env('SELF_UPDATER_DOWNLOAD_PATH', '/tmp'),
             'private_access_token' => env('SELF_UPDATER_GITHUB_PRIVATE_ACCESS_TOKEN', ''),
             'use_branch'           => env('SELF_UPDATER_USE_BRANCH', ''),
+            'package_file_name'    => env('SELF_UPDATER_PACKAGE_FILE_NAME'),
         ],
         'gitlab' => [
             'base_url'             => '',
