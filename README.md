@@ -25,7 +25,7 @@ that needs some updating mechanism without [Composer](https://getcomposer.org/).
 To install the latest version from the master using [Composer](https://getcomposer.org/):
 
 ```sh
-$ composer require codedge/laravel-selfupdater
+composer require codedge/laravel-selfupdater
 ```
 
 ## Configuration
@@ -33,7 +33,7 @@ $ composer require codedge/laravel-selfupdater
 After installing the package you need to publish the configuration file via
 
 ```sh
-$ php artisan vendor:publish --provider="Codedge\Updater\UpdaterServiceProvider"
+php artisan vendor:publish --provider="Codedge\Updater\UpdaterServiceProvider"
 ```
 
 **Note:** Please enter correct value for vendor and repository name in your `config/self-updater.php` if you want to use Github as source for your updates.
