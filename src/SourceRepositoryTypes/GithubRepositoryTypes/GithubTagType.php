@@ -91,7 +91,7 @@ final class GithubTagType extends GithubRepositoryType implements SourceReposito
             if (!$asset) {
                 throw ReleaseException::archiveFileNotFound($version);
             }
-            $downloadUrl = $asset->browser_download_url;
+            $downloadUrl = $asset->url;
             $fileName = $asset->name;
         } else {
             $downloadUrl = $release->zipball_url;
