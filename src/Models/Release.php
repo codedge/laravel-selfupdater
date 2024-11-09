@@ -175,6 +175,7 @@ final class Release
 
         if ($this->hasAccessToken()) {
             $headers = [
+                 'Accept' => 'application/octet-stream',
                 'Authorization' => $this->getAccessToken(),
             ];
         }
