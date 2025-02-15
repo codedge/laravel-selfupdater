@@ -29,17 +29,17 @@
         "ext-json": "*",
         "ext-zip": "*",
         "guzzlehttp/guzzle": "^7.5.0",
-        "illuminate/support": "^10 || ^11.0",
+        "illuminate/support": "^10 || ^11.0 || ^12.0",
         "league/uri": "~6.7 || ~6.8 || ^7.4",
         "phpstan/extension-installer": "^1.2",
-        "phpstan/phpstan-phpunit": "^1.2"
+        "phpstan/phpstan-phpunit": "^1.2 || ^2.0"
     },
     "require-dev": {
         "dg/bypass-finals": "^1.4",
         "mikey179/vfsstream": "^1.6",
         "mockery/mockery": "^1.5",
-        "orchestra/testbench": "^8.1 || ^9.0",
-        "phpunit/phpunit": "^9.5.26 || ^10.5"
+        "orchestra/testbench": "^8.1 || ^9.0 || ^10.0",
+        "phpunit/phpunit": "^9.5.26 || ^10.5 || ^11.5.3"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
