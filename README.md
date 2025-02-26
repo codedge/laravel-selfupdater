@@ -36,7 +36,7 @@ After installing the package you need to publish the configuration file via
 php artisan vendor:publish --provider="Codedge\Updater\UpdaterServiceProvider"
 ```
 
-**Note:** Please enter correct value for vendor and repository name in your `config/self-updater.php` if you want to use Github as source for your updates.
+**Note:** Please enter correct value for vendor and repository name in your `config/self-update.php` if you want to use Github as source for your updates.
 
 ### Setting the currently installed version
 
@@ -54,7 +54,7 @@ A valid version would be: `2020-04-19T22:35:48Z`
 
 ### Running artisan commands
 
-Artisan commands can be run before or after the update process and can be configured in `config/self-updater.php`:
+Artisan commands can be run before or after the update process and can be configured in `config/self-update.php`:
 
 **Example:**
 
@@ -143,7 +143,7 @@ The package comes with a _GitHub_ source repository type to fetch
 releases from GitHub - basically use GitHub to pull the latest version
 of your software.
 
-Just make sure you set the proper repository in your `config/self-updater.php`
+Just make sure you set the proper repository in your `config/self-update.php`
 file.
 
 #### Tag-based updates
@@ -197,7 +197,7 @@ Select the branch that should be used via the `use_branch` setting [inside the c
 
 ### Using Gitlab
 
-Configure Gitlab either via the `config/self-updater.php` or use the appropriate environment variables.
+Configure Gitlab either via the `config/self-update.php` or use the appropriate environment variables.
 
 ```php
 // ...
